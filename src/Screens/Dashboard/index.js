@@ -3,6 +3,7 @@ import { DashboardLayout } from "./../../Components/Layout/DashboardLayout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleDown } from "@fortawesome/free-solid-svg-icons";
 import Board from 'react-trello';
+import Avatar from 'react-avatar';
 import "./style.css";
 
 export const Dashboard = () => {
@@ -68,6 +69,7 @@ export const Dashboard = () => {
       return (
             <DashboardLayout>
                   <div className="container-fluid">
+                       
                         <div className="row mb-3">
                               <div className="col-12">
                                     <div className="dashCard">
@@ -75,8 +77,8 @@ export const Dashboard = () => {
                                                 <Board data={data}
                                                       canAddLanes
                                                       onCardAdd={(card, laneId) => handleCardAdd(laneId)}
-                                                      editable
-                                                      
+
+
                                                       onCardClick={handleOpenBox}
 
                                                 />
