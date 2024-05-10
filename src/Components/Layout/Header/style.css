@@ -17,6 +17,13 @@
     max-width: 100%;
 }
 
+.workPlaces {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
 
 .customCollapse .navbar-nav {
     align-items: center;
@@ -39,6 +46,8 @@
     max-width: 100%;
 }
 
+.sb-avatar {margin-right: 7px;}
+
 .siteLogo h1 {
     font-size: 25px;
     color: #00293b;
@@ -60,15 +69,21 @@
 
 .notiMenu {
     width: 320px;
-    background: #fff;
     padding: 0 !important;
     border: none !important;
     border-radius: 0.5rem !important;
     box-shadow: 0 3px 6px rgb(0 0 0 / 28%) !important;
+    left: 0px !important;
+}
+
+
+.notiMenu {
+    top: 41px !important;
+    background-color: #ffffffe3;
 }
 
 .notificationsBody {
-    height: 160px;
+    height: 230px;
     overflow-y: auto;
 }
 

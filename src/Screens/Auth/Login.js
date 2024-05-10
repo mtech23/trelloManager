@@ -7,19 +7,14 @@ import "./style.css";
 import { AuthLayout } from '../../Components/Layout/AuthLayout';
 import CustomButton from '../../Components/CustomButton';
 import CustomInput from "../../Components/CustomInput"
+import { base_url } from '../../Api/base_url';
 
 
 const AdminLogin = () => {
     const navigate = useNavigate()
 
-    const [formData, setFormData] = useState({
-        email: '',
-        password: ''
-    });
+    const [formData, setFormData] = useState();
 
-  
-
-    console.log(formData.password);
 
     useEffect(() => {
         document.title = 'Task Manager | Login';
@@ -27,43 +22,40 @@ const AdminLogin = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        localStorage.setItem('login', 454556465);
         
-        // const formDataMethod = new FormData();
-        // formDataMethod.append('email', formData.email);
-        // formDataMethod.append('password', formData.password);
-        // console.log(formData)
-        // document.querySelector('.loaderBox').classList.remove("d-none");
+        const formDataMethod = new FormData();
+        formDataMethod.append('username', formData.username);
+        formDataMethod.append('password', formData.password);
+        console.log(formData)
+        document.querySelector('.loaderBox').classList.remove("d-none");
 
-        // const apiUrl = 'https://custom2.mystagingserver.site/food-stadium/public/api/user-login';
+        const apiUrl = `${base_url}/api/auth/login`;
 
 
-        // try {
-        //     const response = await fetch(apiUrl, {
-        //         method: 'POST',
-        //         body: formDataMethod
-        //     });
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                body: formDataMethod
+            });
 
-        //     if (response.ok) {
+            if (response.ok) {
                
-        //         const responseData = await response.json();
-        //         localStorage.setItem('login', responseData.data.token);
-        //         console.log('Login Response:', responseData);
-        //         document.querySelector('.loaderBox').classList.add("d-none");
-        //         navigate('/dashboard')
+                const responseData = await response.json();
+                localStorage.setItem('login', responseData.token);
+                console.log('Login Response:', responseData);
+                document.querySelector('.loaderBox').classList.add("d-none");
+                navigate('/dashboard')
                 
-        //     } else {
-        //         document.querySelector('.loaderBox').classList.add("d-none");
-        //         alert('Invalid Credentials')
+            } else {
+                document.querySelector('.loaderBox').classList.add("d-none");
+                alert('Invalid Credentials')
 
-        //         console.error('Login failed');
-        //     }
-        // } catch (error) {
-        //     document.querySelector('.loaderBox').classList.add("d-none");
-        //     console.error('Error:', error);
-        // }
-
-        navigate('/dashboard')
+                console.error('Login failed');
+            }
+        } catch (error) {
+            document.querySelector('.loaderBox').classList.add("d-none");
+            console.error('Error:', error);
+        }
     };
 
 
@@ -75,12 +67,12 @@ const AdminLogin = () => {
                         label='Email Address'
                         required
                         id='userEmail'
-                        type='email'
+                        type='text'
                         placeholder='Enter Your Email Address'
                         labelClass='mainLabel'
                         inputClass='mainInput'
                         onChange={(event) => {
-                            setFormData({ ...formData, email: event.target.value });
+                            setFormData({ ...formData, username: event.target.value });
                             console.log(event.target.value);
                         }}
                     />

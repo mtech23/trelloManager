@@ -4,13 +4,7 @@ import ForgetPassword from "../Screens/Auth/ForgetPassword";
 import ForgetPassword2 from "../Screens/Auth/ForgetPassword2";
 import ForgetPassword3 from "../Screens/Auth/ForgetPassword3";
 import { Dashboard } from "../Screens/Dashboard";
-// import { ProductManagement } from "../Screens/ProductManagement";
-// import { AddProduct } from "../Screens/ProductManagement/AddProduct";
-// import { EditProduct } from "../Screens/ProductManagement/EditProduct";
-// import { ProductDetails } from "../Screens/ProductManagement/ProductDetail";
-// import Profile from "../Screens/Profile";
-// import EditProfile from "../Screens/Profile/EditProfile";
-// import ChangePassword from "../Screens/Profile/ChangePassword";
+import { Boards } from "../Screens/Boards";
 import { ProtectedRoutes } from "./ProtectedRoutes";
 import Error from "../Screens/Error";
 import React from 'react';
@@ -28,7 +22,8 @@ export default function AdminRouter() {
         <Route path="/forget-password3" element={<ForgetPassword3 />} />
 
         {/* <Route path="/dashboard" element={<ProtectedRoutes Components={Dashboard} />} /> */}
-        <Route path="/dashboard" element={<ProtectedRoutes Components={Dashboard}  />} />
+        <Route path="/dashboard" element={<ProtectedRoutes Components={Dashboard} />} />
+        <Route path="/board/:id" element={<ProtectedRoutes Components={Boards} />} />
         {/* <Route path="/product-management" element={<ProtectedRoutes Components={ProductManagement} />} />
         <Route path="/add-product" element={<ProtectedRoutes Components={AddProduct} />} />
         <Route path="/product-management/product-details/:id" element={<ProtectedRoutes Components={ProductDetails} />} />

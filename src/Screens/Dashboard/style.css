@@ -17,6 +17,13 @@
     font-size: 12px;
 }
 
+
+li.sidebar-li.active {
+    background-color: #509b8a73;
+}
+
+
+
 .djiHhb {
     background-color: transparent !important;
 }
@@ -28,9 +35,11 @@
 button.sc-jegwpa.dlKLWs {
     justify-content: flex-start;
     width: 272px;
-    background-color: #ffffff3d !important;
+    background-color: #ffffffc7 !important;
     border-radius: 12px;
     padding: 12px;
+    color: #000;
+    font-weight: 700;
 }
 
 .statsChange p {

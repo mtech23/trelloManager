@@ -52,6 +52,10 @@
 }
 
 
+body {
+    position: relative;
+}
+
 /*----- Sidebar Collapsed Start -----*/
 
 .sidebar.collapsed {

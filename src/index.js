@@ -7,10 +7,13 @@ import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <App />
-    // <div className='loaderBox d-none'>
-    //   <div className="custom-loader"></div>
-    // </div>
+    <>
+        <App />
+        <div className='loaderBox d-none'>
+            <div className="custom-loader"></div>
+        </div>
+
+    </>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -13,6 +13,11 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 
+.notiDropdown button:hover, .notiDropdown button:focus, .notiDropdown button:active, .btn-check:checked + .btn, :not(.btn-check) + .btn:active, .btn:first-child:active, .btn.active, .btn.show {
+    color: #fff;
+}
+
+
 @media(max-width: 640px) {
 
 .verification-box input {

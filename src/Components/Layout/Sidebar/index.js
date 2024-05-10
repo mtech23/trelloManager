@@ -14,39 +14,53 @@ import {
 
 import "./style.css";
 import React from 'react';
+import Avatar from "react-avatar";
+import { base_url } from "../../../Api/base_url";
 
 export const Sidebar = (props) => {
 
-  const location = useLocation()
+  const location = useLocation();
+  const LogoutData = localStorage.getItem('login');
+
+  const handleBoard = (boardID) => {
+    document.querySelector('.loaderBox').classList.remove("d-none");
+    fetch(`${base_url}/api/view-lists/${boardID}`,
+      {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${LogoutData}`
+        },
+      },
+    )
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        console.log(data);
+        document.querySelector('.loaderBox').classList.add("d-none");
+      })
+      .catch((error) => {
+        document.querySelector('.loaderBox').classList.add("d-none");
+        console.log(error);
+      })
+
+  }
   return (
     <div className={`sidebar ${props.sideClass}`} id="sidebar">
       <div className="boardTitle">
-        <h6>Your Boards</h6>
+        <h6><Avatar name={props?.title} size={40} round="8px" />{props?.title}</h6>
       </div>
       <ul className="list-unstyled">
-        <li className="sidebar-li">
-          <Link className={`sideLink ${location.pathname.includes('/dashboard') ? 'active' : ''}`} to="/dashboard">
-            <span className="sideLinkText">Custom Development</span>
-          </Link>
-        </li>
+        {props?.boards && props?.boards.map((item, index) => (
+          <li className="sidebar-li">
+            <button className={`sideLink border-0 shadow-0 btn`} onClick={() => { handleBoard(item?.id) }}>
+              <span className="sideLinkText">{item?.title}</span>
+            </button>
+          </li>
+        ))}
 
-        <li className="sidebar-li">
-          <Link className={`sideLink ${location.pathname.includes('#') ? 'active' : ''}`} to="/dashboard">
-            <span className="sideLinkText">Digital Marketing</span>
-          </Link>
-        </li>
-
-        <li className="sidebar-li">
-          <Link className={`sideLink ${location.pathname.includes('#') ? 'active' : ''}`} to="#">
-            <span className="sideLinkText">Hyder Web Production</span>
-          </Link>
-        </li>
-
-        <li className="sidebar-li">
-          <Link className={`sideLink ${location.pathname.includes('#') ? 'active' : ''}`} to="#">
-            <span className="sideLinkText">Yameen Web Production</span>
-          </Link>
-        </li>
       </ul>
     </div>
   );
