@@ -12,6 +12,7 @@ import { Sidebar } from "../../Components/Layout/Sidebar";
 import CustomInput from "../../Components/CustomInput";
 import CustomButton from "../../Components/CustomButton";
 import CustomModal from "../../Components/CustomModal";
+import { usePost } from "../../Api/usePost";
 
 export const Boards = () => {
 
@@ -69,28 +70,6 @@ export const Boards = () => {
 
     const { id } = useParams();
 
-    const handleCardAdd = (laneId) => {
-        const newCard = {
-            id: `Card${Math.random().toString(36).substr(2, 9)}`,
-            title: 'New Task',
-            description: 'Description of New Task',
-        };
-
-        const updatedData = {
-            lanes: data.lanes.map(lane => {
-                if (lane.id === laneId) {
-                    return {
-                        ...lane,
-                        cards: [...lane.cards, newCard]
-                    };
-                }
-                return lane;
-            })
-        };
-
-        setData(updatedData);
-    };
-
     const handleOpenBox = () => {
         alert()
     }
@@ -126,7 +105,7 @@ export const Boards = () => {
     console.log('board', boardData)
     useEffect(() => {
         GetBoardData()
-        setData(initialData)
+        // setData(initialData)
     }, [id])
 
     // onCardClick(cardId, metadata, laneId)
@@ -138,31 +117,35 @@ export const Boards = () => {
 
 
     const handleBoard = (boardID) => {
-        document.querySelector('.loaderBox').classList.remove("d-none");
-        fetch(`${base_url}/api/view-lists/${boardID}`,
-            {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${LogoutData}`
+        if (boardID != '') {
+            document.querySelector('.loaderBox').classList.remove("d-none");
+            fetch(`${base_url}/api/view-lists/${boardID}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${LogoutData}`
+                    },
                 },
-            },
-        )
-            .then((response) => {
-                return response.json()
-            })
-            .then((data) => {
-                console.log(data);
-                setData(data);
-                document.querySelector('.loaderBox').classList.add("d-none");
-            })
-            .catch((error) => {
-                document.querySelector('.loaderBox').classList.add("d-none");
-                console.log(error);
-            })
+            )
+                .then((response) => {
+                    return response.json()
+                })
+                .then((data) => {
+                    console.log('dataLog', data);
+                    setData(data);
+                    document.querySelector('.loaderBox').classList.add("d-none");
+                })
+                .catch((error) => {
+                    document.querySelector('.loaderBox').classList.add("d-none");
+                    console.log(error);
+                })
+        }
 
     }
+
+
 
 
 
@@ -217,14 +200,89 @@ export const Boards = () => {
 
 
     const [activeItem, setActiveItem] = useState(null);
+    console.log(activeItem);
 
     const handleBoardClick = (itemId) => {
-      // Set the active item to the clicked item's ID
-      setActiveItem(itemId);
-      // Perform any other actions you want when an item is clicked
-      // For example, navigating to the board or fetching data related to the board
-      handleBoard(itemId);
+        setActiveItem(itemId);
+
+        handleBoard(itemId);
     };
+
+    const { ApiData: addTaskApiData, loading: addTaskLoading, error: addTaskError, post: addTaskPost } = usePost('/api/add-task');
+    const { ApiData: storeListApiData, loading: storeListLoading, error: storeListError, post: storeListPost } = usePost('/api/storelist');
+
+
+    const [lane, setLane] = useState();
+
+
+    const onDataChange = (card, laneId) => {
+        console.log(card)
+    }
+
+    const handleCardAdd = (card, laneId) => {
+        const taskData = card;
+
+        setFormData((prevData) => ({
+            ...prevData,
+            title: taskData.title,
+            description: taskData.description,
+            board_id: activeItem,
+            board_list_id: laneId,
+            position: laneId
+        }));
+
+
+        setFormData(prevData => {
+            console.log('listItem', prevData);
+            return prevData;
+        });
+
+        // Log the card id
+        console.log('Task ID:', taskData.id);
+
+    };
+
+    const onLaneAdd = (card, laneId) => {
+
+        setLane((prevData) => ({
+            ...prevData,
+            title: card?.title,
+            board_id: activeItem,
+        }));
+
+        setLane(prevData => {
+            console.log('listItem', prevData);
+            return prevData;
+        });
+
+        console.log(lane)
+    }
+
+
+    useEffect(() => {
+        if (formData?.board_id && formData?.board_list_id && formData?.title) {  // Check if formData has the necessary fields
+            console.log('listItem', formData);
+            addTaskPost(formData);
+        }
+    }, [formData])
+
+
+    useEffect(() => {
+        if (lane?.board_id && lane?.title) {  // Check if formData has the necessary fields
+            console.log('laneData', lane);
+            storeListPost(lane);
+        }
+    }, [lane])
+
+
+
+
+
+
+    useEffect(() => {
+        // handleBoard(boardData?.workspace?.boards[0]?.id)
+        handleBoardClick(boardData?.workspace?.boards[0]?.id)
+    }, [boardData])
 
 
     return (
@@ -246,8 +304,8 @@ export const Boards = () => {
                 </div>
                 <ul className="list-unstyled">
                     {boardData?.workspace?.boards && boardData?.workspace?.boards.map((item, index) => (
-                        <li key={index} className={`sidebar-li ${item.id === activeItem ? 'active' : ''}`}>
-                            <button className={`border-0 btn shadow-0 sideLink text-lg-start w-100`} onClick={() => handleBoardClick(item.id)}>
+                        <li key={index} className={`sidebar-li ${item?.id === activeItem ? 'active' : ''}`}>
+                            <button className={`border-0 btn shadow-0 sideLink text-lg-start w-100`} onClick={() => handleBoardClick(item?.id)}>
                                 <span className="sideLinkText">{item.title}</span>
                             </button>
                         </li>
@@ -272,14 +330,20 @@ export const Boards = () => {
                                     <div className="col-12">
                                         <div className="dashCard">
                                             <div>
-                                                <Board data={data}
+                                                <Board
+                                                    data={data}
                                                     canAddLanes
-                                                    onCardAdd={(card, laneId) => handleCardAdd(laneId)}
+                                                    onCardAdd={handleCardAdd}
                                                     // onCardClick={handleOpenBox}
                                                     editable
                                                     draggable
+                                                    hideCardDeleteIcon
+                                                    onDataChange={onDataChange}
+                                                    onLaneAdd={onLaneAdd}
+
 
                                                 />
+
                                             </div>
                                         </div>
                                     </div>
@@ -302,9 +366,10 @@ export const Boards = () => {
                     required
                     onChange={handleChange}
 
+
                 />
 
-                <CustomButton variant="primaryButton" text="Add Workspace" type="submit"></CustomButton>
+                <CustomButton variant="primaryButton" text="Add Board" type="submit"></CustomButton>
 
             </CustomModal>
             <CustomModal show={showModal2} close={() => { setShowModal2(false) }} success heading={message} />

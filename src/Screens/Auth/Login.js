@@ -24,7 +24,7 @@ const AdminLogin = () => {
         event.preventDefault();
         
         const formDataMethod = new FormData();
-        formDataMethod.append('username', formData.username);
+        formDataMethod.append('username_or_email', formData.username_or_email);
         formDataMethod.append('password', formData.password);
         console.log(formData)
         document.querySelector('.loaderBox').classList.remove("d-none");
@@ -39,7 +39,6 @@ const AdminLogin = () => {
             });
 
             if (response.ok) {
-               
                 const responseData = await response.json();
                 localStorage.setItem('login', responseData.token);
                 console.log('Login Response:', responseData);
@@ -72,7 +71,7 @@ const AdminLogin = () => {
                         labelClass='mainLabel'
                         inputClass='mainInput'
                         onChange={(event) => {
-                            setFormData({ ...formData, username: event.target.value });
+                            setFormData({ ...formData, username_or_email: event.target.value });
                             console.log(event.target.value);
                         }}
                     />
