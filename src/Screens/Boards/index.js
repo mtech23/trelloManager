@@ -210,6 +210,7 @@ export const Boards = () => {
 
     const { ApiData: addTaskApiData, loading: addTaskLoading, error: addTaskError, post: addTaskPost } = usePost('/api/add-task');
     const { ApiData: storeListApiData, loading: storeListLoading, error: storeListError, post: storeListPost } = usePost('/api/storelist');
+    const { ApiData: lanePositionData, loading: laneLoader, error: LanerErrorData, post: UpdateLanePos } = usePost('/api/update-position');
 
 
     const [lane, setLane] = useState();
@@ -285,6 +286,38 @@ export const Boards = () => {
     }, [boardData])
 
 
+
+    const [positionData, setPositionData] = useState();
+    const handleDrag = (cardId, sourceLaneId, targetLaneId, position, cardDetails) => {
+        const taskData = cardDetails;
+        console.log(taskData)
+
+        setPositionData((prevData) => ({
+            ...prevData,
+            board_id: taskData?.board_id,
+            board_list_id: taskData.laneId,
+            position: taskData?.laneId,
+            id: taskData?.id,
+            // laneId: taskData?.laneId
+
+        }));
+
+
+        setPositionData(prevData => {
+            console.log('listItem', prevData);
+            return prevData;
+        });
+
+
+
+    }
+
+    useEffect(()=>{
+        UpdateLanePos(positionData);
+    },[positionData])
+
+
+
     return (
 
         <>
@@ -340,6 +373,7 @@ export const Boards = () => {
                                                     hideCardDeleteIcon
                                                     onDataChange={onDataChange}
                                                     onLaneAdd={onLaneAdd}
+                                                    handleDragEnd={handleDrag}
 
 
                                                 />
