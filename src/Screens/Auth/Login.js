@@ -22,7 +22,7 @@ const AdminLogin = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        
+
         const formDataMethod = new FormData();
         formDataMethod.append('username', formData?.username);
         formDataMethod.append('password', formData?.password);
@@ -43,8 +43,8 @@ const AdminLogin = () => {
                 localStorage.setItem('login', responseData.token);
                 console.log('Login Response:', responseData);
                 document.querySelector('.loaderBox').classList.add("d-none");
-                navigate('/dashboard')
-                
+                navigate('/sign-up')
+
             } else {
                 document.querySelector('.loaderBox').classList.add("d-none");
                 alert('Invalid Credentials')
@@ -95,8 +95,16 @@ const AdminLogin = () => {
                         </div>
                         <Link to={'/forget-password'} className='text-dark text-decoration-underline'>Forget Password?</Link>
                     </div>
+                  
+
+
+
                     <div className="mt-4 text-center">
                         <CustomButton variant='primaryButton' text='Login' type='submit' />
+                        {/* <div className='accountRegister mt-3'>
+                            <p className='text-light text-black-50 '> Create a new Account. <Link to={'/sign-up'} className='text-light text-decoration-underline  text-black-50 '>Sign up </Link></p>
+                        </div> */}
+
                     </div>
                 </form>
             </AuthLayout>

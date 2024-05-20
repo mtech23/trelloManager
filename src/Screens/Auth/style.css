@@ -1,3 +1,28 @@
+/* 
+  .select {
+    color: #fff;
+    font-family: "Poppins";
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 30px;
+    letter-spacing: 0.02em;
+    text-align: left;
+    background: transparent;
+    display: flex;
+    width: 300px;
+    padding: 16px 12px;
+  }
+  .select option {
+    color: #000;
+    font-family: "Poppins";
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 30px;
+    letter-spacing: 0.02em;
+    text-align: left;
+    background: transparent;
+  }
+   */
 .verification-box {
     display: flex;
     gap: 15px;

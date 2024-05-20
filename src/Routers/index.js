@@ -9,6 +9,7 @@ import { ProtectedRoutes } from "./ProtectedRoutes";
 import Error from "../Screens/Error";
 import React from 'react';
 
+import Register from "../Screens/Auth/Register";
 
 
 export default function AdminRouter() {
@@ -20,7 +21,9 @@ export default function AdminRouter() {
         <Route path="/forget-password" element={<ForgetPassword />} />
         <Route path="/forget-password2" element={<ForgetPassword2 />} />
         <Route path="/forget-password3" element={<ForgetPassword3 />} />
+        <Route path="/sign-up" element={<ProtectedRoutes Components={Register} />} />
 
+        {/* <Route path="/sign-up" element={<Register />} /> */}
         {/* <Route path="/dashboard" element={<ProtectedRoutes Components={Dashboard} />} /> */}
         <Route path="/dashboard" element={<ProtectedRoutes Components={Dashboard} />} />
         <Route path="/board/:id" element={<ProtectedRoutes Components={Boards} />} />
