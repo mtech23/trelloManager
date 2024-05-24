@@ -178,7 +178,7 @@ export const Header = (props) => {
                           <li className="nav-item" key={index}>
                             {/* Adding onClick handler to close the dropdown */}
                             <Link
-                              to={`/board/${item?.id}`}
+                              to={`/wordplace/${item?.code}/${item?.id}`}
                               className="nav-link"
                               onClick={() => {
                                 // Close the dropdown menu when an item is clicked

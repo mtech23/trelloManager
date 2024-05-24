@@ -13,6 +13,8 @@ import CustomInput from "../../Components/CustomInput";
 import CustomButton from "../../Components/CustomButton";
 import CustomModal from "../../Components/CustomModal";
 import { usePost } from "../../Api/usePost";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router";
 
 export const Boards = () => {
 
@@ -45,6 +47,8 @@ export const Boards = () => {
         window.addEventListener("resize", handleResize);
     }, []);
 
+    const location =  useLocation();
+
 
     function sidebarToggle() {
         if (sideBarClass === "") {
@@ -68,7 +72,9 @@ export const Boards = () => {
     const [boardData, setBoardData] = useState();
     const LogoutData = localStorage.getItem('login');
 
-    const { id } = useParams();
+    const { id, slug, type } = useParams();
+
+
 
     const handleOpenBox = () => {
         alert()
@@ -106,7 +112,7 @@ export const Boards = () => {
     useEffect(() => {
         GetBoardData()
         // setData(initialData)
-    }, [id])
+    }, [slug])
 
     // onCardClick(cardId, metadata, laneId)
 
@@ -116,10 +122,10 @@ export const Boards = () => {
     }, []);
 
 
-    const handleBoard = (boardID) => {
-        if (boardID != '') {
+    const handleBoard = () => {
+        if (type != '') {
             document.querySelector('.loaderBox').classList.remove("d-none");
-            fetch(`${base_url}/api/view-lists/${boardID}`,
+            fetch(`${base_url}/api/view-lists/${type}`,
                 {
                     method: 'GET',
                     headers: {
@@ -281,9 +287,10 @@ export const Boards = () => {
 
 
     useEffect(() => {
-        // handleBoard(boardData?.workspace?.boards[0]?.id)
-        handleBoardClick(boardData?.workspace?.boards[0]?.id)
-    }, [boardData])
+        handleBoard()
+    }, [slug])
+
+
 
 
 
@@ -337,10 +344,10 @@ export const Boards = () => {
                 </div>
                 <ul className="list-unstyled">
                     {boardData?.workspace?.boards && boardData?.workspace?.boards.map((item, index) => (
-                        <li key={index} className={`sidebar-li ${item?.id === activeItem ? 'active' : ''}`}>
-                            <button className={`border-0 btn shadow-0 sideLink text-lg-start w-100`} onClick={() => handleBoardClick(item?.id)}>
+                        <li key={index}  className={`sidebar-li ${location.pathname.includes(`/${item?.code}`) ? 'active' : ''}`}>
+                            <Link className={`border-0 btn shadow-0 sideLink text-lg-start w-100`} to={`/board/${item?.code}/${id}/${item?.id}`}>
                                 <span className="sideLinkText">{item.title}</span>
-                            </button>
+                            </Link>
                         </li>
                     ))}
 

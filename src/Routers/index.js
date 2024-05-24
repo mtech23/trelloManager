@@ -5,6 +5,7 @@ import ForgetPassword2 from "../Screens/Auth/ForgetPassword2";
 import ForgetPassword3 from "../Screens/Auth/ForgetPassword3";
 import { Dashboard } from "../Screens/Dashboard";
 import { Boards } from "../Screens/Boards";
+import { WorkPlace } from "../Screens/WorkPlaces";
 import { ProtectedRoutes } from "./ProtectedRoutes";
 import Error from "../Screens/Error";
 import React from 'react';
@@ -23,7 +24,8 @@ export default function AdminRouter() {
 
         {/* <Route path="/dashboard" element={<ProtectedRoutes Components={Dashboard} />} /> */}
         <Route path="/dashboard" element={<ProtectedRoutes Components={Dashboard} />} />
-        <Route path="/board/:id" element={<ProtectedRoutes Components={Boards} />} />
+        <Route path="/wordplace/:slug/:id" element={<ProtectedRoutes Components={WorkPlace} />} />
+        <Route path="/board/:slug/:id/:type" element={<ProtectedRoutes Components={Boards} />} />
         {/* <Route path="/product-management" element={<ProtectedRoutes Components={ProductManagement} />} />
         <Route path="/add-product" element={<ProtectedRoutes Components={AddProduct} />} />
         <Route path="/product-management/product-details/:id" element={<ProtectedRoutes Components={ProductDetails} />} />
