@@ -233,7 +233,7 @@ export const Boards = () => {
             ...prevData,
             title: taskData.title,
             description: taskData.description,
-            board_id: activeItem,
+            board_id: type,
             board_list_id: laneId,
             position: laneId
         }));
@@ -254,7 +254,7 @@ export const Boards = () => {
         setLane((prevData) => ({
             ...prevData,
             title: card?.title,
-            board_id: activeItem,
+            board_id: type,
         }));
 
         setLane(prevData => {
@@ -338,7 +338,7 @@ export const Boards = () => {
 
             /> */}
 
-            <div className={`sidebar sideBarClass`} id="sidebar">
+            <div className={`sidebar ${sideBarClass}`} id="sidebar">
                 <div className="boardTitle">
                     <h6><Avatar name={boardData?.workspace?.title} size={40} round="8px" />{boardData?.workspace?.title}</h6>
                 </div>
