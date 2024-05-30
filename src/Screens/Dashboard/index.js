@@ -113,7 +113,7 @@ export const Dashboard = () => {
                                           <div className="shadow bg-light p-3 rounded-4" key={index}>
                                                 {/* Adding onClick handler to close the dropdown */}
                                                 <Link
-                                                      to={`/wordplace/${item?.code}/${item?.id}`}
+                                                      to={`/w/${item?.code}/${item?.id}`}
                                                       className="nav-link"
 
                                                 >

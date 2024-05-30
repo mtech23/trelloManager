@@ -12,7 +12,7 @@ import { Sidebar } from "../../Components/Layout/Sidebar";
 import CustomInput from "../../Components/CustomInput";
 import CustomButton from "../../Components/CustomButton";
 import CustomModal from "../../Components/CustomModal";
-import { usePost } from "../../Api/usePost";
+import { usePost, useGet } from "../../Api/usePost";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router";
 
@@ -47,7 +47,7 @@ export const Boards = () => {
         window.addEventListener("resize", handleResize);
     }, []);
 
-    const location =  useLocation();
+    const location = useLocation();
 
 
     function sidebarToggle() {
@@ -76,43 +76,41 @@ export const Boards = () => {
 
 
 
-    const handleOpenBox = () => {
-        alert()
-    }
 
 
-    const GetBoardData = () => {
-        document.querySelector('.loaderBox').classList.remove("d-none");
-        fetch(`${base_url}/api/view-workspace/${id}`,
-            {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${LogoutData}`
-                },
-            },
-        )
-            .then((response) => {
-                return response.json()
-            })
-            .then((data) => {
-                console.log(data);
-                setBoardData(data)
-                document.querySelector('.loaderBox').classList.add("d-none");
-            })
-            .catch((error) => {
-                document.querySelector('.loaderBox').classList.add("d-none");
-                console.log(error);
-            })
 
-    }
+    // const GetBoardData = () => {
+    //     document.querySelector('.loaderBox').classList.remove("d-none");
+    //     fetch(`${base_url}/api/view-workspace/${id}`,
+    //         {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Accept': 'application/json',
+    //                 'Content-Type': 'application/json',
+    //                 'Authorization': `Bearer ${LogoutData}`
+    //             },
+    //         },
+    //     )
+    //         .then((response) => {
+    //             return response.json()
+    //         })
+    //         .then((data) => {
+    //             console.log(data);
+    //             setBoardData(data)
+    //             document.querySelector('.loaderBox').classList.add("d-none");
+    //         })
+    //         .catch((error) => {
+    //             document.querySelector('.loaderBox').classList.add("d-none");
+    //             console.log(error);
+    //         })
 
-    console.log('board', boardData)
-    useEffect(() => {
-        GetBoardData()
-        // setData(initialData)
-    }, [slug])
+    // }
+
+    // console.log('board', boardData)
+    // useEffect(() => {
+    //     GetBoardData()
+    //     // setData(initialData)
+    // }, [slug])
 
     // onCardClick(cardId, metadata, laneId)
 
@@ -125,7 +123,7 @@ export const Boards = () => {
     const handleBoard = () => {
         if (type != '') {
             document.querySelector('.loaderBox').classList.remove("d-none");
-            fetch(`${base_url}/api/view-lists/${type}`,
+            fetch(`${base_url}/api/view-lists/${slug}`,
                 {
                     method: 'GET',
                     headers: {
@@ -139,8 +137,9 @@ export const Boards = () => {
                     return response.json()
                 })
                 .then((data) => {
-                    console.log('dataLog', data);
-                    setData(data);
+                    console.log('check', data?.workspace?.boards.find((item) => item?.code == slug));
+                    setData(data?.workspace?.boards.find((item) => item?.code == slug));
+                    setBoardData(data)
                     document.querySelector('.loaderBox').classList.add("d-none");
                 })
                 .catch((error) => {
@@ -187,7 +186,7 @@ export const Boards = () => {
                 setTimeout(() => {
                     setShowModal2(false)
                 }, 1000)
-                GetBoardData()
+                // GetBoardData()
             })
             .catch((error) => {
                 document.querySelector('.loaderBox').classList.add("d-none");
@@ -219,6 +218,21 @@ export const Boards = () => {
     const { ApiData: lanePositionData, loading: laneLoader, error: LanerErrorData, post: UpdateLanePos } = usePost('/api/update-position');
 
 
+    const [taskID, setTaskID] = useState();
+    const [cardShow, setCardShow] = useState(false);
+    const { ApiData: detailData, loading: detailLoading, error: detailError, get: GetDetail } = useGet('/api/task-detail/', null, taskID);
+
+
+    useEffect(() => {
+        GetDetail();
+        setCardShow(true);
+    }, [taskID]);
+
+    const handleOpenBox = (card) => {
+        setTaskID(card);
+    }
+
+
     const [lane, setLane] = useState();
 
 
@@ -233,7 +247,7 @@ export const Boards = () => {
             ...prevData,
             title: taskData.title,
             description: taskData.description,
-            board_id: type,
+            board_id: data?.id,
             board_list_id: laneId,
             position: laneId
         }));
@@ -254,7 +268,7 @@ export const Boards = () => {
         setLane((prevData) => ({
             ...prevData,
             title: card?.title,
-            board_id: type,
+            board_id: data?.id,
         }));
 
         setLane(prevData => {
@@ -297,7 +311,7 @@ export const Boards = () => {
     const [positionData, setPositionData] = useState();
     const handleDrag = (cardId, sourceLaneId, targetLaneId, position, cardDetails) => {
         const taskData = cardDetails;
-        console.log(taskData)
+        console.log('dsadsdasd', taskData)
 
         setPositionData((prevData) => ({
             ...prevData,
@@ -319,9 +333,12 @@ export const Boards = () => {
 
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         UpdateLanePos(positionData);
-    },[positionData])
+    }, [positionData])
+
+
+
 
 
 
@@ -331,21 +348,14 @@ export const Boards = () => {
             <Header
                 sidebarToggle={sidebarToggle}
             />
-            {/* <Sidebar
-                sideClass={sideBarClass}
-                title={boardData?.workspace?.title}
-                boards={boardData?.workspace?.boards}
-
-            /> */}
-
             <div className={`sidebar ${sideBarClass}`} id="sidebar">
                 <div className="boardTitle">
                     <h6><Avatar name={boardData?.workspace?.title} size={40} round="8px" />{boardData?.workspace?.title}</h6>
                 </div>
                 <ul className="list-unstyled">
                     {boardData?.workspace?.boards && boardData?.workspace?.boards.map((item, index) => (
-                        <li key={index}  className={`sidebar-li ${location.pathname.includes(`/${item?.code}`) ? 'active' : ''}`}>
-                            <Link className={`border-0 btn shadow-0 sideLink text-lg-start w-100`} to={`/board/${item?.code}/${id}/${item?.id}`}>
+                        <li key={index} className={`sidebar-li ${location.pathname.includes(`/${item?.code}`) ? 'active' : ''}`}>
+                            <Link className={`border-0 btn shadow-0 sideLink text-lg-start w-100`} to={`/b/${item?.code}`}>
                                 <span className="sideLinkText">{item.title}</span>
                             </Link>
                         </li>
@@ -374,7 +384,7 @@ export const Boards = () => {
                                                     data={data}
                                                     canAddLanes
                                                     onCardAdd={handleCardAdd}
-                                                    // onCardClick={handleOpenBox}
+                                                    onCardClick={handleOpenBox}
                                                     editable
                                                     draggable
                                                     hideCardDeleteIcon
@@ -414,6 +424,17 @@ export const Boards = () => {
 
             </CustomModal>
             <CustomModal show={showModal2} close={() => { setShowModal2(false) }} success heading={message} />
+
+            <CustomModal show={cardShow} close={() => { setCardShow(false) }} heading={detailData?.card?.title}>
+
+
+
+                {
+                    detailLoading ? 'Loading' : detailData && detailData?.card?.mergedActivity[0]?.activity
+                    
+                }
+
+            </CustomModal>
 
         </>
 

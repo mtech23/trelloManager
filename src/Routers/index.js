@@ -24,8 +24,8 @@ export default function AdminRouter() {
 
         {/* <Route path="/dashboard" element={<ProtectedRoutes Components={Dashboard} />} /> */}
         <Route path="/dashboard" element={<ProtectedRoutes Components={Dashboard} />} />
-        <Route path="/wordplace/:slug/:id" element={<ProtectedRoutes Components={WorkPlace} />} />
-        <Route path="/board/:slug/:id/:type" element={<ProtectedRoutes Components={Boards} />} />
+        <Route path="/w/:slug/:id" element={<ProtectedRoutes Components={WorkPlace} />} />
+        <Route path="/b/:slug/" element={<ProtectedRoutes Components={Boards} />} />
         {/* <Route path="/product-management" element={<ProtectedRoutes Components={ProductManagement} />} />
         <Route path="/add-product" element={<ProtectedRoutes Components={AddProduct} />} />
         <Route path="/product-management/product-details/:id" element={<ProtectedRoutes Components={ProductDetails} />} />
