@@ -12,8 +12,8 @@ import './style.css'
 const CustomModal = (props) => {
     return (
         <>
-            <Modal show={props?.show} centered onHide={props?.close}>
-                <button className='closeButton' onClick={props?.close}><FontAwesomeIcon icon={faTimes} /></button>
+            <Modal show={props?.show} centered onHide={props?.close} size={props?.size}>
+                <button className={`closeButton ${props?.className}`} onClick={props?.close}><FontAwesomeIcon icon={faTimes} /></button>
                 <Modal.Body className={props.children ? '' : 'text-center'}>
                     {props?.children ? (
                         ''

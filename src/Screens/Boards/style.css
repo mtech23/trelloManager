@@ -1,0 +1,62 @@
+.activityBox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.userName {
+    display: flex;
+    align-items: center;
+}
+
+.documentFile svg {
+    font-size: 46px !important;
+    color: #858585;
+}
+
+.titleSummary h3 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.titleSummary svg {
+    font-size: 15px;
+    margin-right: 15px;
+}
+
+.titleSummary {
+    margin-bottom: 20px;
+}
+
+
+.attachmentSection .attachmentBox a {
+    width: 135px;
+    height: 96px;
+    display: block;
+    background-size: contain !important;
+    background-repeat: no-repeat;
+    background-color: #f3f3f3;
+}
+
+
+.attachmentSection .documentFile {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none !important;
+    margin-bottom: 0 !important;
+    color: #44546f;
+    font-weight: 800;
+}
+
+
+.taskBoardHeader {
+    position: absolute;
+    right: 0;
+    z-index: 99999;
+}
+
+/* .taskBg {
+    background-color: #091e420f;
+} */

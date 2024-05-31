@@ -44,7 +44,6 @@ export const useGet = (url, initialData = null, idData = '') => {
   const [error, setError] = useState(null);
   const LogoutData = localStorage.getItem('login');
   const [isTriggered, setIsTriggered] = useState(false);
-
   const get = async () => {
     setLoading(true);
     setError(null);
@@ -68,8 +67,10 @@ export const useGet = (url, initialData = null, idData = '') => {
       setLoading(false);
     }
   };
+  
 
 
 
-  return { ApiData, loading, error, get };
+
+return { ApiData, loading, error, get };
 };

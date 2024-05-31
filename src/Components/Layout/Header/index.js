@@ -195,7 +195,7 @@ export const Header = (props) => {
                   </Dropdown.Menu>
                 </Dropdown>
 
-                <CustomButton variant="primaryButton" text="Create Workspace" onClick={() => { setShowForm(true) }}></CustomButton>
+                {/* <CustomButton variant="primaryButton" text="Create Workspace" onClick={() => { setShowForm(true) }}></CustomButton> */}
               </div>
               <div className="otherOptions d-flex align-items-center">
                 {/* <Dropdown className="notiDropdown me-2">
