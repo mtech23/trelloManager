@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleDown, faFile, faFileAlt, faLaughWink, faLink, faList } from "@fortawesome/free-solid-svg-icons";
 import Board from 'react-trello';
 import Avatar from 'react-avatar';
-import "./style.css";
+// import "./style.css";                            
 import { base_url } from "../../Api/base_url";
 import { useNavigate, useParams } from "react-router";
 import { Header } from "../../Components/Layout/Header";
@@ -15,9 +15,9 @@ import CustomModal from "../../Components/CustomModal";
 import { usePost, useGet } from "../../Api/usePost";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router";
-import { CardDetail } from "../CardDetail";
+import FormatDateTime from "../../Components/DateFormate";
 
-export const Boards = () => {
+export const CardDetail = () => {
 
 
     const [sideBarClass, setsideBarClass] = useState("");
@@ -27,8 +27,6 @@ export const Boards = () => {
     const [formData, setFormData] = useState();
     const [message, setMessage] = useState();
     const [showForm, setShowForm] = useState(false);
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (window.innerWidth <= 991) {
@@ -75,7 +73,7 @@ export const Boards = () => {
     const [boardData, setBoardData] = useState();
     const LogoutData = localStorage.getItem('login');
 
-    const { id, type } = useParams();
+    const { id, slug } = useParams();
 
 
     useEffect(() => {
@@ -85,33 +83,31 @@ export const Boards = () => {
 
 
     const handleBoard = () => {
-        if (type != '') {
-            document.querySelector('.loaderBox').classList.remove("d-none");
-            fetch(`${base_url}/api/view-lists/${id}`,
-                {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${LogoutData}`
-                    },
+        document.querySelector('.loaderBox').classList.remove("d-none");
+        fetch(`${base_url}/api/view-lists/${id}`,
+            {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${LogoutData}`
                 },
-            )
-                .then((response) => {
-                    return response.json()
-                })
-                .then((data) => {
-                    console.log('check', data?.workspace?.boards.find((item) => item?.code == id));
-                    setData(data?.workspace?.boards.find((item) => item?.code == id));
-                    setBoardData(data)
-                    console.log('sdasa', data)
-                    document.querySelector('.loaderBox').classList.add("d-none");
-                })
-                .catch((error) => {
-                    document.querySelector('.loaderBox').classList.add("d-none");
-                    console.log(error);
-                })
-        }
+            },
+        )
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                console.log('check', data?.workspace?.boards.find((item) => item?.code == id));
+                setData(data?.workspace?.boards.find((item) => item?.code == id));
+                setBoardData(data)
+                console.log('sdasa', data)
+                document.querySelector('.loaderBox').classList.add("d-none");
+            })
+            .catch((error) => {
+                document.querySelector('.loaderBox').classList.add("d-none");
+                console.log(error);
+            })
 
     }
 
@@ -182,35 +178,21 @@ export const Boards = () => {
     const { ApiData: storeListApiData, loading: storeListLoading, error: storeListError, post: storeListPost } = usePost('/api/storelist');
     const { ApiData: lanePositionData, loading: laneLoader, error: LanerErrorData, post: UpdateLanePos } = usePost('/api/update-position');
 
-    const getBoardDetails = (cardID) => {
-        document.querySelector('.loaderBox').classList.remove("d-none");
-        fetch(`${base_url}/api/task-detail/${cardID}`,
-            {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${LogoutData}`
-                },
-            },
-        )
-            .then((response) => {
-                return response.json()
-            })
-            .then((data) => {
-                document.querySelector('.loaderBox').classList.add("d-none");
-                navigate(`/b/${id}/${data?.card?.slug}`)
 
-            })
-            .catch((error) => {
-                document.querySelector('.loaderBox').classList.add("d-none");
-                console.log(error);
-            })
+    const [taskID, setTaskID] = useState('');
+    const [cardShow, setCardShow] = useState(false);
+    const [trigger, setTrigger] = useState(false);
+    const { ApiData: detailData, loading: detailLoading, error: detailError, get: GetDetail } = useGet(`/api/b/${id}/${slug}`, null);
 
-    }
+
+    useEffect(() => {
+        GetDetail();
+        setCardShow(true);
+    }, [slug]);
 
     const handleOpenBox = (card) => {
-        getBoardDetails(card)
+        console.log(card);
+
     }
 
 
@@ -319,6 +301,12 @@ export const Boards = () => {
     }, [positionData])
 
 
+    const navigate = useNavigate();
+
+    const closeTask = () => {
+        setCardShow(false);
+        navigate(`/b/${id}/`)
+    }
 
 
 
@@ -417,6 +405,115 @@ export const Boards = () => {
             </CustomModal>
             <CustomModal show={showModal2} close={() => { setShowModal2(false) }} success heading={message} />
 
+            <div className="detailTaskBox">
+                <CustomModal show={cardShow} close={() => { closeTask() }} heading={detailData?.data?.card?.title} size="lg" className="taskBoardHeader">
+
+                    <div className="descriptionBox">
+
+                    </div>
+                    <div className="attachmentSection my-5">
+                        <div className="titleSummary">
+                            <h3><FontAwesomeIcon icon={faLink}></FontAwesomeIcon>Attachment</h3>
+                        </div>
+                        {
+                            detailLoading ? 'Loading' : detailData?.data && detailData?.data?.card && detailData?.data?.card?.mergedActivity && detailData.data?.card?.mergedActivity?.map((item, index) => {
+                                switch (item?.type) {
+                                    case "attachment":
+                                        return (
+                                            <div className="attachmentBox mb-4">
+                                                <div>
+                                                    {
+                                                        item?.ext == 'txt' ? (
+                                                            <a href={base_url + item?.attachment_url} target="_blank" className="documentFile" ><span class="attachment-thumbnail-preview-ext">docx</span></a>
+                                                        ) : (
+                                                            <a href={base_url + item?.attachment_url} target="_blank" style={{ backgroundImage: `url(${base_url + item?.attachment_url})`, backgroundPosition: 'center' }}></a>
+                                                        )
+                                                    }
+
+                                                    <FormatDateTime isoDateString={item?.created_at} />
+                                                </div>
+                                            </div>
+                                        );
+
+                                    default:
+                                        return null;
+                                }
+                            })
+                        }
+
+                    </div>
+                    <div className="activitySection">
+                        <div className="titleSummary">
+                            <h3><FontAwesomeIcon icon={faList}></FontAwesomeIcon>Activity</h3>
+                        </div>
+                        {
+                            detailLoading ? 'Loading' : detailData && detailData?.data?.card && detailData?.data?.card.mergedActivity && detailData?.data?.card?.mergedActivity.map((item, index) => {
+                                switch (item?.type) {
+                                    case "activity":
+                                        return (
+                                            <>
+                                                <div className="activityBox" key={index}>
+                                                    <div className="userName">
+                                                        <Avatar name={item?.user?.username} size={40} round="50px" />
+                                                    </div>
+                                                    <div className="activityContent">
+                                                        <div dangerouslySetInnerHTML={{ __html: item?.activity }} />
+                                                        <FormatDateTime isoDateString={item?.created_at} />
+                                                    </div>
+
+                                                </div>
+                                            </>
+                                        );
+                                    case "attachment":
+                                        return (
+                                            <div className="attachmentBox mb-4">
+                                                <div className="activityBox" key={index}>
+                                                    <div className="userName">
+                                                        <Avatar name={item?.user?.username} size={40} round="50px" />
+                                                    </div>
+                                                    <div className="activityContent">
+                                                        <div>
+                                                            <strong>Attachment:</strong> <a href={item?.attachment_url} target="_blank" rel="noopener noreferrer">{item?.attachment_name}</a>
+                                                            <FormatDateTime isoDateString={item?.created_at} />
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div className="ps-5">
+                                                    {
+                                                        item?.ext == 'txt' ? (
+                                                            <a href={base_url + item?.attachment_url} target="_blank" className="documentFile"><FontAwesomeIcon icon={faFileAlt}></FontAwesomeIcon><p>{item?.attachment_name}</p></a>
+                                                        ) : (
+                                                            <a href={base_url + item?.attachment_url} target="_blank"><img src={base_url + item?.attachment_url} className="mw-100 d-block" /></a>
+                                                        )
+                                                    }
+
+                                                </div>
+                                            </div>
+                                        );
+                                    case "comment":
+                                        return (
+                                            <div className="activityBox" key={index}>
+                                                <div className="userName">
+                                                    <Avatar name={item?.user?.username} size={40} round="50px" />
+                                                </div>
+                                                <div className="activityContent shadow rounded-4 flex-grow-1 p-3">
+                                                    <div>
+                                                        {item?.comment}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    default:
+                                        return null;
+                                }
+                            })
+                        }
+                    </div>
+
+                </CustomModal >
+            </div >
 
 
 
