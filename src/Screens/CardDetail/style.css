@@ -1,0 +1,38 @@
+.dataExist {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.actionBtn button, .actionBtn a {
+    border: none;
+    background-color: transparent;
+    font-size: 14px;
+    text-decoration: underline;
+    outline: none;
+}
+
+
+.activityContent {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    font-size: 14px;
+}
+
+.activityContent small, .dateTime small {
+    font-size: 12px;
+    color: #7e7c7c;
+}
+
+.activityAttached {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.activityAttached strong {
+    text-transform: capitalize;
+}

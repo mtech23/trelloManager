@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleDown, faFile, faFileAlt, faLaughWink, faLink, faList } from "@fortawesome/free-solid-svg-icons";
 import Board from 'react-trello';
 import Avatar from 'react-avatar';
-// import "./style.css";                            
+import "./style.css";                            
 import { base_url } from "../../Api/base_url";
 import { useNavigate, useParams } from "react-router";
 import { Header } from "../../Components/Layout/Header";
@@ -351,16 +351,6 @@ export const CardDetail = () => {
                                             <div>
                                                 <Board
                                                     data={data}
-                                                    // canAddLanes
-                                                    // onCardAdd={handleCardAdd}
-                                                    // onCardClick={handleOpenBox}
-                                                    // draggable
-                                                    // editable
-                                                    // hideCardDeleteIcon
-                                                    // onDataChange={onDataChange}
-                                                    // onLaneAdd={onLaneAdd}
-                                                    // handleDragEnd={handleDrag}
-
                                                     canAddLanes
                                                     editable
                                                     draggable
@@ -421,16 +411,27 @@ export const CardDetail = () => {
                                     case "attachment":
                                         return (
                                             <div className="attachmentBox mb-4">
-                                                <div>
+                                                <div className="dataExist">
                                                     {
                                                         item?.ext == 'txt' ? (
-                                                            <a href={base_url + item?.attachment_url} target="_blank" className="documentFile" ><span class="attachment-thumbnail-preview-ext">docx</span></a>
+                                                            <div className="attachmentData">
+                                                                <a href={base_url + item?.attachment_url} target="_blank" className="documentFile" ><span class="attachment-thumbnail-preview-ext">docx</span></a>
+                                                            </div>
                                                         ) : (
-                                                            <a href={base_url + item?.attachment_url} target="_blank" style={{ backgroundImage: `url(${base_url + item?.attachment_url})`, backgroundPosition: 'center' }}></a>
+                                                            <div className="attachmentData">
+                                                                <a href={base_url + item?.attachment_url} target="_blank" style={{ backgroundImage: `url(${base_url + item?.attachment_url})`, backgroundPosition: 'center' }}></a>
+                                                            </div>
                                                         )
                                                     }
 
-                                                    <FormatDateTime isoDateString={item?.created_at} />
+                                                    <div className="dateTime">
+                                                        <FormatDateTime isoDateString={item?.created_at} />
+                                                    </div>
+                                                    <div class="actionBtn">
+                                                        <button type="button">Comment</button>
+                                                        <button type="button">Download</button>
+                                                        <button type="button">Delete</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         );
@@ -472,8 +473,8 @@ export const CardDetail = () => {
                                                         <Avatar name={item?.user?.username} size={40} round="50px" />
                                                     </div>
                                                     <div className="activityContent">
-                                                        <div>
-                                                            <strong>Attachment:</strong> <a href={item?.attachment_url} target="_blank" rel="noopener noreferrer">{item?.attachment_name}</a>
+                                                        <div className="activityAttached">
+                                                             <strong>{item?.user?.username}</strong> attachment <a href={item?.attachment_url} target="_blank" rel="noopener noreferrer">{item?.attachment_name}</a>
                                                             <FormatDateTime isoDateString={item?.created_at} />
 
                                                         </div>

@@ -277,10 +277,6 @@ export const Boards = () => {
     }, [lane])
 
 
-
-
-
-
     useEffect(() => {
         handleBoard()
     }, [id])
