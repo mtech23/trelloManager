@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleDown, faFile, faFileAlt, faLaughWink, faLink, faList } from "@fortawesome/free-solid-svg-icons";
 import Board from 'react-trello';
 import Avatar from 'react-avatar';
-import "./style.css";                            
+import "./style.css";
 import { base_url } from "../../Api/base_url";
 import { useNavigate, useParams } from "react-router";
 import { Header } from "../../Components/Layout/Header";
@@ -310,6 +310,44 @@ export const CardDetail = () => {
 
 
 
+    const [file, setFile] = useState(null);
+
+    const onFileChange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            console.log('File name:', file.name);
+            console.log('File type:', file.type);
+            console.log('File size:', file.size);
+
+            const formDataAttached = new FormData();
+            formDataAttached.append('file', file);
+
+            fetch(`${base_url}/api/add-attachment`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${LogoutData}`
+                },
+                body: formDataAttached // Use the FormData object as the request body
+            })
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    document.querySelector('.loaderBox').classList.add("d-none");
+                    console.log(data);
+
+                    handleBoard()
+                })
+                .catch((error) => {
+                    document.querySelector('.loaderBox').classList.add("d-none");
+                    console.log(error)
+                })
+        }
+    };
+
+
+
 
     return (
 
@@ -402,8 +440,21 @@ export const CardDetail = () => {
 
                     </div>
                     <div className="attachmentSection my-5">
-                        <div className="titleSummary">
+                        <div className="titleSummary attachmendHead">
                             <h3><FontAwesomeIcon icon={faLink}></FontAwesomeIcon>Attachment</h3>
+                            <div class="addAttachment">
+                                <CustomInput
+                                    type="file"
+                                    label="Add"
+                                    labelClass="btnBox"
+                                    inputClass="d-none"
+                                    id="add"
+                                    onChange={onFileChange}
+
+                                />
+
+
+                            </div>
                         </div>
                         {
                             detailLoading ? 'Loading' : detailData?.data && detailData?.data?.card && detailData?.data?.card?.mergedActivity && detailData.data?.card?.mergedActivity?.map((item, index) => {
@@ -446,6 +497,14 @@ export const CardDetail = () => {
                     <div className="activitySection">
                         <div className="titleSummary">
                             <h3><FontAwesomeIcon icon={faList}></FontAwesomeIcon>Activity</h3>
+                            <div className="commentBox">
+                                <div className="userName">
+                                    <Avatar name={detailData?.user?.name} size={40} round="50px" />
+                                </div>
+                                <div className="commentAreaBox shadow">
+                                    <span>Write a comment...</span>
+                                </div>
+                            </div>
                         </div>
                         {
                             detailLoading ? 'Loading' : detailData && detailData?.data?.card && detailData?.data?.card.mergedActivity && detailData?.data?.card?.mergedActivity.map((item, index) => {
@@ -474,7 +533,7 @@ export const CardDetail = () => {
                                                     </div>
                                                     <div className="activityContent">
                                                         <div className="activityAttached">
-                                                             <strong>{item?.user?.username}</strong> attachment <a href={item?.attachment_url} target="_blank" rel="noopener noreferrer">{item?.attachment_name}</a>
+                                                            <strong>{item?.user?.username}</strong> attachment <a href={item?.attachment_url} target="_blank" rel="noopener noreferrer">{item?.attachment_name}</a>
                                                             <FormatDateTime isoDateString={item?.created_at} />
 
                                                         </div>

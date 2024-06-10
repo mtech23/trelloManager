@@ -36,3 +36,29 @@
 .activityAttached strong {
     text-transform: capitalize;
 }
+
+
+.attachmendHead {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.addAttachment label {
+    background-color: #f3f3f3;
+    padding: 6px 14px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.commentBox {
+    display: flex;
+    align-items: center;
+}
+
+.commentAreaBox {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+}
