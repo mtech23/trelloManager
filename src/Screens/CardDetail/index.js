@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DashboardLayout } from "./../../Components/Layout/DashboardLayout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowCircleDown, faFile, faFileAlt, faLaughWink, faLink, faList } from "@fortawesome/free-solid-svg-icons";
+import { faArrowCircleDown, faBars, faFile, faFileAlt, faLaughWink, faLink, faList } from "@fortawesome/free-solid-svg-icons";
 import Board from 'react-trello';
 import Avatar from 'react-avatar';
 import "./style.css";
@@ -16,6 +16,13 @@ import { usePost, useGet } from "../../Api/usePost";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router";
 import FormatDateTime from "../../Components/DateFormate";
+import { TextEditor } from "../../Components/TextEditor";
+import CustomCard from "../../Components/CustomCard";
+
+
+
+
+
 
 export const CardDetail = () => {
 
@@ -188,7 +195,13 @@ export const CardDetail = () => {
     useEffect(() => {
         GetDetail();
         setCardShow(true);
+
     }, [slug]);
+
+
+    useEffect(() => {
+        setEditorContent(detailData?.data?.card?.description);
+    }, [detailData])
 
     const handleOpenBox = (card) => {
         console.log(card);
@@ -315,12 +328,12 @@ export const CardDetail = () => {
     const onFileChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            console.log('File name:', file.name);
-            console.log('File type:', file.type);
-            console.log('File size:', file.size);
+
 
             const formDataAttached = new FormData();
-            formDataAttached.append('file', file);
+            formDataAttached.append('attachment_url', file);
+            formDataAttached.append('user_id', detailData?.user?.id);
+            formDataAttached.append('task_id', detailData?.data?.card?.id);
 
             fetch(`${base_url}/api/add-attachment`, {
                 method: 'POST',
@@ -337,7 +350,7 @@ export const CardDetail = () => {
                     document.querySelector('.loaderBox').classList.add("d-none");
                     console.log(data);
 
-                    handleBoard()
+                    GetDetail()
                 })
                 .catch((error) => {
                     document.querySelector('.loaderBox').classList.add("d-none");
@@ -347,6 +360,92 @@ export const CardDetail = () => {
     };
 
 
+
+    // editor 
+
+    const [editorContent, setEditorContent] = useState('');
+    const [showEditor, setShowEditor] = useState(false);
+    const [showEditorDescription, setShowEditorDescription] = useState(false);
+    const [descriptionFormData, setDescriptionFormData] = useState();
+    const [newContent, setNewContent] = useState();
+
+    const handleEditorData = (content, delta, source, editor) => {
+        setEditorContent(content);
+        console.log(content)
+    };
+
+    const handleNewComment = (content, delta, source, editor) => {
+        setNewContent(content)
+    }
+
+
+    const { ApiData: updateDescription, loading: updateDescriptionLoading, error: updateDescriptionError, post: updateDescriptionData } = usePost('/api/add-task');
+
+    const handleEditDescription = () => {
+        setDescriptionFormData((prevData) => ({
+            ...prevData,
+            title: detailData?.data?.card?.title,
+            description: editorContent,
+            board_id: data?.id,
+            board_list_id: detailData?.data?.card?.board_list_id,
+            position: detailData?.data?.card?.position,
+            id: detailData?.data?.card?.id
+        }));
+
+
+        setDescriptionFormData(prevData => {
+            console.log('updateItem', prevData);
+            return prevData;
+        });
+    }
+
+    useEffect(() => {
+        if (descriptionFormData?.board_id && descriptionFormData?.board_list_id && descriptionFormData?.title && descriptionFormData?.description && descriptionFormData?.id) {  // Check if descriptionFormData has the necessary fields
+            console.log('updateData', descriptionFormData);
+            updateDescriptionData(descriptionFormData);
+        }
+    }, [descriptionFormData])
+
+
+    useEffect(() => {
+        setShowEditorDescription(false)
+    }, [updateDescription])
+
+
+
+    // add comment 
+
+
+    const [addComnet, setAddCommet] = useState();
+    const { ApiData: addComment, loading: addCommentLoading, error: addCommentError, post: addCommentData } = usePost('/api/add-comment');
+
+    const handleAddComment = () => {
+        setAddCommet((prevData) => ({
+            ...prevData,
+            comment: newContent,
+            user_id: detailData?.user?.id,
+            task_id: detailData?.data?.card?.id,
+        }));
+
+
+        setAddCommet(prevData => {
+            console.log('updateItem', prevData);
+            return prevData;
+        });
+    }
+
+    useEffect(() => {
+        if (addComnet?.comment && addComnet?.user_id && addComnet?.task_id) {  // Check if addComnet has the necessary fields
+            console.log('updateData', addComnet);
+            addCommentData(addComnet);
+        }
+    }, [addComnet])
+
+
+    useEffect(() => {
+        setShowEditor(false)
+        GetDetail()
+    }, [addComment])
 
 
     return (
@@ -389,6 +488,7 @@ export const CardDetail = () => {
                                             <div>
                                                 <Board
                                                     data={data}
+                                                    components={{ Card: CustomCard }}
                                                     canAddLanes
                                                     editable
                                                     draggable
@@ -398,6 +498,7 @@ export const CardDetail = () => {
                                                     onDataChange={onDataChange}
                                                     onLaneAdd={onLaneAdd}
                                                     handleDragEnd={handleDrag}
+
 
 
 
@@ -437,7 +538,38 @@ export const CardDetail = () => {
                 <CustomModal show={cardShow} close={() => { closeTask() }} heading={detailData?.data?.card?.title} size="lg" className="taskBoardHeader">
 
                     <div className="descriptionBox">
+                        <div className="titleSummary attachmendHead">
+                            <h3><FontAwesomeIcon icon={faBars}></FontAwesomeIcon>Description</h3>
+                            <div class="addAttachment">
+                                <button className="editBtn border-0" type="button" onClick={() => { setShowEditorDescription(true) }}>Edit</button>
+                            </div>
+                        </div>
+                        <div className="descBox">
+                            {
 
+                                showEditorDescription === true ? (
+                                    <>
+                                        <div className="commentAreaBox shadow">
+                                            <TextEditor value={editorContent} onChange={handleEditorData} />
+
+                                        </div>
+                                        <div className="btnBoxes">
+                                            <button className="btnPrimary" type="button" onClick={handleEditDescription}>Save</button>
+                                            <button className="btnSecondary" type="button" onClick={() => { setShowEditorDescription(false) }}>Cancel</button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="commentAreaBox shadow">
+                                        {editorContent ? (
+                                            <div dangerouslySetInnerHTML={{ __html: editorContent }} />
+
+                                        ) : (
+                                            <span>Add a more detailed description…</span>
+                                        )}
+                                    </div>
+                                )
+                            }
+                        </div>
                     </div>
                     <div className="attachmentSection my-5">
                         <div className="titleSummary attachmendHead">
@@ -449,6 +581,7 @@ export const CardDetail = () => {
                                     labelClass="btnBox"
                                     inputClass="d-none"
                                     id="add"
+                                    multiple
                                     onChange={onFileChange}
 
                                 />
@@ -458,22 +591,33 @@ export const CardDetail = () => {
                         </div>
                         {
                             detailLoading ? 'Loading' : detailData?.data && detailData?.data?.card && detailData?.data?.card?.mergedActivity && detailData.data?.card?.mergedActivity?.map((item, index) => {
+
                                 switch (item?.type) {
                                     case "attachment":
                                         return (
                                             <div className="attachmentBox mb-4">
                                                 <div className="dataExist">
                                                     {
-                                                        item?.ext == 'txt' ? (
+                                                        (item?.ext.toLowerCase() === 'txt' || item?.ext.toLowerCase() === 'doc' || item?.ext.toLowerCase() === 'docx' || item?.ext.toLowerCase() === 'pdf' || item?.ext.toLowerCase() === 'csv' || item?.ext.toLowerCase() === 'xls' || item?.ext.toLowerCase() === 'xlsx' || item?.ext.toLowerCase() === 'ppt' || item?.ext.toLowerCase() === 'pptx') ? (
                                                             <div className="attachmentData">
-                                                                <a href={base_url + item?.attachment_url} target="_blank" className="documentFile" ><span class="attachment-thumbnail-preview-ext">docx</span></a>
+                                                                <a href={base_url + item?.attachment_url} target="_blank" className="documentFile" >
+                                                                    <span className="attachment-thumbnail-preview-ext">{item?.ext.toLowerCase()}</span>
+                                                                </a>
                                                             </div>
-                                                        ) : (
+                                                        ) : item?.ext.toLowerCase() === 'mp4' || item?.ext.toLowerCase() === 'avi' || item?.ext.toLowerCase() === 'mov' || item?.ext.toLowerCase() === 'wmv' || item?.ext.toLowerCase() === 'flv' ? (
                                                             <div className="attachmentData">
-                                                                <a href={base_url + item?.attachment_url} target="_blank" style={{ backgroundImage: `url(${base_url + item?.attachment_url})`, backgroundPosition: 'center' }}></a>
+                                                                <video controls width={150}>
+                                                                    <source src={base_url + item?.attachment_url} type={`video/${item?.ext.toLowerCase()}`} />
+                                                                    {/* Your browser does not support the video tag. */}
+                                                                </video>
                                                             </div>
-                                                        )
+                                                        ) : item?.ext.toLowerCase() == 'png' || item?.ext.toLowerCase() == 'jpg' || item?.ext.toLowerCase() == 'jpeg' || item?.ext.toLowerCase() == 'gif' || item?.ext.toLowerCase() == 'bmp' || item?.ext.toLowerCase() == 'tiff' ? (
+                                                            <div className="attachmentData">
+                                                                <a href={base_url + item?.attachment_url} target="_blank" style={{ backgroundImage: `url(${base_url + item?.attachment_url})`, backgroundPosition: 'center', display: 'block' }}></a>
+                                                            </div>
+                                                        ) : null
                                                     }
+
 
                                                     <div className="dateTime">
                                                         <FormatDateTime isoDateString={item?.created_at} />
@@ -497,13 +641,31 @@ export const CardDetail = () => {
                     <div className="activitySection">
                         <div className="titleSummary">
                             <h3><FontAwesomeIcon icon={faList}></FontAwesomeIcon>Activity</h3>
-                            <div className="commentBox">
+                            <div className={`commentBox ${showEditor ? 'align-items-start' : 'align-items-center'}`}>
                                 <div className="userName">
                                     <Avatar name={detailData?.user?.name} size={40} round="50px" />
                                 </div>
-                                <div className="commentAreaBox shadow">
-                                    <span>Write a comment...</span>
-                                </div>
+                                {
+                                    showEditor === true ? (
+                                        <div className="data flex-grow-1">
+                                            <div className="commentAreaBox shadow">
+                                                <TextEditor value={newContent} onChange={handleNewComment} />
+
+                                            </div>
+                                            <div className="btnBoxes">
+                                                <button className="btnPrimary" type="button" onClick={handleAddComment}>Save</button>
+                                                <button className="btnSecondary" type="button" onClick={() => { setShowEditor(false) }}>Cancel</button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="commentAreaBox shadow" onClick={() => { setShowEditor(true) }}>
+                                            <span>Write a comment...</span>
+                                        </div>
+                                    )
+                                }
+                            </div>
+                            <div className="dataEditor">
+
                             </div>
                         </div>
                         {
@@ -542,12 +704,29 @@ export const CardDetail = () => {
                                                 </div>
                                                 <div className="ps-5">
                                                     {
-                                                        item?.ext == 'txt' ? (
-                                                            <a href={base_url + item?.attachment_url} target="_blank" className="documentFile"><FontAwesomeIcon icon={faFileAlt}></FontAwesomeIcon><p>{item?.attachment_name}</p></a>
+                                                        (item?.ext.toLowerCase() === 'txt' || item?.ext.toLowerCase() === 'doc' || item?.ext.toLowerCase() === 'docx' || item?.ext.toLowerCase() === 'pdf' || item?.ext.toLowerCase() === 'csv' || item?.ext.toLowerCase() === 'xls' || item?.ext.toLowerCase() === 'xlsx' || item?.ext.toLowerCase() === 'ppt' || item?.ext.toLowerCase() === 'pptx') ? (
+                                                            <a href={base_url + item?.attachment_url} target="_blank" className="documentFile">
+                                                                <FontAwesomeIcon icon={faFileAlt} />
+                                                                <p>{item?.attachment_name}</p>
+                                                            </a>
                                                         ) : (
-                                                            <a href={base_url + item?.attachment_url} target="_blank"><img src={base_url + item?.attachment_url} className="mw-100 d-block" /></a>
+                                                            item?.ext.toLowerCase() === 'mp4' || item?.ext.toLowerCase() === 'avi' || item?.ext.toLowerCase() === 'mov' || item?.ext.toLowerCase() === 'wmv' || item?.ext.toLowerCase() === 'flv' ? (
+                                                                <div className="attachmentData">
+                                                                    <video controls width={300}>
+                                                                        <source src={base_url + item?.attachment_url} type={`video/${item?.ext.toLowerCase()}`} />
+                                                                        Your browser does not support the video tag.
+                                                                    </video>
+                                                                </div>
+                                                            ) : (
+                                                                item?.ext.toLowerCase() === 'png' || item?.ext.toLowerCase() === 'jpg' || item?.ext.toLowerCase() === 'jpeg' || item?.ext.toLowerCase() === 'gif' || item?.ext.toLowerCase() === 'bmp' || item?.ext.toLowerCase() === 'tiff' ? (
+                                                                    <a href={base_url + item?.attachment_url} target="_blank">
+                                                                        <img src={base_url + item?.attachment_url} className="mw-100 d-block" />
+                                                                    </a>
+                                                                ) : null
+                                                            )
                                                         )
                                                     }
+
 
                                                 </div>
                                             </div>
@@ -559,9 +738,7 @@ export const CardDetail = () => {
                                                     <Avatar name={item?.user?.username} size={40} round="50px" />
                                                 </div>
                                                 <div className="activityContent shadow rounded-4 flex-grow-1 p-3">
-                                                    <div>
-                                                        {item?.comment}
-                                                    </div>
+                                                    <div dangerouslySetInnerHTML={{ __html: item?.comment }} />
                                                 </div>
                                             </div>
                                         );
@@ -580,4 +757,7 @@ export const CardDetail = () => {
         </>
 
     );
+
+
+
 };

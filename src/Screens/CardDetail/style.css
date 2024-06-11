@@ -44,7 +44,7 @@
     align-items: center;
 }
 
-.addAttachment label {
+.addAttachment label, .editBtn {
     background-color: #f3f3f3;
     padding: 6px 14px;
     border-radius: 3px;
@@ -53,7 +53,7 @@
 
 .commentBox {
     display: flex;
-    align-items: center;
+    /* align-items: center; */
 }
 
 .commentAreaBox {
@@ -61,4 +61,32 @@
     padding: 10px;
     border-radius: 10px;
     font-size: 14px;
+}
+
+
+.ql-toolbar.ql-snow {
+    border-bottom: 1px solid #d1d1d1c2 !important;
+    border: none;
+}
+
+.ql-container.ql-snow {
+    border: none !important;
+}
+
+
+.btnBoxes button {
+    padding: 4px 10px;
+    border: none;
+    min-width: 85px;
+    border-radius: 4px;
+}
+
+.btnBoxes {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btnPrimary {
+    background-color: #6fc8b4;
 }

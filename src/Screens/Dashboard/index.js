@@ -102,7 +102,7 @@ export const Dashboard = () => {
 
       return (
             <DashboardLayout>
-                  <div className="container">
+                  <div className="container dashCard">
 
                         <div className="row mb-3">
                               <div className="col-md-12 mb-5 text-center">

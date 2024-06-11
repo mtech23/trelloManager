@@ -16,6 +16,7 @@ import { usePost, useGet } from "../../Api/usePost";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router";
 import { CardDetail } from "../CardDetail";
+import CustomCard from "../../Components/CustomCard";
 
 export const Boards = () => {
 
@@ -359,16 +360,7 @@ export const Boards = () => {
                                             <div>
                                                 <Board
                                                     data={data}
-                                                    // canAddLanes
-                                                    // onCardAdd={handleCardAdd}
-                                                    // onCardClick={handleOpenBox}
-                                                    // draggable
-                                                    // editable
-                                                    // hideCardDeleteIcon
-                                                    // onDataChange={onDataChange}
-                                                    // onLaneAdd={onLaneAdd}
-                                                    // handleDragEnd={handleDrag}
-
+                                                    components={{ Card: CustomCard }}
                                                     canAddLanes
                                                     editable
                                                     draggable

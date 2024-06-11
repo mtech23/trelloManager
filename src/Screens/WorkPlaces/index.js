@@ -155,7 +155,7 @@ export const WorkPlace = () => {
         <DashboardLayout>
             <div className="container">
 
-                <div className="row mb-3">
+                <div className="row mb-3 dashCard">
                     <div className="col-md-12 mb-5 text-center">
                         <h2 className="text-light font-weight-600">Your Boards</h2>
                     </div>
