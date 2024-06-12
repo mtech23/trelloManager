@@ -90,3 +90,20 @@
 .btnPrimary {
     background-color: #6fc8b4;
 }
+
+.commentActions {margin-top: 10px;}
+
+.commentActions button {
+    font-size: 14px;
+    border: none;
+    background-color: transparent;
+}
+
+.commentActions button svg {
+    font-size: 13px;
+    padding-right: 3px;
+}
+
+.commentBar {
+    flex-grow: 1;
+}
