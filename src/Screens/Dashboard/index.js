@@ -87,11 +87,11 @@ export const Dashboard = () => {
       const handleChange = (event) => {
             const { name, value } = event.target;
             setFormData((prevData) => ({
-              ...prevData,
-              [name]: value,
+                  ...prevData,
+                  [name]: value,
             }));
             console.log(formData)
-          };
+      };
 
       // onCardClick(cardId, metadata, laneId)
 
@@ -99,6 +99,8 @@ export const Dashboard = () => {
             document.title = "Trello WorkPlace | Dashboard";
             WorkPlaceList()
       }, []);
+
+      const userID = localStorage.getItem('userID');
 
       return (
             <DashboardLayout>
@@ -123,9 +125,15 @@ export const Dashboard = () => {
                                           </div>
                                     </div>
                               ))}
-                              <div className="col-md-12 text-center">
-                                    <CustomButton variant="primaryButton" text="Create Workspace" onClick={() => { setShowForm(true) }}></CustomButton>
-                              </div>
+
+                              {
+                                    userID == '1' && (
+
+                                          <div className="col-md-12 text-center">
+                                                <CustomButton variant="primaryButton" text="Create Workspace" onClick={() => { setShowForm(true) }}></CustomButton>
+                                          </div>
+                                    )
+                              }
                         </div>
                   </div>
 

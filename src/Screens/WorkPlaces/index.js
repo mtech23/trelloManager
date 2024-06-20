@@ -151,6 +151,8 @@ export const WorkPlace = () => {
             })
     }
 
+    const userID = localStorage.getItem('userID');
+
     return (
         <DashboardLayout>
             <div className="container">
@@ -174,9 +176,15 @@ export const WorkPlace = () => {
                             </div>
                         </div>
                     ))}
-                    <div className="col-md-12 text-center">
-                        <CustomButton variant="primaryButton" text="Add Board" onClick={() => { setShowForm(true) }}></CustomButton>
-                    </div>
+
+                    {
+                        userID == '1' && (
+
+                            <div className="col-md-12 text-center">
+                                <CustomButton variant="primaryButton" text="Add Board" onClick={() => { setShowForm(true) }}></CustomButton>
+                            </div>
+                        )
+                    }
                 </div>
             </div>
 
@@ -202,7 +210,7 @@ export const WorkPlace = () => {
             </CustomModal>
 
 
-           
+
         </DashboardLayout>
     );
 };

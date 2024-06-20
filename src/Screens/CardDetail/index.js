@@ -18,6 +18,8 @@ import { useLocation } from "react-router";
 import FormatDateTime from "../../Components/DateFormate";
 import { TextEditor } from "../../Components/TextEditor";
 import CustomCard from "../../Components/CustomCard";
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 
 
@@ -335,7 +337,7 @@ export const CardDetail = () => {
             formDataAttached.append('attachment_url', file);
             formDataAttached.append('user_id', detailData?.user?.id);
             formDataAttached.append('task_id', detailData?.data?.card?.id);
-
+            document.querySelector('.loaderBox').classList.remove("d-none");
             fetch(`${base_url}/api/add-attachment`, {
                 method: 'POST',
                 headers: {
@@ -406,7 +408,7 @@ export const CardDetail = () => {
     const handleEditDescription = () => {
         setDescriptionFormData((prevData) => ({
             ...prevData,
-            title: detailData?.data?.card?.title,
+            title: title ? title : detailData?.data?.card?.title,
             description: editorContent,
             board_id: data?.id,
             board_list_id: detailData?.data?.card?.board_list_id,
@@ -422,7 +424,7 @@ export const CardDetail = () => {
     }
 
     useEffect(() => {
-        if (descriptionFormData?.board_id && descriptionFormData?.board_list_id && descriptionFormData?.title && descriptionFormData?.description && descriptionFormData?.id) {  // Check if descriptionFormData has the necessary fields
+        if (descriptionFormData?.board_id && descriptionFormData?.board_list_id && descriptionFormData?.title && descriptionFormData?.description ? descriptionFormData?.description : '' && descriptionFormData?.id) {  // Check if descriptionFormData has the necessary fields
             console.log('updateData', descriptionFormData);
             updateDescriptionData(descriptionFormData);
         }
@@ -430,7 +432,8 @@ export const CardDetail = () => {
 
 
     useEffect(() => {
-        setShowEditorDescription(false)
+        setShowEditorDescription(false);
+        GetDetail()
     }, [updateDescription])
 
 
@@ -468,6 +471,7 @@ export const CardDetail = () => {
         setShowEditor(false)
         GetDetail()
         setNewContent('')
+        setAddCommet('')
     }, [addComment])
 
 
@@ -534,6 +538,11 @@ export const CardDetail = () => {
         GetDetail()
     }, [deleteData])
 
+    const userID = localStorage.getItem('userID');
+
+    const [isEditable, setIsEditable] = useState(false);
+    const [title, setTitle] = useState();
+
     return (
 
         <>
@@ -553,12 +562,16 @@ export const CardDetail = () => {
                         </li>
                     ))}
 
+                    {
+                        userID == '1' && (
+                            <li className="sidebar-li px-3">
+                                <button className={`customButton primaryButton w-100`} onClick={() => { setShowForm(true) }}>
+                                    <span className="sideLinkText">Add Board +</span>
+                                </button>
+                            </li>
+                        )
+                    }
 
-                    <li className="sidebar-li px-3">
-                        <button className={`customButton primaryButton w-100`} onClick={() => { setShowForm(true) }}>
-                            <span className="sideLinkText">Add Board +</span>
-                        </button>
-                    </li>
 
                 </ul>
             </div>
@@ -621,15 +634,39 @@ export const CardDetail = () => {
             <CustomModal show={showModal2} close={() => { setShowModal2(false) }} success heading={message} />
 
             <div className="detailTaskBox">
-                <CustomModal show={cardShow} close={() => { closeTask() }} heading={detailData?.data?.card?.title} size="lg" className="taskBoardHeader">
+                <CustomModal
+                    show={cardShow}
+                    close={() => { closeTask() }}
+                    setTitle={setTitle}
+                    title={title ? title : detailData?.data?.card?.title}
+                    heading={detailData?.data?.card?.title}
+                    onClick={() => { setIsEditable(true) }}
+                    onBlur={() => {
+                        setIsEditable(false);
+                        handleEditDescription()
+                    }}
+                    editData={isEditable}
+                    size="lg"
+                    className="taskBoardHeader">
 
                     <div className="row">
-                        <div className="col-md-9">
+                        <div className="col-md-10">
+                            {
+                                detailData?.data?.card?.members && (
+                                    <div className="membersBox mb-4">
+                                        <h6>Members</h6>
+                                        {detailData?.data?.card?.members && detailData?.data?.card?.members.map((item, index) => (
+                                            <Avatar name={item?.username} size={25} round="50px" />
+                                        ))}
+                                    </div>
+                                )
+                            }
+
                             <div className="descriptionBox">
                                 <div className="titleSummary attachmendHead">
                                     <h3><FontAwesomeIcon icon={faBars}></FontAwesomeIcon>Description</h3>
                                     <div class="addAttachment">
-                                        <button className="editBtn border-0" type="button" onClick={() => { setShowEditorDescription(true) }}>Edit</button>
+                                        <button className="editBtn border-0" type="button" onClick={() => { setShowEditorDescription(true) }}>{editorContent != '' ? 'Edit' : 'Add'}</button>
                                     </div>
                                 </div>
                                 <div className="descBox">
@@ -678,7 +715,7 @@ export const CardDetail = () => {
                                     </div>
                                 </div>
                                 {
-                                    detailLoading ? 'Loading' : detailData?.data && detailData?.data?.card && detailData?.data?.card?.mergedActivity && detailData.data?.card?.mergedActivity?.map((item, index) => {
+                                    detailLoading ? <Skeleton count={20} height={50} /> : detailData?.data && detailData?.data?.card && detailData?.data?.card?.mergedActivity && detailData.data?.card?.mergedActivity?.map((item, index) => {
 
                                         switch (item?.type) {
                                             case "attachment":
@@ -686,11 +723,14 @@ export const CardDetail = () => {
                                                     <div className="attachmentBox mb-4">
                                                         <div className="dataExist">
                                                             {
-                                                                (item?.ext.toLowerCase() === 'txt' || item?.ext.toLowerCase() === 'doc' || item?.ext.toLowerCase() === 'docx' || item?.ext.toLowerCase() === 'pdf' || item?.ext.toLowerCase() === 'csv' || item?.ext.toLowerCase() === 'xls' || item?.ext.toLowerCase() === 'xlsx' || item?.ext.toLowerCase() === 'ppt' || item?.ext.toLowerCase() === 'pptx') ? (
+                                                                (
+
+                                                                    item?.ext.toLowerCase() === 'txt' || item?.ext.toLowerCase() === 'doc' || item?.ext.toLowerCase() === 'docx' || item?.ext.toLowerCase() === 'pdf' || item?.ext.toLowerCase() === 'csv' || item?.ext.toLowerCase() === 'xls' || item?.ext.toLowerCase() === 'xlsx' || item?.ext.toLowerCase() === 'ppt' || item?.ext.toLowerCase() === 'pptx') ? (
                                                                     <div className="attachmentData">
                                                                         <a href={base_url + item?.attachment_url} target="_blank" className="documentFile" >
                                                                             <span className="attachment-thumbnail-preview-ext">{item?.ext.toLowerCase()}</span>
                                                                         </a>
+
                                                                     </div>
                                                                 ) : item?.ext.toLowerCase() === 'mp4' || item?.ext.toLowerCase() === 'avi' || item?.ext.toLowerCase() === 'mov' || item?.ext.toLowerCase() === 'wmv' || item?.ext.toLowerCase() === 'flv' ? (
                                                                     <div className="attachmentData">
@@ -757,7 +797,7 @@ export const CardDetail = () => {
                                     </div>
                                 </div>
                                 {
-                                    detailLoading ? 'Loading' : detailData && detailData?.data?.card && detailData?.data?.card.mergedActivity && detailData?.data?.card?.mergedActivity.map((item, index) => {
+                                    detailLoading ? <Skeleton count={20} height={50} /> : detailData && detailData?.data?.card && detailData?.data?.card.mergedActivity && detailData?.data?.card?.mergedActivity.map((item, index) => {
                                         switch (item?.type) {
                                             case "activity":
                                                 return (
@@ -815,16 +855,16 @@ export const CardDetail = () => {
                                                                 )
                                                             }
 
+                                                            {
+                                                                item?.user?.id == userID ? (
+                                                                    <div className="commentActions">
+                                                                        <button type="button" className="text-danger" onClick={() => { deleteAttachment(item?.id) }}>
+                                                                            <FontAwesomeIcon icon={faTrash} /> Delete
+                                                                        </button>
+                                                                    </div>
+                                                                ) : ''
+                                                            }
 
-                                                            <div className="commentActions">
-                                                                {/* <button type="button">
-                                                                    <FontAwesomeIcon icon={faPenAlt} /> Reply
-                                                                </button> */}
-
-                                                                <button type="button" className="text-danger" onClick={() => { deleteAttachment(item?.id) }}>
-                                                                    <FontAwesomeIcon icon={faTrash} /> Delete
-                                                                </button>
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 );
@@ -847,8 +887,12 @@ export const CardDetail = () => {
                                                                 </>
                                                             ) : (
                                                                 <>
-                                                                    <div className="d-flex gap-2 align-items-center">
-                                                                        <span className="text-capitalize"><strong>{item?.user?.username}</strong></span> <FormatDateTime isoDateString={item?.created_at} />
+                                                                    <div className="d-flex gap-2 align-items-center activityContent">
+                                                                        <span className="text-capitalize"><strong>{item?.user?.username}</strong></span> <FormatDateTime isoDateString={item?.updated_at ? item?.updated_at : item?.created_at} />
+                                                                        {item?.updated_at ? (
+                                                                            <small>(edited)</small>
+                                                                        ) : ''}
+
                                                                     </div>
                                                                     <div className="activityContent shadow rounded-4 flex-grow-1 p-3">
                                                                         {item?.comment && (
@@ -860,18 +904,22 @@ export const CardDetail = () => {
 
                                                                 </>
                                                             )}
-                                                            <div className="commentActions">
-                                                                <button type="button" onClick={() => {
-                                                                    setEditCommentIndex(index);
-                                                                    setComment(item?.comment);
-                                                                }}>
-                                                                    <FontAwesomeIcon icon={faPenAlt} /> Edit
-                                                                </button>
+                                                            {
+                                                                item?.user?.id == userID ? (
+                                                                    <div className="commentActions">
+                                                                        <button type="button" onClick={() => {
+                                                                            setEditCommentIndex(index);
+                                                                            setComment(item?.comment);
+                                                                        }}>
+                                                                            <FontAwesomeIcon icon={faPenAlt} /> Edit
+                                                                        </button>
 
-                                                                <button type="button" className="text-danger" onClick={() => { deleteComment(item?.id) }}>
-                                                                    <FontAwesomeIcon icon={faTrash} /> Delete
-                                                                </button>
-                                                            </div>
+                                                                        <button type="button" className="text-danger" onClick={() => { deleteComment(item?.id) }}>
+                                                                            <FontAwesomeIcon icon={faTrash} /> Delete
+                                                                        </button>
+                                                                    </div>
+                                                                ) : ""
+                                                            }
                                                         </div>
                                                     </div>
                                                 );

@@ -31,6 +31,7 @@
     display: flex;
     align-items: center;
     gap: 5px;
+    flex-wrap: wrap;
 }
 
 .activityAttached strong {
@@ -106,4 +107,18 @@
 
 .commentBar {
     flex-grow: 1;
+}
+
+img {
+    max-width: 100%;
+}
+
+.cardImage img {
+    width: 215px !important;
+    height: 180px;
+    object-fit: contain;
+}
+
+li.sidebar-li a {
+    text-transform: capitalize;
 }

@@ -1,52 +1,83 @@
 .custom-card {
-    border: 1px solid #ddd;
-    padding: 10px;
-    margin: 10px;
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-  
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .user-info {
-    display: flex;
-    align-items: center;
-  }
-  
-  .user-icon {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    margin-right: 8px;
-  }
-  
-  .notification-counter {
-    background-color: red;
-    color: white;
-    padding: 2px 6px;
-    border-radius: 12px;
-    font-size: 12px;
-  }
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 10px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
 
 
-  .card-header h4 {
-    font-size: 14px;
-    font-weight: 600;
+
+.user-info>div {
+  margin-left: -5px;
+}
+
+
+.user-info > div span {
+  font-size: 11px;
+}
+
+
+
+.user-info {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: -12px;
+  bottom: -7px;
+}
+
+.user-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.notification-counter {
+  background-color: red;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+
+.card-header h4 {
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .countData {
-    display: flex;
-    gap: 5px;
-    font-size: 11px;
-    align-items: center;
+  display: flex;
+  gap: 5px;
+  font-size: 11px;
+  align-items: center;
 }
 
 .countData span {
-    padding-left: 4px;
-    font-weight: 600;
+  padding-left: 4px;
+  font-weight: 600;
+}
+
+.cksBWM {
+  padding-bottom: 30px !important;
+}
+
+.activityContent p {
+  margin-bottom: 0;
+}
+
+.smooth-dnd-container.horizontal section {
+  border-radius: 12px;
 }

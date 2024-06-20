@@ -1,15 +1,17 @@
 import { Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faQuestionCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import CustomButton from '../CustomButton';
 
 import { check, question } from '../../Assets/images';
 
 import './style.css'
+import CustomInput from '../CustomInput';
 
 const CustomModal = (props) => {
+    
     return (
         <>
             <Modal show={props?.show} centered onHide={props?.close} size={props?.size}>
@@ -28,7 +30,21 @@ const CustomModal = (props) => {
 
 
                     <div className="modalContent">
-                        <h2 className="modalHeading">{props?.heading}</h2>
+                        {props?.editData ? (
+                            <CustomInput
+                                value={props?.title}
+                                type="text"
+                                inputClass='mainInput mt-3 rounded-1'
+                                onBlur={props?.onBlur}
+                                onChange={(e) => {
+                                    props?.setTitle(e.target.value);
+                                }}
+
+                            />
+                        ) : (
+
+                            <h2 className="modalHeading" onClick={props?.onClick} >{props?.heading}</h2>
+                        )}
                         {props?.children ? (
                             <p>
                                 <form onSubmit={props?.handleSubmit} className='formDataStyle'>
