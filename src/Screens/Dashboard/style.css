@@ -19,7 +19,7 @@
 
 
 li.sidebar-li.active {
-    background-color: #509b8a73;
+    background-color: #898b8cc9;
 }
 
 
@@ -27,6 +27,7 @@ li.sidebar-li.active {
 .djiHhb {
     background-color: transparent !important;
     height: calc(100vh - 52px) !important;
+    gap: 45px;
 }
 
 .fnvpnN {

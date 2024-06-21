@@ -1,14 +1,13 @@
 .custom-card {
-  border: 1px solid #ddd;
-  padding: 10px;
+  border: none;
+  padding: 0;
   margin: 10px;
-  background-color: #fff;
-  border-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: #22272b;
+  box-shadow: none;
   cursor: pointer;
   border-radius: 12px;
+  overflow: hidden;
 }
-
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -33,8 +32,8 @@
   display: flex;
   align-items: center;
   position: absolute;
-  right: -12px;
-  bottom: -7px;
+  right: 1px;
+  bottom: 5px;
 }
 
 .user-icon {
@@ -79,5 +78,25 @@
 }
 
 .smooth-dnd-container.horizontal section {
+  border-radius: 12px;
+  background-color: #101204;
+  color: #A9B4C0;
+}
+
+.cardImage {
+  position: relative;
+  /* top: 5px; */
+}
+
+.modal-content {
+  overflow: hidden;
+}
+
+.cardBody {
+  display: block;
+  width: 100%;
+  flex-grow: 1;
+  background-color: #22272B;
+  padding: 20px 10px 10px;
   border-radius: 12px;
 }

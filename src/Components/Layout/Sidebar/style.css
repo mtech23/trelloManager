@@ -3,7 +3,7 @@
     height: calc(100vh - 3rem);
     position: fixed;
     /* transition: all 0.35s ease-in-out, left 0.35s ease-in-out, margin-right 0.35s ease-in-out, right 0.35s ease-in-out; */
-    background: #1a6050f0;
+    background: #22272be3;
     z-index: 2;
     top: 3rem;
     padding-bottom: 3rem;
@@ -42,7 +42,8 @@
 
 .sideLink:hover, .sideLink.active {
     color: #fff;
-    background: #509b8a73;
+    background: #898b8cc9;
+    border-radius: 0;
 }
 
 

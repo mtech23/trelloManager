@@ -16,29 +16,31 @@ const CustomCard = ({ title, userIcon, notificationCount, onClick, commentCount,
                     </div>
                 )
             }
-            <h4>{title}</h4>
-            <div className='countData'>
-                <div className='commentCount'>
-                    <FontAwesomeIcon icon={faCommentDots}></FontAwesomeIcon><span>{commentCount}</span>
+            <div className='cardBody'>
+                <h4>{title}</h4>
+                <div className='countData'>
+                    <div className='commentCount'>
+                        <FontAwesomeIcon icon={faCommentDots}></FontAwesomeIcon><span>{commentCount}</span>
+                    </div>
+                    <div className='attachedCount'>
+                        <FontAwesomeIcon icon={faLink}></FontAwesomeIcon><span>{attachmentCount}</span>
+                    </div>
+                    {
+                        notificationCount && (
+                            <span className="notification-counter">{notificationCount}</span>
+                        )
+                    }
                 </div>
-                <div className='attachedCount'>
-                    <FontAwesomeIcon icon={faLink}></FontAwesomeIcon><span>{attachmentCount}</span>
+                <div className="user-info">
+                    {
+                        members && members.map((item, index) => (
+                            <Avatar name={item?.username} size={25} round="50px" />
+                        ))
+                    }
+
+
+
                 </div>
-                {
-                    notificationCount && (
-                        <span className="notification-counter">{notificationCount}</span>
-                    )
-                }
-            </div>
-            <div className="user-info">
-                {
-                    members && members.map((item, index) => (
-                        <Avatar name={item?.username} size={25} round="50px" />
-                    ))
-                }
-
-
-
             </div>
         </div>
     </div>

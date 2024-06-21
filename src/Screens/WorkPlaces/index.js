@@ -166,7 +166,7 @@ export const WorkPlace = () => {
                             <div className="shadow bg-light p-3 rounded-4" key={index}>
                                 {/* Adding onClick handler to close the dropdown */}
                                 <Link
-                                    to={`/b/${item?.code}/`}
+                                    to={`/b/${item?.code}`}
                                     className="nav-link"
 
                                 >

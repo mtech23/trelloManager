@@ -9,9 +9,10 @@ import { check, question } from '../../Assets/images';
 
 import './style.css'
 import CustomInput from '../CustomInput';
+import { base_url } from '../../Api/base_url';
 
 const CustomModal = (props) => {
-    
+
     return (
         <>
             <Modal show={props?.show} centered onHide={props?.close} size={props?.size}>
@@ -28,7 +29,30 @@ const CustomModal = (props) => {
                         )
                     )}
 
+                    {
+                        props?.cover && (
+                            <div className='coverImage'>
+                                <CustomInput
+                                    type="file"
+                                    label={props?.cover_image ? 'Change Cover' : 'Upload Cover'}
+                                    id="cover"
+                                    inputClass='d-none'
+                                    onChange={(e) => {
+                                        props?.setCover(e.target.files[0]);
+                                    }}
 
+                                />
+                                {
+                                    props?.cover_image && (
+                                        <div className='imageCover'>
+                                            <img src={base_url + props?.cover_image} />
+                                        </div>
+                                    )
+                                }
+
+                            </div>
+                        )
+                    }
                     <div className="modalContent">
                         {props?.editData ? (
                             <CustomInput

@@ -3,7 +3,7 @@
 /*----- General Css Start -----*/
 
 :root {
-    --primaryColor: #6fc8b4;
+    --primaryColor: #848787;
     --grayColor: #2E2E2E;
     --redColor : #ff0000;
     --greenColor: #42C900;
@@ -119,7 +119,7 @@ body {
    
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #1a6050f0; 
+    background: #22272B; 
     border-radius: 50px;
     cursor: pointer;
   }

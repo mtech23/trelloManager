@@ -191,20 +191,25 @@ export const Boards = () => {
     const [taskID, setTaskID] = useState('');
     const [cardShow, setCardShow] = useState(false);
     const [trigger, setTrigger] = useState(false);
-    const [openSlug, setOpenSlug] = useState('');
+    const [openSlug, setOpenSlug] = useState(null);
 
-    const { ApiData: detailData, loading: detailLoading, error: detailError, get: GetDetail } = useGet(`/api/b/${id}/${openSlug}`, null);
+    const { ApiData: detailData, loading: detailLoading, error: detailError, get: GetDetail } = useGet(`/api/b/${id}/${openSlug ? openSlug : ''}`, null);
 
 
     useEffect(() => {
-        if (openSlug) {
+        if (openSlug != null && id) {
             if (trigger) {
                 window.history.pushState("object or string", "Title", `${window.location.href}/${openSlug}`)
+               
+                console.log('slugTesting', openSlug)
             }
+
             GetDetail();
+            
 
         }
-        
+ 
+       
 
     }, [openSlug]);
 
@@ -219,20 +224,29 @@ export const Boards = () => {
         if (apiSlug) {
             setOpenSlug(apiSlug)
             setTrigger(false)
+        } else {
+            setCardShow(false);
         }
     }, [])
 
 
 
     useEffect(() => {
-        setEditorContent(detailData?.data?.card?.description);
-        setCardShow(true);
+        if (detailData) {
+            setEditorContent(detailData?.data?.card?.description);
+            setCardShow(true);
+        }
     }, [detailData])
 
 
-    useEffect(()=>{
-       
-    },[detailLoading])
+
+
+
+    // useEffect(() => {
+    //     setCardShow(false);
+    //     // setOpenSlug('')
+    //     window.history.pushState("object or string", "Title", `/trello/b/${id}`);
+    // }, [detailError])
 
 
 
@@ -343,6 +357,11 @@ export const Boards = () => {
     }, [id])
 
 
+    // useEffect(() => {
+    //     handleBoard()
+    // }, [])
+
+
 
 
 
@@ -428,7 +447,7 @@ export const Boards = () => {
     // Delete Attachment 
 
 
-    const [AttachementID, setAttachementID] = useState(null)
+    const [AttachementID, setAttachementID] = useState('');
     const { ApiData: deleteAttachmentID, loading: AttachementLoading, error: AttachementError, del: GetdeleteAttachment } = useDelete(`/api/remove-attachment/`, null, AttachementID);
 
     const deleteAttachment = (commentID) => {
@@ -437,7 +456,9 @@ export const Boards = () => {
     }
 
     useEffect(() => {
-        GetdeleteAttachment(AttachementID);
+        if (AttachementID) {
+            GetdeleteAttachment(AttachementID);
+        }
     }, [AttachementID])
 
 
@@ -583,7 +604,7 @@ export const Boards = () => {
 
     // Delete Comment 
 
-    const [deleteID, setDeleteID] = useState(null)
+    const [deleteID, setDeleteID] = useState('')
     const { ApiData: deleteData, loading: deleteLoading, error: deleteError, del: Getdelete } = useDelete(`/api/remove-comment/`, null, deleteID);
 
     const deleteComment = (commentID) => {
@@ -592,7 +613,9 @@ export const Boards = () => {
     }
 
     useEffect(() => {
-        Getdelete(deleteID);
+        if (deleteID) {
+            Getdelete(deleteID);
+        }
     }, [deleteID])
 
 
@@ -604,6 +627,40 @@ export const Boards = () => {
 
     const [isEditable, setIsEditable] = useState(false);
     const [title, setTitle] = useState();
+    const [coverImage, setCover] = useState();
+
+
+    useEffect(() => {
+        console.log('iii', coverImage)
+        if (coverImage) {
+            const formDataAttached = new FormData();
+            formDataAttached.append('cover_image', coverImage);
+            // formDataAttached.append('task_id', detailData?.data?.card?.id);
+            document.querySelector('.loaderBox').classList.remove("d-none");
+            fetch(`${base_url}/api/update-cover/${detailData?.data?.card?.id}`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${LogoutData}`
+                },
+                body: formDataAttached // Use the FormData object as the request body
+            })
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    document.querySelector('.loaderBox').classList.add("d-none");
+                    console.log(data);
+                    GetDetail();
+                    handleBoard()
+                })
+                .catch((error) => {
+                    document.querySelector('.loaderBox').classList.add("d-none");
+                    console.log(error)
+                })
+        }
+
+    }, [coverImage])
 
     return (
 
@@ -709,7 +766,11 @@ export const Boards = () => {
                     }}
                     editData={isEditable}
                     size="lg"
-                    className="taskBoardHeader">
+                    className="taskBoardHeader"
+                    cover
+                    setCover={setCover}
+                    cover_image={detailData?.data?.card?.cover_image}
+                >
 
                     <div className="row">
                         <div className="col-md-10">
@@ -996,13 +1057,6 @@ export const Boards = () => {
 
                 </CustomModal >
             </div >
-
-
-
         </>
-
     );
-
-
-
 };

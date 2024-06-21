@@ -114,9 +114,10 @@ img {
 }
 
 .cardImage img {
-    width: 215px !important;
-    height: 180px;
+    width: 230px;
+    height: auto;
     object-fit: contain;
+    max-width: 100% !important;
 }
 
 li.sidebar-li a {
