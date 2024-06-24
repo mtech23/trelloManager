@@ -26,16 +26,17 @@ const CustomInput = (props) => {
           </div>
           :
           <input type={props?.type}
-           placeholder={props?.placeholder}
-           required={props?.required}
-           disabled={props.disabled} 
-          id={props?.id} 
-          name={props?.name} 
-          className={props?.inputClass} 
-          onBlur={props?.onBlur}
-          onChange={props?.onChange} 
-          multiple={props?.multiple}
-          value={props.value} />
+            placeholder={props?.placeholder}
+            required={props?.required}
+            disabled={props.disabled}
+            id={props?.id}
+            name={props?.name}
+            className={props?.inputClass}
+            onBlur={props?.onBlur}
+            onChange={props?.onChange}
+            multiple={props?.multiple}
+            onClick={props?.onClick}
+            value={props.value} />
         }
       </div>
     </>

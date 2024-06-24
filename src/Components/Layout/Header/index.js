@@ -23,6 +23,7 @@ import CustomInput from "../../CustomInput"
 import Form from 'react-bootstrap/Form';
 import { base_url } from "../../../Api/base_url";
 import Avatar from 'react-avatar';
+import SearchAutocomplete from "../../SearchAutoComplete";
 
 
 export const Header = (props) => {
@@ -172,6 +173,7 @@ export const Header = (props) => {
                     <div className="notiHead p-3 pb-0">
                       <h4 className="mainTitle">Workspaces</h4>
                     </div>
+
                     <div className="notificationsBody">
                       <ul className="navbar-nav d-block">
                         {workspace && workspace.map((item, index) => (
@@ -197,6 +199,7 @@ export const Header = (props) => {
 
                 {/* <CustomButton variant="primaryButton" text="Create Workspace" onClick={() => { setShowForm(true) }}></CustomButton> */}
               </div>
+
               <div className="otherOptions d-flex align-items-center">
                 {/* <Dropdown className="notiDropdown me-2">
                   <Dropdown.Toggle variant="transparent" className="notButton">
@@ -232,27 +235,10 @@ export const Header = (props) => {
                   </Dropdown.Menu>
                 </Dropdown> */}
                 <Dropdown className="userDropdown">
-                  <Dropdown.Toggle
-                    variant="transparent"
-                    className="notButton toggleButton"
-                  >
-                    <div className="userImage">
-                      <img
-                        src={userImage}
-                        alt=""
-                        className="img-fluid"
-                      />
+                  <div className="headerAction">
+                    <div>
+                      <SearchAutocomplete />
                     </div>
-                    {/* <img src={images.profilePic} alt="" className="img-fluid" /> */}
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu className="userMenu" align="end">
-                    {/* <Link className="userMenuItem" to={'/profile'}>
-                    <FontAwesomeIcon
-                      className="me-2 yellow-text"
-                      icon={faUser}
-                    />{" "}
-                    Profile
-                  </Link> */}
                     <Link to="#" className="userMenuItem" onClick={handleClickPopup}>
                       <FontAwesomeIcon
                         className="me-1 yellow-text"
@@ -261,7 +247,8 @@ export const Header = (props) => {
                       />{" "}
                       Logout
                     </Link>
-                  </Dropdown.Menu>
+                  </div>
+
                 </Dropdown>
                 <button className="notButton ms-md-2 order-lg-4 order-md-4 order-1">
                   <FontAwesomeIcon

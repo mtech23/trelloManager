@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DashboardLayout } from "./../../Components/Layout/DashboardLayout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowCircleDown, faBars, faFile, faFileAlt, faLaughWink, faLink, faList, faPenAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faArrowCircleDown, faBars, faFile, faFileAlt, faLaughWink, faLink, faList, faPenAlt, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Board from 'react-trello';
 import Avatar from 'react-avatar';
 import "./style.css";
@@ -20,6 +20,7 @@ import { TextEditor } from "../../Components/TextEditor";
 import CustomCard from "../../Components/CustomCard";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { Dropdown, DropdownButton } from "react-bootstrap";
 
 
 
@@ -200,16 +201,16 @@ export const Boards = () => {
         if (openSlug != null && id) {
             if (trigger) {
                 window.history.pushState("object or string", "Title", `${window.location.href}/${openSlug}`)
-               
+
                 console.log('slugTesting', openSlug)
             }
 
             GetDetail();
-            
+
 
         }
- 
-       
+
+
 
     }, [openSlug]);
 
@@ -228,6 +229,23 @@ export const Boards = () => {
             setCardShow(false);
         }
     }, [])
+
+
+    const orignUrl = window.location.href;
+    const sliceUrl = orignUrl.indexOf('/b');
+    const urlPart = orignUrl.slice(sliceUrl);
+    const apiSlug = urlPart.split('/')[3];
+
+    useEffect(() => {
+
+        console.log('ss', apiSlug);
+        if (apiSlug) {
+            setOpenSlug(apiSlug)
+            setTrigger(false)
+        } else {
+            setCardShow(false);
+        }
+    }, [apiSlug])
 
 
 
@@ -662,6 +680,50 @@ export const Boards = () => {
 
     }, [coverImage])
 
+
+    // get all users 
+
+    const [userList, setUserList] = useState();
+    const [memberData, setAddMember] = useState();
+    const { ApiData: usersData, loading: usersLoading, error: usersError, get: GetUsers } = useGet(`/api/users`);
+
+    useEffect(() => {
+        GetUsers()
+        console.log('user', usersData)
+        setUserList(usersData?.Users)
+    }, [id, apiSlug])
+
+    useEffect(() => {
+        GetUsers()
+        console.log('user', usersData)
+        setUserList(usersData?.Users)
+    }, [])
+
+
+    const addMember = (memberID) => {
+        setAddMember((prevData) => ({
+            ...prevData,
+            user_id: memberID,
+            board_id: data?.id
+        }));
+    }
+
+
+    // add Member on  board 
+
+    const { ApiData: addmember, loading: addmemberLoading, error: addmemberError, post: addmemberResult } = usePost('/api/mapboardmember');
+
+    useEffect(() => {
+        if (memberData?.user_id && memberData?.board_id) {
+            addmemberResult(memberData)
+        }
+    }, [memberData])
+
+
+    useEffect(() => {
+        handleBoard()
+        setAddMember('');
+    }, [addmember])
     return (
 
         <>
@@ -699,10 +761,53 @@ export const Boards = () => {
                     <div className="col-12 p-0">
                         <div className={`dashboardBody ${bodyClass}`}>
                             <div className="container-fluid">
+                                <div className="topBarNav">
+                                    <div className="row justify-content-between">
+                                        <div className="col-md-5">
+                                            <div className="boardTitle">
+                                                <h3 className="mb-md-0">{data?.title}</h3>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <div className="userShown">
+                                                {
+                                                    data?.users && data.users.slice(0, 5).map((item, index) => (
+                                                        index >= 2 ? (
+                                                            <>
+                                                                <Avatar key={index} name={item.username} size={30} round="50px" />
+
+                                                            </>
+                                                        ) : (
+                                                            <Avatar key={index} name={item.username} size={30} round="50px" />
+                                                        )
+                                                    ))
+                                                }
+
+                                                <DropdownButton id="dropdown-basic-button" title="Add+">
+                                                    {
+                                                        userList && userList?.map((item, index) => (
+                                                            <Dropdown.Item >
+                                                                <div className="userListData" onClick={() => { addMember(item?.id) }}>
+                                                                    <Avatar key={index} name={item.username} size={30} round="50px" />
+                                                                    <span>{item?.username} <button type="button"><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon></button></span>
+                                                                </div>
+                                                            </Dropdown.Item>
+                                                        ))
+                                                    }
+
+                                                </DropdownButton>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="container-fluid">
 
                                 <div className="row mb-3">
+
                                     <div className="col-12">
-                                        <div className="dashCard">
+                                        <div className="dashCard pt-0">
                                             <div>
                                                 <Board
                                                     data={data}
