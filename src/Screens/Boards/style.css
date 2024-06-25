@@ -115,6 +115,12 @@
 }
 
 
+.userShown .dropdown-menu {
+    height: 400px;
+    overflow-y: auto;
+}
+
+
 /* .taskBg {
     background-color: #091e420f;
 } */

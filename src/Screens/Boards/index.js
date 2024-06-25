@@ -691,13 +691,16 @@ export const Boards = () => {
         GetUsers()
         console.log('user', usersData)
         setUserList(usersData?.Users)
-    }, [id, apiSlug])
+    }, [id])
 
     useEffect(() => {
         GetUsers()
-        console.log('user', usersData)
-        setUserList(usersData?.Users)
     }, [])
+
+
+    useEffect(() => {
+        setUserList(usersData?.Users)
+    }, [usersData])
 
 
     const addMember = (memberID) => {
@@ -771,7 +774,7 @@ export const Boards = () => {
                                         <div className="col-md-4">
                                             <div className="userShown">
                                                 {
-                                                    data?.users && data.users.slice(0, 5).map((item, index) => (
+                                                    data?.users && data?.users.slice(0, 5).map((item, index) => (
                                                         index >= 2 ? (
                                                             <>
                                                                 <Avatar key={index} name={item.username} size={30} round="50px" />
@@ -783,19 +786,23 @@ export const Boards = () => {
                                                     ))
                                                 }
 
-                                                <DropdownButton id="dropdown-basic-button" title="Add+">
-                                                    {
-                                                        userList && userList?.map((item, index) => (
-                                                            <Dropdown.Item >
-                                                                <div className="userListData" onClick={() => { addMember(item?.id) }}>
-                                                                    <Avatar key={index} name={item.username} size={30} round="50px" />
-                                                                    <span>{item?.username} <button type="button"><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon></button></span>
-                                                                </div>
-                                                            </Dropdown.Item>
-                                                        ))
-                                                    }
+                                                {
+                                                    userID == '1' && (
+                                                        <DropdownButton id="dropdown-basic-button" title="Add+">
+                                                            {
+                                                                userList && userList?.map((item, index) => (
+                                                                    <Dropdown.Item >
+                                                                        <div className="userListData" onClick={() => { addMember(item?.id) }}>
+                                                                            <Avatar key={index} name={item.username} size={30} round="50px" />
+                                                                            <span>{item?.username} <button type="button"><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon></button></span>
+                                                                        </div>
+                                                                    </Dropdown.Item>
+                                                                ))
+                                                            }
 
-                                                </DropdownButton>
+                                                        </DropdownButton>
+                                                    )
+                                                }
 
                                             </div>
                                         </div>
@@ -1133,7 +1140,7 @@ export const Boards = () => {
                                                                 </>
                                                             )}
                                                             {
-                                                                item?.user?.id == userID ? (
+                                                                item?.user?.id == userID || userID == '1' ? (
                                                                     <div className="commentActions">
                                                                         <button type="button" onClick={() => {
                                                                             setEditCommentIndex(index);

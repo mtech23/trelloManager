@@ -87,6 +87,11 @@ button.sc-jegwpa.dlKLWs {
     flex-shrink: 0;
 }
 
+.modal-body .passwordWrapper svg {
+    color: var(--grayColor);
+    font-size: small;
+}
+
 
 @media screen and (max-width: 1200px) and (min-width: 768px) {
     .stats, .stats:not(:last-child) {

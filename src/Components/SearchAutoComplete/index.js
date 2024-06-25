@@ -7,7 +7,7 @@ import CustomInput from '../CustomInput';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTabletScreenButton } from '@fortawesome/free-solid-svg-icons/faTabletScreenButton';
-import { faDesktop, faWindowMaximize } from '@fortawesome/free-solid-svg-icons';
+import { faDesktop, faRemove, faWindowMaximize } from '@fortawesome/free-solid-svg-icons';
 
 const SearchAutocomplete = () => {
     const [query, setQuery] = useState('');
@@ -58,15 +58,22 @@ const SearchAutocomplete = () => {
 
     return (
         <div className='searchBar'>
-            <CustomInput
-                type="text"
-                value={query}
-                onChange={handleInputChange}
-                onClick={() => { setIncreaseWidth(true) }}
-                // onBlur={() => { setIncreaseWidth(false) }}
-                inputClass={`mainInput ${increaseWidth === true ? 'w-550' : ''}`}
-                placeholder="Search..."
-            />
+            <div className='serachBox position-relative'>
+                <CustomInput
+                    type="text"
+                    value={query}
+                    onChange={handleInputChange}
+                    onClick={() => { setIncreaseWidth(true) }}
+                    // onBlur={() => { setIncreaseWidth(false) }}
+                    inputClass={`mainInput ${increaseWidth === true ? 'w-550' : ''}`}
+                    placeholder="Search..."
+                />
+                {
+                    increaseWidth && (
+                        <button className='removeSearch' onClick={() => { setIncreaseWidth(false); setQuery('') }}><FontAwesomeIcon icon={faRemove}></FontAwesomeIcon></button>
+                    )
+                }
+            </div>
             {increaseWidth && (
                 isLoading || suggestions?.cards?.length > 0 ? (
                     <div className='dropDownSearch'>
@@ -75,7 +82,7 @@ const SearchAutocomplete = () => {
                             <ul onMouseEnter={() => { setIncreaseWidth(true) }}>
                                 {suggestions?.cards.map((suggestion, index) => (
                                     <li key={index} >
-                                        <Link to={`/b/${suggestion?.boardcode}/${suggestion?.slug}`}>
+                                        <Link to={`/b/${suggestion?.boardcode}/${suggestion?.slug}`} >
                                             <div className='searchData'>
                                                 <div className='iconBoxData'>
                                                     <FontAwesomeIcon icon={faWindowMaximize}></FontAwesomeIcon>

@@ -10,34 +10,29 @@ import { Link } from "react-router-dom";
 import CustomButton from "../../Components/CustomButton";
 import CustomInput from "../../Components/CustomInput";
 import CustomModal from "../../Components/CustomModal";
+import { usePost, useGet, useDelete } from "../../Api/usePost";
+import { SelectBox } from "../../Components/CustomSelect"
+import { userData } from "../../Config/Data";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 export const Dashboard = () => {
 
       const [workspace, setWorkSpace] = useState();
       const LogoutData = localStorage.getItem('login');
-      const WorkPlaceList = () => {
-            fetch(`${base_url}/api/workspaces`,
-                  {
-                        method: 'GET',
-                        headers: {
-                              'Accept': 'application/json',
-                              'Content-Type': 'application/json',
-                              'Authorization': `Bearer ${LogoutData}`
-                        },
-                  },
-            )
-                  .then((response) => {
-                        return response.json()
-                  })
-                  .then((data) => {
-                        console.log(data);
-                        setWorkSpace(data?.workspaces);
-                  })
-                  .catch((error) => {
-                        console.log(error);
-                  })
+      const userID = localStorage.getItem('userID');
 
-      }
+      const { ApiData: workspaceData, loading: workspaceLoading, error: workspaceError, get: WorkPlaceList } = useGet(`/api/workspaces`);
+
+      useEffect(() => {
+            setLoading(true);
+      }, [workspaceLoading])
+
+
+      useEffect(() => {
+            setLoading(false);
+            setWorkSpace(workspaceData?.workspaces)
+      }, [workspaceData])
+
 
       const [showModal, setShowModal] = useState(false);
       const [showModal2, setShowModal2] = useState(false);
@@ -98,10 +93,58 @@ export const Dashboard = () => {
       useEffect(() => {
             document.title = "Trello WorkPlace | Dashboard";
             WorkPlaceList()
+
       }, []);
 
-      const userID = localStorage.getItem('userID');
 
+
+
+      const [userList, setUserList] = useState();
+      const [isLoading, setLoading] = useState(false);
+      const { ApiData: usersData, loading: usersLoading, error: usersError, get: GetUsers } = useGet(`/api/users`);
+
+      useEffect(() => {
+            GetUsers()
+      }, [])
+
+      useEffect(() => {
+            setLoading(false)
+            setUserList(usersData?.Users)
+      }, [usersData])
+
+      useEffect(() => {
+            setLoading(true)
+      }, [usersLoading])
+
+      const [addUser, setAddUser] = useState();
+      const { ApiData: addmember, loading: addmemberLoading, error: addmemberError, post: addmemberResult } = usePost('/api/auth/register-member');
+
+      const handleAddUser = (e) => {
+            e.preventDefault();
+
+            console.log(formData)
+            if (formData?.username && formData?.role && formData?.password && formData?.password_confirmation && formData?.email) {
+                  addmemberResult(formData)
+            }
+      }
+
+      useEffect(() => {
+            GetUsers()
+            setAddUser(false);
+      }, [addmember])
+
+
+
+      const roleList = [
+            {
+                  name: 'Member',
+                  id: 'member'
+            },
+            {
+                  name: 'Moderator',
+                  id: 'moderator'
+            }
+      ]
       return (
             <DashboardLayout>
                   <div className="container dashCard">
@@ -110,20 +153,36 @@ export const Dashboard = () => {
                               <div className="col-md-12 mb-5 text-center">
                                     <h2 className="text-light font-weight-600">Your Workspace</h2>
                               </div>
-                              {workspace && workspace.map((item, index) => (
-                                    <div className="col-md-4 mb-4">
-                                          <div className="shadow bg-light p-3 rounded-4" key={index}>
-                                                {/* Adding onClick handler to close the dropdown */}
-                                                <Link
-                                                      to={`/w/${item?.code}/${item?.id}`}
-                                                      className="nav-link"
 
-                                                >
-                                                      <Avatar name={item?.title} size={40} round="8px" />
-                                                      {item?.title}
-                                                </Link>
+                              {workspace && workspace.map((item, index) => (
+
+                                    <SkeletonTheme baseColor="grey" highlightColor="silver" key={index}>
+
+                                          <div className="col-md-4 mb-4">
+                                                <div className="shadow bg-light p-3 rounded-4" key={index}>
+                                                      {isLoading ? (
+                                                            <>
+                                                                  <Skeleton round={8} height={40} width={40} />
+                                                                  <div className="ms-3">
+                                                                        <Skeleton width={150} height={20} />
+                                                                  </div>
+                                                            </>
+                                                      ) : (
+
+                                                            <Link
+                                                                  to={`/w/${item?.code}/${item?.id}`}
+                                                                  className="nav-link"
+
+                                                            >
+                                                                  <Avatar name={item?.title} size={40} round="8px" />
+                                                                  {item?.title}
+                                                            </Link>
+                                                      )
+                                                      }
+
+                                                </div>
                                           </div>
-                                    </div>
+                                    </SkeletonTheme>
                               ))}
 
                               {
@@ -135,6 +194,53 @@ export const Dashboard = () => {
                                     )
                               }
                         </div>
+
+                        {
+                              userID == '1' && (
+                                    <div className="row mb-3">
+                                          <div className="col-md-12 my-5 text-center">
+                                                <h2 className="text-light font-weight-600">User List ({userList?.length})</h2>
+                                          </div>
+                                          {userList && userList?.map((item, index) => (
+                                                <SkeletonTheme baseColor="grey" highlightColor="silver" key={index}>
+                                                      <div className="col-md-6 mb-4">
+                                                            <div className="shadow bg-light p-3 rounded-4 d-flex">
+                                                                  {isLoading ? (
+                                                                        <>
+                                                                              <Skeleton circle={true} round={50} height={40} width={40} />
+                                                                              <div className="ms-3">
+                                                                                    <Skeleton width={150} height={20} />
+                                                                                    <Skeleton width={100} height={15} />
+                                                                              </div>
+                                                                        </>
+                                                                  ) : (
+                                                                        <>
+                                                                              <Avatar name={item?.username} size={40} round="50px" />
+                                                                              <div className="ms-3">
+                                                                                    <p className="mb-0">{item?.email}</p>
+                                                                                    <small>{`@${item?.username}`}</small>
+                                                                              </div>
+                                                                        </>
+                                                                  )}
+                                                            </div>
+                                                      </div>
+                                                </SkeletonTheme>
+                                          ))}
+
+
+
+
+                                          {
+                                                userID == '1' && (
+
+                                                      <div className="col-md-12 text-center">
+                                                            <CustomButton variant="primaryButton" text="Add user" onClick={() => { setAddUser(true) }}></CustomButton>
+                                                      </div>
+                                                )
+                                          }
+                                    </div>
+                              )
+                        }
                   </div>
 
 
@@ -153,6 +259,71 @@ export const Dashboard = () => {
                         />
 
                         <CustomButton variant="primaryButton" text="Add Workspace" type="submit"></CustomButton>
+
+                  </CustomModal>
+
+                  <CustomModal show={addUser} close={() => { setAddUser(false) }} heading='Create User' handleSubmit={handleAddUser}>
+
+                        <CustomInput
+                              label="User Name"
+                              placeholder="Enter User Name"
+                              type="text"
+                              labelClass="mainLabel"
+                              inputClass="mainInput"
+                              name="username"
+                              required
+                              onChange={handleChange}
+
+                        />
+
+                        <CustomInput
+                              label="Email"
+                              placeholder="Enter Email"
+                              type="email"
+                              labelClass="mainLabel"
+                              inputClass="mainInput"
+                              name="email"
+                              required
+                              onChange={handleChange}
+
+                        />
+
+                        <CustomInput
+                              label="Password"
+                              placeholder="Enter Password"
+                              type="password"
+                              labelClass="mainLabel"
+                              inputClass="mainInput"
+                              name="password"
+                              id='pass'
+                              required
+                              onChange={handleChange}
+
+                        />
+
+                        <CustomInput
+                              label="Confirm Password"
+                              placeholder="Enter Confirm Password"
+                              type="password"
+                              id='confrimPassword'
+                              labelClass="mainLabel"
+                              inputClass="mainInput"
+                              name="password_confirmation"
+                              required
+                              onChange={handleChange}
+
+                        />
+
+                        <SelectBox
+                              label="Select Role"
+                              required
+                              name="role"
+                              option={roleList}
+                              selectClass="mainInput"
+                              onChange={handleChange}
+                        />
+
+                        <CustomButton variant="primaryButton" text="Add User" type="submit"></CustomButton>
 
                   </CustomModal>
             </DashboardLayout>
