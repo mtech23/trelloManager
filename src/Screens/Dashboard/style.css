@@ -92,6 +92,14 @@ button.sc-jegwpa.dlKLWs {
     font-size: small;
 }
 
+.dashboardCards {
+    height: 80vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
 
 @media screen and (max-width: 1200px) and (min-width: 768px) {
     .stats, .stats:not(:last-child) {

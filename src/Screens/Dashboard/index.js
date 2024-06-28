@@ -149,98 +149,98 @@ export const Dashboard = () => {
             <DashboardLayout>
                   <div className="container dashCard">
 
-                        <div className="row mb-3">
-                              <div className="col-md-12 mb-5 text-center">
-                                    <h2 className="text-light font-weight-600">Your Workspace</h2>
-                              </div>
+                        <div className="row my-3">
+                              <div className="col-md-4">
+                                    <div className="titleBox">
+                                          <h3 className="text-light font-weight-600">Your Workspace</h3>
+                                    </div>
+                                    <div className="dashboardCards">
+                                          {workspace && workspace.map((item, index) => (
 
-                              {workspace && workspace.map((item, index) => (
-
-                                    <SkeletonTheme baseColor="grey" highlightColor="silver" key={index}>
-
-                                          <div className="col-md-4 mb-4">
-                                                <div className="shadow bg-light p-3 rounded-4" key={index}>
-                                                      {isLoading ? (
-                                                            <>
-                                                                  <Skeleton round={8} height={40} width={40} />
-                                                                  <div className="ms-3">
-                                                                        <Skeleton width={150} height={20} />
-                                                                  </div>
-                                                            </>
-                                                      ) : (
-
-                                                            <Link
-                                                                  to={`/w/${item?.code}/${item?.id}`}
-                                                                  className="nav-link"
-
-                                                            >
-                                                                  <Avatar name={item?.title} size={40} round="8px" />
-                                                                  {item?.title}
-                                                            </Link>
-                                                      )
-                                                      }
-
-                                                </div>
-                                          </div>
-                                    </SkeletonTheme>
-                              ))}
-
-                              {
-                                    userID == '1' && (
-
-                                          <div className="col-md-12 text-center">
-                                                <CustomButton variant="primaryButton" text="Create Workspace" onClick={() => { setShowForm(true) }}></CustomButton>
-                                          </div>
-                                    )
-                              }
-                        </div>
-
-                        {
-                              userID == '1' && (
-                                    <div className="row mb-3">
-                                          <div className="col-md-12 my-5 text-center">
-                                                <h2 className="text-light font-weight-600">User List ({userList?.length})</h2>
-                                          </div>
-                                          {userList && userList?.map((item, index) => (
                                                 <SkeletonTheme baseColor="grey" highlightColor="silver" key={index}>
-                                                      <div className="col-md-6 mb-4">
-                                                            <div className="shadow bg-light p-3 rounded-4 d-flex">
-                                                                  {isLoading ? (
-                                                                        <>
-                                                                              <Skeleton circle={true} round={50} height={40} width={40} />
-                                                                              <div className="ms-3">
-                                                                                    <Skeleton width={150} height={20} />
-                                                                                    <Skeleton width={100} height={15} />
-                                                                              </div>
-                                                                        </>
-                                                                  ) : (
-                                                                        <>
-                                                                              <Avatar name={item?.username} size={40} round="50px" />
-                                                                              <div className="ms-3">
-                                                                                    <p className="mb-0">{item?.email}</p>
-                                                                                    <small>{`@${item?.username}`}</small>
-                                                                              </div>
-                                                                        </>
-                                                                  )}
-                                                            </div>
+
+                                                      <div className="shadow bg-light p-3 rounded-4 mb-4" key={index}>
+                                                            {isLoading ? (
+                                                                  <>
+                                                                        <Skeleton round={8} height={40} width={40} />
+                                                                        <div className="ms-3">
+                                                                              <Skeleton width={150} height={20} />
+                                                                        </div>
+                                                                  </>
+                                                            ) : (
+
+                                                                  <Link
+                                                                        to={`/w/${item?.code}/${item?.id}`}
+                                                                        className="nav-link"
+
+                                                                  >
+                                                                        <Avatar name={item?.title} size={40} round="8px" />
+                                                                        {item?.title}
+                                                                  </Link>
+                                                            )
+                                                            }
+
                                                       </div>
                                                 </SkeletonTheme>
                                           ))}
-
-
-
-
-                                          {
-                                                userID == '1' && (
-
-                                                      <div className="col-md-12 text-center">
-                                                            <CustomButton variant="primaryButton" text="Add user" onClick={() => { setAddUser(true) }}></CustomButton>
-                                                      </div>
-                                                )
-                                          }
                                     </div>
-                              )
-                        }
+
+                                    {
+                                          userID == '1' && (
+
+                                                <div className="col-md-12 text-center mb-5">
+                                                      <CustomButton variant="primaryButton" text="Create Workspace +" onClick={() => { setShowForm(true) }}></CustomButton>
+                                                </div>
+                                          )
+                                    }
+                              </div>
+                              <div className="col-md-8">
+                                    {userList && (
+                                          <>
+                                                <div className="titleBox">
+                                                      <h3 className="text-light font-weight-600">User List ({userList?.length})</h3>
+                                                </div>
+                                                <div className="dashboardCards">
+                                                      {userList?.map((item, index) => (
+                                                            <SkeletonTheme baseColor="grey" highlightColor="silver" key={index}>
+                                                                  <div className="shadow bg-light p-3 rounded-4 d-flex mb-4">
+                                                                        {isLoading ? (
+                                                                              <>
+                                                                                    <Skeleton circle={true} round={50} height={40} width={40} />
+                                                                                    <div className="ms-3">
+                                                                                          <Skeleton width={150} height={20} />
+                                                                                          <Skeleton width={100} height={15} />
+                                                                                    </div>
+                                                                              </>
+                                                                        ) : (
+                                                                              <>
+                                                                                    <Avatar name={item?.username} size={40} round="50px" />
+                                                                                    <div className="ms-3">
+                                                                                          <p className="mb-0">{item?.email}</p>
+                                                                                          <small>{`@${item?.username}`}</small>
+                                                                                    </div>
+                                                                              </>
+                                                                        )}
+
+
+                                                                  </div>
+                                                            </SkeletonTheme>
+                                                      ))}
+                                                </div>
+                                          </>
+                                    )}
+                                    {
+                                          userID == '1' && (
+                                                <div className="d-flex justify-content-center gap-4">
+                                                      <CustomButton variant="primaryButton" text="Add user +" onClick={() => { setAddUser(true) }}></CustomButton>
+                                                </div>
+                                          )
+                                    }
+                              </div>
+
+                        </div>
+
+
                   </div>
 
 

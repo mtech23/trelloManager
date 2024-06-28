@@ -1,9 +1,10 @@
 .dashboardBody {
-    background: transparent;
+    background: #0000009c;
     min-height: 100vh;
     margin-left: 260px;
     padding: 0;
     transition: ease-in-out .4s;
+    height: 100%;
 }
 
 body {

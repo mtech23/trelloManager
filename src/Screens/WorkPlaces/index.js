@@ -153,13 +153,67 @@ export const WorkPlace = () => {
 
     const userID = localStorage.getItem('userID');
 
+    const [fileUpoad, setFileUpload] = useState();
+
+    const handleUpload = (e) => {
+        setFileUpload({
+            ...fileUpoad,
+            file: e.target.files[0],
+            workspace: id
+        })
+    }
+
+
+    useEffect(() => {
+
+        if (fileUpoad?.file && fileUpoad?.workspace) {
+            document.querySelector('.loaderBox').classList.remove("d-none");
+            const formDataAttached = new FormData();
+
+            for (const key in fileUpoad) {
+                formDataAttached.append(key, fileUpoad[key]);
+            }
+
+            fetch(`${base_url}/api/import-board`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${LogoutData}`
+                },
+                body: formDataAttached // Use the FormData object as the request body
+            })
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    document.querySelector('.loaderBox').classList.add("d-none");
+                    console.log(data);
+                    GetBoardData()
+                })
+                .catch((error) => {
+                    document.querySelector('.loaderBox').classList.add("d-none");
+                    console.log(error)
+                })
+        }
+    }, [fileUpoad])
+
     return (
         <DashboardLayout>
             <div className="container">
 
                 <div className="row mb-3 dashCard">
                     <div className="col-md-12 mb-5 text-center">
-                        <h2 className="text-light font-weight-600">Your Boards</h2>
+                        <div className="d-flex justify-content-between mt-4">
+                            <h2 className="text-light font-weight-600">Your Boards</h2>
+                            <CustomInput
+                                type="file"
+                                label="Import Board"
+                                id="board"
+                                inputClass="d-none"
+                                labelClass="buttonBoard"
+                                onChange={handleUpload}
+                            />
+                        </div>
                     </div>
                     {boardData?.boards && boardData?.boards?.map((item, index) => (
                         <div className="col-md-4 mb-4">
@@ -175,6 +229,7 @@ export const WorkPlace = () => {
                                 </Link>
                             </div>
                         </div>
+
                     ))}
 
                     {

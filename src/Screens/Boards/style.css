@@ -121,6 +121,66 @@
 }
 
 
+.userShownIntenal svg {
+    font-size: 14px;
+}
+
+.userShownIntenal > div > button {
+    background-color: transparent !important;
+    color: #333 !important;
+    border: none !important;
+    outline: none;
+    font-weight: 600;
+}
+
+.membersBox {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.membersBox h6 {
+    margin-bottom: 0;
+}
+
+.membersBox > .sb-avatar {
+    margin-right: 0;
+}
+
+
+.dropdownSubTitle {
+    padding: 5px 15px;
+    font-weight: 700;
+}
+
+.dropdownSubTitle p {
+    font-size: 13px;
+    margin-bottom: 0;
+}
+
+.userShownIntenal a {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+
+.dropdown-item.active, .dropdown-item:active {
+    color: #000;
+    text-decoration: none;
+    background-color: #e9ecef;
+}
+
+
+.memberRistriction {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    height: 100vh;
+    justify-content: center;
+    font-size: 20px;
+}
+
+
 /* .taskBg {
     background-color: #091e420f;
 } */

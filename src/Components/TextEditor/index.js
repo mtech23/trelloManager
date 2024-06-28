@@ -38,7 +38,7 @@ export const TextEditor = ({ value, onChange, toolbarOptions, placeholder }) => 
 
   const mentionModule = {
     allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
-    mentionDenotationChars: ['@'],
+    mentionDenotationChars: ['@'], 
     source: (searchTerm, renderList, mentionChar) => {
       console.log('Mention source function called', searchTerm);
       if (searchTerm.length === 0) {
