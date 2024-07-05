@@ -19,18 +19,23 @@
 
 
 li.sidebar-li.active {
-    background-color: #509b8a73;
+    background-color: #898b8cc9;
 }
 
 
 
 .djiHhb {
     background-color: transparent !important;
-    height: calc(100vh - 52px) !important;
+    height: calc(100vh - 120px) !important;
+    gap: 45px;
 }
 
 .fnvpnN {
     background-color: transparent !important;
+}
+
+.smooth-dnd-container.horizontal section > div {
+    max-height: 78vh !important;
 }
 
 button.sc-jegwpa.dlKLWs {
@@ -84,6 +89,19 @@ button.sc-jegwpa.dlKLWs {
 
 .statsChange {
     flex-shrink: 0;
+}
+
+.modal-body .passwordWrapper svg {
+    color: var(--grayColor);
+    font-size: small;
+}
+
+.dashboardCards {
+    height: 80vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px;
+    margin-bottom: 15px;
 }
 
 

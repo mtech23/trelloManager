@@ -1,0 +1,7 @@
+.buttonBoard {
+    background-color: #848787;
+    color: #fff;
+    padding: 6px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}

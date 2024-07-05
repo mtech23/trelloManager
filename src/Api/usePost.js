@@ -61,6 +61,7 @@ export const useGet = (url, initialData = null, idData = '') => {
       }
       const result = await response.json();
       setData(result);
+        
     } catch (err) {
       setError(err);
     } finally {
@@ -71,7 +72,7 @@ export const useGet = (url, initialData = null, idData = '') => {
 
 
 
-  return { ApiData, loading, error, get };
+  return { ApiData, loading, error, get, setData };
 };
 
 

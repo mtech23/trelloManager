@@ -3,12 +3,23 @@
 /*----- General Css Start -----*/
 
 :root {
-    --primaryColor: #6fc8b4;
+    --primaryColor: #848787;
     --grayColor: #2E2E2E;
-    --redColor : #ff0000;
+    --redColor: #ff0000;
     --greenColor: #42C900;
     --yellowColor: #E5BB45;
     --whiteColor: #fff;
+    --dark: #22272B;
+    --light: #A9B4C0;
+}
+
+
+.bg-theme-dark {
+    background-color: var(--dark);
+}
+
+.text-theme-light {
+    color: var(--light);
 }
 
 body {
@@ -85,6 +96,7 @@ body {
     font-weight: 500;
     margin-bottom: 1rem;
 }
+
 /*----- Modal Css End -----*/
 
 
@@ -108,27 +120,27 @@ body {
     height: 10px;
     border-radius: 50px;
     cursor: pointer;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: #ddd3d3; 
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #ddd3d3;
     border-radius: 50px;
     cursor: pointer;
-  }
-   
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: #1a6050f0; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #22272B;
     border-radius: 50px;
     cursor: pointer;
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
     border-radius: 50px;
-  }
+}
 
 .mainTitle {
     font-size: 22px;
@@ -190,17 +202,22 @@ body {
 }
 
 .custom-loader {
-    width:50px;
-    height:50px;
-    border-radius:50%;
-    border:8px solid;
-    border-color:#E4E4ED;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 8px solid;
+    border-color: #E4E4ED;
     border-right-color: var(--primaryColor);
-    animation:s2 1s infinite linear;
-  }
-  @keyframes s2 {to{transform: rotate(1turn)}}
+    animation: s2 1s infinite linear;
+}
 
-  .loaderBox {
+@keyframes s2 {
+    to {
+        transform: rotate(1turn)
+    }
+}
+
+.loaderBox {
     position: absolute;
     background-color: #000000c2;
     width: 100%;

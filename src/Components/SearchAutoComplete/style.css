@@ -1,0 +1,108 @@
+.dropDownSearch {
+    height: 40vh;
+    overflow-y: auto;
+    background-color: #fff;
+    position: absolute;
+    top: 47px;
+    width: 550px;
+    border-radius: 10px !important;
+    padding: 10px;
+}
+
+.searchBar {
+    position: relative;
+    top: 6px;
+}
+
+.searchBar input {
+    padding: 5px 16px;
+}
+
+
+.dropDownSearch ul {
+    list-style: none;
+    padding: 0;
+}
+
+.dropDownSearch ul li {
+    margin-bottom: 10px;
+}
+
+
+.headerAction {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.headerAction .userMenuItem {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+}
+
+.w-550 {
+    width: 550px;
+}
+
+.dropDownSearch li a {
+    text-decoration: none;
+    color: #565252;
+}
+
+.searchData {
+    display: flex;
+    gap: 10px;
+    font-size: 14px;
+}
+
+
+.dataTitle p {
+    margin: 0;
+    line-height: 1;
+}
+
+.iconBoxData svg {
+    font-size: 25px;
+}
+
+
+.userListData button {
+    background-color: transparent;
+    border: none;
+    font-size: 11px;
+    /* position: absolute;
+    right: 0;
+    top: 8px; */
+}
+
+
+
+.userListData {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+
+button#dropdown-basic-button {
+    background-color: #737677;
+    border-color: #737677;
+}
+
+
+.userListData > span {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+
+.removeSearch {
+    position: absolute;
+    bottom: 1px;
+    right: 5px;
+    border: none;
+    background-color: transparent;
+    outline: none;
+}
