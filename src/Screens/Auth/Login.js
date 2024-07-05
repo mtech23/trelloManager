@@ -42,6 +42,7 @@ const AdminLogin = () => {
                 const responseData = await response.json();
                 localStorage.setItem('login', responseData?.token);
                 localStorage.setItem('userID', responseData?.id);
+                localStorage.setItem('userInfo', responseData?.user?.username);
                 console.log('Login Response:', responseData);
                 document.querySelector('.loaderBox').classList.add("d-none");
                 navigate('/dashboard')
@@ -64,11 +65,11 @@ const AdminLogin = () => {
             <AuthLayout authTitle='Login' authPara='Login into your Account'>
                 <form onSubmit={handleSubmit}>
                     <CustomInput
-                        label='Email Address'
+                        label='Username'
                         required
                         id='userEmail'
                         type='text'
-                        placeholder='Enter Your Email Address'
+                        placeholder='Enter Your Username'
                         labelClass='mainLabel'
                         inputClass='mainInput'
                         onChange={(event) => {

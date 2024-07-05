@@ -26,12 +26,16 @@ li.sidebar-li.active {
 
 .djiHhb {
     background-color: transparent !important;
-    height: calc(100vh - 52px) !important;
+    height: calc(100vh - 120px) !important;
     gap: 45px;
 }
 
 .fnvpnN {
     background-color: transparent !important;
+}
+
+.smooth-dnd-container.horizontal section > div {
+    max-height: 78vh !important;
 }
 
 button.sc-jegwpa.dlKLWs {

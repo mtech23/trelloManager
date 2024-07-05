@@ -6,7 +6,7 @@ import Board from 'react-trello';
 import Avatar from 'react-avatar';
 import "./style.css";
 import { base_url } from "../../Api/base_url";
-import { useNavigate, useParams } from "react-router";
+import { json, useNavigate, useParams } from "react-router";
 import { Header } from "../../Components/Layout/Header";
 import { Sidebar } from "../../Components/Layout/Sidebar";
 import CustomInput from "../../Components/CustomInput";
@@ -21,13 +21,24 @@ import CustomCard from "../../Components/CustomCard";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { Dropdown, DropdownButton } from "react-bootstrap";
-
-
-
+import { socket } from "../../socket";
 
 
 
 export const Boards = () => {
+
+
+
+    const initialData = {
+        lanes: [
+
+        ]
+    };
+
+
+    const [data, setData] = useState(initialData);
+    const [boardData, setBoardData] = useState();
+
 
 
     const [sideBarClass, setsideBarClass] = useState("");
@@ -73,14 +84,7 @@ export const Boards = () => {
 
 
 
-    const initialData = {
-        lanes: [
 
-        ]
-    };
-
-    const [data, setData] = useState(initialData);
-    const [boardData, setBoardData] = useState();
     const LogoutData = localStorage.getItem('login');
 
     const { id, slug } = useParams();
@@ -91,7 +95,7 @@ export const Boards = () => {
 
     }, []);
 
-    const [isAllowed, setIsAllowed] = useState(false);
+    const [isAllowed, setIsAllowed] = useState('');
     const handleBoard = () => {
         document.querySelector('.loaderBox').classList.remove("d-none");
         fetch(`${base_url}/api/view-lists/${id}`,
@@ -189,13 +193,25 @@ export const Boards = () => {
     const { ApiData: storeListApiData, loading: storeListLoading, error: storeListError, post: storeListPost } = usePost('/api/storelist');
     const { ApiData: lanePositionData, loading: laneLoader, error: LanerErrorData, post: UpdateLanePos } = usePost('/api/update-position');
 
+    useEffect(() => {
+        socket.emit('saveChanges', id, userID);
+    }, [lanePositionData])
+
+    useEffect(() => {
+        socket.emit('saveChanges', id, userID);
+    }, [addTaskApiData])
+
+    useEffect(() => {
+        socket.emit('saveChanges', id, userID);
+    }, [storeListApiData])
+
 
     const [taskID, setTaskID] = useState('');
     const [cardShow, setCardShow] = useState(false);
     const [trigger, setTrigger] = useState(false);
     const [openSlug, setOpenSlug] = useState(null);
 
-    const { ApiData: detailData, loading: detailLoading, error: detailError, get: GetDetail } = useGet(`/api/b/${id}/${openSlug ? openSlug : ''}`, null);
+    const { ApiData: detailData, loading: detailLoading, error: detailError, get: GetDetail, setData: liveData } = useGet(`/api/b/${id}/${openSlug ? openSlug : ''}`, null);
 
 
     useEffect(() => {
@@ -446,7 +462,7 @@ export const Boards = () => {
                     document.querySelector('.loaderBox').classList.add("d-none");
                     console.log(data);
 
-                    GetDetail()
+                    socket.emit('saveChanges', id, userID);
                 })
                 .catch((error) => {
                     document.querySelector('.loaderBox').classList.add("d-none");
@@ -475,7 +491,7 @@ export const Boards = () => {
 
 
     useEffect(() => {
-        GetDetail()
+        socket.emit('saveChanges', id, userID);
     }, [deleteAttachmentID])
 
 
@@ -528,7 +544,7 @@ export const Boards = () => {
 
     useEffect(() => {
         setShowEditorDescription(false);
-        GetDetail()
+        socket.emit('saveChanges', id, userID);
     }, [updateDescription])
 
 
@@ -564,7 +580,7 @@ export const Boards = () => {
 
     useEffect(() => {
         setShowEditor(false)
-        GetDetail()
+        socket.emit('saveChanges', id, userID);
         setNewContent('')
         setAddCommet('')
     }, [addComment])
@@ -609,7 +625,7 @@ export const Boards = () => {
 
 
     useEffect(() => {
-        GetDetail()
+        socket.emit('saveChanges', id, userID);
         setEditCommentIndex(null)
     }, [editComment])
 
@@ -632,7 +648,7 @@ export const Boards = () => {
 
 
     useEffect(() => {
-        GetDetail()
+        socket.emit('saveChanges', id, userID);
     }, [deleteData])
 
     const userID = localStorage.getItem('userID');
@@ -663,8 +679,7 @@ export const Boards = () => {
                 .then((data) => {
                     document.querySelector('.loaderBox').classList.add("d-none");
                     console.log(data);
-                    GetDetail();
-                    handleBoard()
+                    socket.emit('saveChanges', id, userID);
                 })
                 .catch((error) => {
                     document.querySelector('.loaderBox').classList.add("d-none");
@@ -718,7 +733,7 @@ export const Boards = () => {
 
 
     useEffect(() => {
-        handleBoard()
+        socket.emit('saveChanges', id, userID);
         setAddMember('');
     }, [addmember])
 
@@ -745,7 +760,7 @@ export const Boards = () => {
 
 
     useEffect(() => {
-        handleBoard()
+        socket.emit('saveChanges', id, userID);
         setAddMember('');
     }, [removeBoard])
 
@@ -772,8 +787,7 @@ export const Boards = () => {
     }, [taskMemberData])
 
     useEffect(() => {
-        GetDetail();
-        handleBoard()
+        socket.emit('saveChanges', id, userID);
     }, [taskAddmember])
 
 
@@ -797,8 +811,7 @@ export const Boards = () => {
     }, [removeMemberData])
 
     useEffect(() => {
-        GetDetail();
-        handleBoard()
+        socket.emit('saveChanges', id, userID);
     }, [removeMember])
 
 
@@ -823,10 +836,54 @@ export const Boards = () => {
     }, [requestData])
 
     useEffect(() => {
-        GetDetail();
+        socket.emit('saveChanges', id, userID);
         handleBoard()
     }, [requestMember])
 
+
+
+    useEffect(() => {
+        socket.on("connect", () => {
+            console.log('connected', socket.id); // x8WIv7-mJelg7on_ALbx
+        });
+
+        socket.on("disconnect", () => {
+            console.log('disconnected', socket.id);
+        });
+
+
+        socket.on('chat json', (data) => {
+            const socketData = data;
+            console.log('socketData', socketData);
+            const boardData = socketData?.workspace?.boards?.find((item) => item?.code == id);
+            console.log('bb', boardData);
+            if (openSlug != null && id && boardData) {
+                boardData?.lanes?.forEach((item) => {
+                    const cardFound = item?.cards?.filter((cardItem) => cardItem?.slug == openSlug);
+                    console.log('open', cardFound);
+                    if (cardFound?.length > 0) {
+                        console.log('cardFound', { data: { card: cardFound[0] } })
+                        liveData({ data: { card: cardFound[0] } });
+                    }
+                });
+            }
+
+            setData(boardData);
+            setBoardData(socketData);
+
+        });
+
+        return () => {
+            socket.off('chat json', data);
+        };
+
+
+    }, [])
+
+
+
+
+    const username = localStorage.getItem('userInfo');
     return (
 
         <>
@@ -1185,7 +1242,7 @@ export const Boards = () => {
                                                 </div>
                                             </div>
                                             {
-                                                detailLoading ? <Skeleton count={20} height={50} /> : detailData && detailData?.data?.card && detailData?.data?.card.mergedActivity && detailData?.data?.card?.mergedActivity.map((item, index) => {
+                                                detailLoading ? <Skeleton count={20} height={50} /> : detailData && detailData?.data?.card && detailData?.data?.card.mergedActivity && detailData?.data?.card?.mergedActivity?.map((item, index) => {
                                                     switch (item?.type) {
                                                         case "activity":
                                                             return (
@@ -1260,7 +1317,7 @@ export const Boards = () => {
                                                             return (
                                                                 <div className="activityBox" key={index}>
                                                                     <div className="userName">
-                                                                        <Avatar name={item?.user?.username} size={40} round="50px" />
+                                                                        <Avatar name={username} size={40} round="50px" />
                                                                     </div>
                                                                     <div className="commentBar">
                                                                         {editCommentIndex === index ? (

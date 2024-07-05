@@ -29,6 +29,7 @@
     "react-select": "^5.7.4",
     "react-trello": "github:rcdexta/react-trello",
     "simplebar-react": "^2.4.3",
+    "socket.io-client": "^4.7.5",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
