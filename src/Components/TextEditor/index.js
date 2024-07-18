@@ -4,7 +4,7 @@ import 'react-quill/dist/quill.snow.css';
 
 // Ensure quill-mention is correctly imported
 import QuillMention from 'quill-mention';
-
+import { mentionModule } from './mentionConfig';
 // Register the mention module and blot
 Quill.register('modules/mention', QuillMention);
 
@@ -32,27 +32,27 @@ export const TextEditor = ({ value, onChange, toolbarOptions, placeholder }) => 
     return () => observer.disconnect();
   }, []);
 
-  const users = [
-    { id: 1, value: 'John Doe' },
-    { id: 2, value: 'Jane Smith' },
-    { id: 3, value: 'Michael Brown' },
-  ];
+  // const users = [
+  //   { id: 1, value: 'John Doe' },
+  //   { id: 2, value: 'Jane Smith' },
+  //   { id: 3, value: 'Michael Brown' },
+  // ];
 
-  const mentionModule = {
-    allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
-    mentionDenotationChars: ['@'],
-    source: (searchTerm, renderList, mentionChar) => {
-      console.log('Mention source function called', searchTerm);
-      if (searchTerm.length === 0) {
-        renderList(users, searchTerm);
-      } else {
-        const matches = users.filter((user) =>
-          user.value.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        renderList(matches, searchTerm);
-      }
-    },
-  };
+  // const mentionModule = {
+  //   allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+  //   mentionDenotationChars: ['@'],
+  //   source: (searchTerm, renderList, mentionChar) => {
+  //     console.log('Mention source function called', searchTerm);
+  //     if (searchTerm.length === 0) {
+  //       renderList(users, searchTerm);
+  //     } else {
+  //       const matches = users.filter((user) =>
+  //         user.value.toLowerCase().includes(searchTerm.toLowerCase())
+  //       );
+  //       renderList(matches, searchTerm);
+  //     }
+  //   },
+  // };
 
   const modules = {
     toolbar: toolbarOptions || [
@@ -65,7 +65,7 @@ export const TextEditor = ({ value, onChange, toolbarOptions, placeholder }) => 
     clipboard: {
       matchVisual: false,
     },
-    // mention: mentionModule,
+    mention: mentionModule,
   };
 
   const formats = [
