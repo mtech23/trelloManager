@@ -147,63 +147,27 @@ export const Dashboard = () => {
       ]
       return (
             <DashboardLayout>
-                  <div className="container dashCard">
+                  <div className="container dashCard dashData">
 
                         <div className="row my-3">
                               <div className="col-md-4">
-                                    <div className="titleBox">
-                                          <h3 className="text-light font-weight-600">Your Workspace</h3>
-                                    </div>
-                                    <div className="dashboardCards">
-                                          {workspace && workspace.map((item, index) => (
-
-                                                <SkeletonTheme baseColor="grey" highlightColor="silver" key={index}>
-
-                                                      <div className="shadow bg-light p-3 rounded-4 mb-4" key={index}>
-                                                            {isLoading ? (
-                                                                  <>
-                                                                        <Skeleton round={8} height={40} width={40} />
-                                                                        <div className="ms-3">
-                                                                              <Skeleton width={150} height={20} />
-                                                                        </div>
-                                                                  </>
-                                                            ) : (
-
-                                                                  <Link
-                                                                        to={`/w/${item?.code}/${item?.id}`}
-                                                                        className="nav-link"
-
-                                                                  >
-                                                                        <Avatar name={item?.title} size={40} round="8px" />
-                                                                        {item?.title}
-                                                                  </Link>
-                                                            )
-                                                            }
-
-                                                      </div>
-                                                </SkeletonTheme>
-                                          ))}
-                                    </div>
-
-                                    {
-                                          userID == '1' && (
-
-                                                <div className="col-md-12 text-center mb-5">
-                                                      <CustomButton variant="primaryButton" text="Create Workspace +" onClick={() => { setShowForm(true) }}></CustomButton>
-                                                </div>
-                                          )
-                                    }
-                              </div>
-                              <div className="col-md-8">
                                     {userList && (
                                           <>
                                                 <div className="titleBox">
-                                                      <h3 className="text-light font-weight-600">User List ({userList?.length})</h3>
+                                                      <h5 className="text-light text-center font-weight-600">User List ({userList?.length})</h5>
+                                                      {
+                                                            userID == '1' && (
+                                                                  <div className="d-flex justify-content-center gap-4">
+                                                                        <CustomButton variant="primaryButton" text="Add user +" onClick={() => { setAddUser(true) }}></CustomButton>
+                                                                  </div>
+                                                            )
+                                                      }
                                                 </div>
+
                                                 <div className="dashboardCards">
                                                       {userList?.map((item, index) => (
                                                             <SkeletonTheme baseColor="grey" highlightColor="silver" key={index}>
-                                                                  <div className="shadow bg-light p-3 rounded-4 d-flex mb-4">
+                                                                  <div className="shadow bgWorkCard p-3 rounded-4 d-flex mb-4">
                                                                         {isLoading ? (
                                                                               <>
                                                                                     <Skeleton circle={true} round={50} height={40} width={40} />
@@ -229,13 +193,62 @@ export const Dashboard = () => {
                                                 </div>
                                           </>
                                     )}
-                                    {
-                                          userID == '1' && (
-                                                <div className="d-flex justify-content-center gap-4">
-                                                      <CustomButton variant="primaryButton" text="Add user +" onClick={() => { setAddUser(true) }}></CustomButton>
+
+                              </div>
+
+                              <div className="col-md-8">
+                                    <div className="titleBox">
+                                          <h5 className="text-light text-center font-weight-600">Your Workspace</h5>
+                                          {
+                                                userID == '1' && (
+
+                                                      <div className="data">
+                                                            <CustomButton variant="primaryButton" text="Create Workspace +" onClick={() => { setShowForm(true) }}></CustomButton>
+                                                      </div>
+                                                )
+                                          }
+                                    </div>
+
+                                    <div className="row">
+                                          <div className="col-md-12 mb-4">
+                                                <div className="dashboardCards">
+                                                      <div className="row">
+                                                            {workspace && workspace.map((item, index) => (
+
+                                                                  <div className="col-6">
+                                                                        <SkeletonTheme baseColor="grey" highlightColor="silver" key={index}>
+
+                                                                              <div className="shadow bgWorkCard p-3 rounded-4 mb-4" key={index}>
+                                                                                    {isLoading ? (
+                                                                                          <>
+                                                                                                <Skeleton round={8} height={40} width={40} />
+                                                                                                <div className="ms-3">
+                                                                                                      <Skeleton width={150} height={20} />
+                                                                                                </div>
+                                                                                          </>
+                                                                                    ) : (
+
+                                                                                          <Link
+                                                                                                to={`/w/${item?.code}/${item?.id}`}
+                                                                                                className="nav-link"
+
+                                                                                          >
+                                                                                                <Avatar name={item?.title} size={40} round="8px" />
+                                                                                                {item?.title}
+                                                                                          </Link>
+                                                                                    )
+                                                                                    }
+
+                                                                              </div>
+                                                                        </SkeletonTheme>
+                                                                  </div>
+                                                            ))}
+                                                      </div>
                                                 </div>
-                                          )
-                                    }
+                                          </div>
+                                    </div>
+
+
                               </div>
 
                         </div>

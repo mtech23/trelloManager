@@ -23,10 +23,18 @@ li.sidebar-li.active {
 }
 
 
+.ms-3 p {
+    overflow: hidden;
+    width: 270px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
 
 .djiHhb {
     background-color: transparent !important;
-    height: calc(100vh - 120px) !important;
+    height: calc(100vh - 110px) !important;
     gap: 45px;
 }
 
@@ -103,6 +111,17 @@ button.sc-jegwpa.dlKLWs {
     padding: 10px;
     margin-bottom: 15px;
 }
+
+
+.dashData .titleBox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
 
 
 @media screen and (max-width: 1200px) and (min-width: 768px) {

@@ -152,8 +152,8 @@ export const Header = (props) => {
       <Navbar className="customHeader" expand="md">
         <Container fluid>
           <Link to={"/dashboard"} className="siteLogo order-2 order-lg-3 text-decoration-none">
-            <h1>Mtech <span>Task Manager</span></h1>
-            {/* <img src={logo} className="mw-100" /> */}
+            {/* <h1>Mtech <span>Task Manager</span></h1> */}
+            <img src={mtech} className="mw-100 navLogo" />
           </Link>
           <Navbar.Toggle className="order-4 order-lg-2 notButton">
             <FontAwesomeIcon className="bell-icon" icon={faEllipsisV} />
@@ -162,8 +162,8 @@ export const Header = (props) => {
             id="basic-navbar-nav"
             className="customCollapse order-3"
           >
-            <Nav className="justify-content-between navbar-nav w-100">
-              <div className="workPlaces">
+            <Nav className="justify-content-end navbar-nav w-100">
+              {/* <div className="workPlaces">
                 <Dropdown className="notiDropdown me-2">
                   <Dropdown.Toggle variant="transparent" className="notButton">
                     Workspaces
@@ -178,12 +178,12 @@ export const Header = (props) => {
                       <ul className="navbar-nav d-block">
                         {workspace && workspace.map((item, index) => (
                           <li className="nav-item" key={index}>
-                            {/* Adding onClick handler to close the dropdown */}
+
                             <Link
                               to={`/w/${item?.code}/${item?.id}`}
                               className="nav-link"
                               onClick={() => {
-                                // Close the dropdown menu when an item is clicked
+
                                 document.querySelector('.notiDropdown .dropdown-toggle').click();
                               }}
                             >
@@ -196,9 +196,7 @@ export const Header = (props) => {
                     </div>
                   </Dropdown.Menu>
                 </Dropdown>
-
-                {/* <CustomButton variant="primaryButton" text="Create Workspace" onClick={() => { setShowForm(true) }}></CustomButton> */}
-              </div>
+              </div> */}
 
               <div className="otherOptions d-flex align-items-center">
                 {/* <Dropdown className="notiDropdown me-2">

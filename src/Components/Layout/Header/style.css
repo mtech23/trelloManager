@@ -6,15 +6,16 @@
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
-    padding: 0px 10px !important;
+    /* padding: 0px 10px !important; */
     box-shadow: 0 3px 6px rgb(0 0 0 / 6%);
-    height: 3rem;
+    height: 3.5rem;
 }
 
 
 .customHeader .siteLogo img {
-    width: 100%;
+    width: 155px;
     max-width: 100%;
+    height: auto;
 }
 
 .workPlaces {
@@ -38,7 +39,7 @@
 
 .siteLogo {
     width: 230px;
-    text-align: center;
+    /* text-align: center; */
     outline: none;
 }
 

@@ -15,7 +15,7 @@ const CustomModal = (props) => {
 
     return (
         <>
-            <Modal show={props?.show} centered onHide={props?.close} size={props?.size}>
+            <Modal show={props?.show} centered onHide={props?.close} size={props?.size} dialogClassName={props?.dialogClassName}>
                 <button className={`closeButton ${props?.className}`} onClick={props?.close}><FontAwesomeIcon icon={faTimes} /></button>
                 <Modal.Body className={props.children ? '' : 'text-center'}>
                     {props?.children ? (
@@ -35,6 +35,7 @@ const CustomModal = (props) => {
                                 <CustomInput
                                     type="file"
                                     label={props?.cover_image ? 'Change Cover' : 'Upload Cover'}
+                                    labelClass="text-black shadow-lg "
                                     id="cover"
                                     inputClass='d-none'
                                     onChange={(e) => {

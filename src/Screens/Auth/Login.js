@@ -62,7 +62,7 @@ const AdminLogin = () => {
 
     return (
         <>
-            <AuthLayout authTitle='Login' authPara='Login into your Account'>
+            <AuthLayout  authPara='Login into your Account'>
                 <form onSubmit={handleSubmit}>
                     <CustomInput
                         label='Username'
@@ -95,7 +95,7 @@ const AdminLogin = () => {
                             <input type="checkbox" name="rememberMe" id="rememberMe" className='me-1' />
                             <label htmlFor="rememberMe" className='fw-semibold'>Remember Me</label>
                         </div>
-                        <Link to={'/forget-password'} className='text-dark text-decoration-underline'>Forget Password?</Link>
+                        {/* <Link to={'/forget-password'} className='text-dark text-decoration-underline'>Forget Password?</Link> */}
                     </div>
                     <div className="mt-4 text-center">
                         <CustomButton variant='primaryButton' text='Login' type='submit' />

@@ -17,8 +17,8 @@ export const AuthLayout = (props) => {
                             <div className="authFormWrapper">
                                 <div className="authForm">
                                     <div className="m-auto siteLogo text-center w-100">
-                                        {/* <img src={logo} className="mw-100" /> */}
-                                        <h1>Mtech <span>Task Manager  </span></h1>
+                                        <img src={logo} className="mw-100" />
+                                        {/* <h1>Mtech <span>Task Manager  </span></h1> */}
                                     </div>
                                     <div className="authFormHeader">
                                         <h2 className="authTitle text-black">{props?.authTitle}</h2>

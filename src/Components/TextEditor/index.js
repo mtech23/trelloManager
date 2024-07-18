@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-// import 'quill-mention/dist/quill.mention.css'; // Adjust the path if needed
-import { Mention as QuillMention } from 'quill-mention';
 
-// Register Quill Mention module
+// Ensure quill-mention is correctly imported
+import QuillMention from 'quill-mention';
+
+// Register the mention module and blot
 Quill.register('modules/mention', QuillMention);
 
 export const TextEditor = ({ value, onChange, toolbarOptions, placeholder }) => {
+
   useEffect(() => {
     // Custom patch for replacing deprecated DOMNodeInserted
     const observer = new MutationObserver(mutations => {
@@ -38,7 +40,7 @@ export const TextEditor = ({ value, onChange, toolbarOptions, placeholder }) => 
 
   const mentionModule = {
     allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
-    mentionDenotationChars: ['@'], 
+    mentionDenotationChars: ['@'],
     source: (searchTerm, renderList, mentionChar) => {
       console.log('Mention source function called', searchTerm);
       if (searchTerm.length === 0) {
