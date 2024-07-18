@@ -15,10 +15,23 @@
 }
 
 
-
 .authBox {
-    background-color: #fff;
+    background-color: #191a1a;
     border-radius: 0.5rem;
+    position: relative;
+    z-index: 999;
+}
+
+.authFormWrapper label, .authFormWrapper a {
+    color: #848787 !important;
+}
+
+.authBg::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #000000e0;
 }
 
 .authImage img {
