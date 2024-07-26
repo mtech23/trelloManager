@@ -897,6 +897,8 @@ export const Boards = () => {
 
 
     const username = localStorage.getItem('userInfo');
+
+    const userData = detailData?.data?.card?.members
     return (
 
         <>
@@ -1237,7 +1239,7 @@ export const Boards = () => {
                                                             showEditor === true ? (
                                                                 <div className="data flex-grow-1">
                                                                     <div className="commentAreaBox shadow">
-                                                                        <TextEditor value={newContent} onChange={handleNewComment} />
+                                                                        <TextEditor value={newContent} onChange={handleNewComment} userInfo={userData} />
 
                                                                     </div>
                                                                     <div className="btnBoxes">

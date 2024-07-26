@@ -1,10 +1,17 @@
-const users = [
-    { id: 1, value: 'John Doe' },
-    { id: 2, value: 'Jane Smith' },
-    { id: 3, value: 'Michael Brown' },
-  ];
-  
-  export const mentionModule = {
+export const mentionModuleData = (props) => {
+  console.log('checl', props?.data)
+
+  const users = [
+    {
+      value: 'saif',
+      id: 1
+    },
+    {
+      value: 'waleed',
+      id: 1
+    }
+  ]
+  const mentionModule = {
     allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
     mentionDenotationChars: ['@'],
     source: (searchTerm, renderList) => {
@@ -12,11 +19,13 @@ const users = [
       if (searchTerm.length === 0) {
         renderList(users, searchTerm);
       } else {
-        const matches = users.filter(user =>
-          user.value.toLowerCase().includes(searchTerm.toLowerCase())
+        const matches = users?.filter(user =>
+          user?.value?.toLowerCase().includes(searchTerm.toLowerCase())
         );
         renderList(matches, searchTerm);
       }
     },
   };
-  
+
+  return mentionModule;
+}
