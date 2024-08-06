@@ -1,7 +1,7 @@
 .custom-card {
   border: none;
   padding: 0;
-  margin: 10px;
+  margin: 5px 0;
   background-color: #22272b;
   box-shadow: none;
   cursor: pointer;
@@ -78,11 +78,13 @@
   margin-bottom: 0;
 }
 
+
 .smooth-dnd-container.horizontal section {
   border-radius: 12px;
-  background-color: #101204;
+  background-color: #22272b;
   color: #A9B4C0;
 }
+
 
 .cardImage {
   position: relative;
@@ -98,7 +100,80 @@
   display: block;
   width: 100%;
   flex-grow: 1;
-  background-color: #22272B;
+  background-color: #101204;
   padding: 20px 10px 10px;
   border-radius: 12px;
+}
+
+.glBTSG {
+  background-color: #101204 !important;
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.smooth-dnd-draggable-wrapper .bdZpJa {
+  border-radius: 3px;
+  border-bottom: none;
+  background-color: transparent;
+  position: relative;
+  padding: 10px;
+  cursor: pointer;
+  max-width: 100%;
+  margin-bottom: 7px;
+  min-width: 230px;
+  color: #f3f3f3 !important;
+}
+
+
+.comPlainTextContentEditable--has-placeholder::before {
+  opacity: 1 !important;
+}
+
+.smooth-dnd-draggable-wrapper .jriprn {
+  font-size: 14px;
+  color: #a9b4c0 !important;
+  font-weight: 400 !important;
+  opacity: 1 !important;
+  width: 100% !important;
+  outline: none !important;
+  text-transform: capitalize !important;
+}
+
+span.sc-irTrJD.sc-hAtFlw.hmAjNs.igjTZP {
+  display: none !important;
+}
+
+
+.comPlainTextContentEditable.comPlainTextContentEditable--has-placeholder {
+  outline: none !important;
+}
+
+.sc-fmSBHF.gSddqn {
+  display: none !important;
+}
+
+.cPJvcZ {
+  border-bottom: 1px solid #a9b4c040 !important;
+}
+
+
+.smooth-dnd-draggable-wrapper .UFLAs {
+  background: #6ec8b4 !important;
+  color: #22272b !important;
+  transition: background 0.3s ease;
+  margin-left: 8px !important;
+  border: none !important;
+}
+
+.smooth-dnd-draggable-wrapper .SDhUM {
+  background: #737677 !important;
+  border: none !important;
+}
+
+span.leftSpace {
+  padding-right: 7px;
+}
+
+.comPlainTextContentEditable.focus-visible {
+  outline: none !important;
 }

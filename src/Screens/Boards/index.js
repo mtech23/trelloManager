@@ -21,6 +21,7 @@ import CustomCard from "../../Components/CustomCard";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { Dropdown, DropdownButton } from "react-bootstrap";
+import { CustomLaneHeader } from "../../Components/CustomLane"
 import { socket } from "../../socket";
 
 
@@ -119,7 +120,7 @@ export const Boards = () => {
                 setBoardData(data)
                 console.log('sdasa', data)
                 setIsAllowed(data?.is_allowed);
-                
+
                 document.querySelector('.loaderBox').classList.add("d-none");
             })
             .catch((error) => {
@@ -130,7 +131,7 @@ export const Boards = () => {
     }
 
 
-    const boardRoom = "board-"+ id + '-room';
+    const boardRoom = "board-" + id + '-room';
     console.log(boardRoom)
 
 
@@ -870,9 +871,9 @@ export const Boards = () => {
         });
 
 
-        socket.on('chat json', (data,from) => {
+        socket.on('chat json', (data, from) => {
             console.log(data, from, 'text')
-            if(boardRoom === from){
+            if (boardRoom === from) {
                 const socketData = data;
                 console.log('socketData', socketData);
                 const boardData = socketData?.workspace?.boards?.find((item) => item?.code == id);
@@ -887,7 +888,7 @@ export const Boards = () => {
                         }
                     });
                 }
-    
+
                 setData(boardData);
                 setBoardData(socketData);
             }
@@ -910,6 +911,36 @@ export const Boards = () => {
 
     const userData = detailData?.data?.card?.members
     // console.log('sss', userData)
+
+    const { ApiData: editLaneApiData, loading: editLaneLoading, error: editLaneError, post: editLanePost } = usePost('/api/storelist');
+    const [laneData, setLaneData] = useState();
+
+    const handleLaneUpdate = (laneId, title) => {
+        setLaneData({
+            ...laneData,
+            id: laneId,
+            board_id: data?.id,
+            title: title
+        });
+
+        setLaneData(prevData => {
+            console.log('listItemssss', prevData);
+            return prevData;
+        });
+    };
+
+    useEffect(() => {
+        if (laneData?.id && laneData?.board_id && laneData?.title) {
+            editLanePost(laneData)
+        }
+    }, [laneData]);
+
+    useEffect(() => {
+        socket.emit('saveChanges', id, userID, boardRoom);
+    }, [editLaneApiData])
+
+
+
     return (
 
         <>
@@ -921,20 +952,23 @@ export const Boards = () => {
                     <>
                         <div className={`sidebar ${sideBarClass}`} id="sidebar">
                             <div className="boardTitle">
-                                <h6><Avatar name={boardData?.workspace?.title} size={40} round="8px" />{boardData?.workspace?.title}</h6>
+                                <h6 className="ps-3"><Avatar name={boardData?.workspace?.title} size={40} round="8px" />{boardData?.workspace?.title}</h6>
+                            </div>
+                            <div className="titleBoard">
+                                <p className="mt-2 text-white ps-3">Your Board</p>
                             </div>
                             <ul className="list-unstyled">
                                 {boardData?.workspace?.boards && boardData?.workspace?.boards.map((item, index) => (
                                     <li key={index} className={`sidebar-li ${location.pathname.includes(`/${item?.code}`) ? 'active' : ''}`}>
                                         <Link className={`border-0 btn shadow-0 sideLink text-lg-start w-100`} to={`/b/${item?.code}`}>
-                                            <span className="sideLinkText">{item.title}</span>
+                                            <span className="sideLinkText"><Avatar name={item.title} size={20} round="4px" /> {item.title}</span>
                                         </Link>
                                     </li>
                                 ))}
 
                                 {
                                     userID == '1' && (
-                                        <li className="sidebar-li px-3">
+                                        <li className="sidebar-li px-3 mt-4">
                                             <button className={`customButton primaryButton w-100`} onClick={() => { setShowForm(true) }}>
                                                 <span className="sideLinkText">Add Board +</span>
                                             </button>
@@ -961,16 +995,11 @@ export const Boards = () => {
                                                         <div className="userShown">
                                                             {
                                                                 data?.users && data?.users.slice(0, 5).map((item, index) => (
-                                                                    index >= 4 ? (
-                                                                        <>
-                                                                            <Avatar key={index} name={item.username} size={30} round="50px" />
-                                                                            <span className="px-1">5+</span>
-
-                                                                        </>
-                                                                    ) : (
-                                                                        <Avatar key={index} name={item.username} size={30} round="50px" />
-                                                                    )
+                                                                    <Avatar key={index} name={item.username} size={30} round="50px" />
                                                                 ))
+                                                            }
+                                                            {
+                                                                <span className="px-2">{data?.users.length}+</span>
                                                             }
 
                                                             {
@@ -1021,7 +1050,15 @@ export const Boards = () => {
                                                         <div>
                                                             <Board
                                                                 data={data}
-                                                                components={{ Card: CustomCard }}
+                                                                components={{
+                                                                    Card: CustomCard,
+                                                                    LaneHeader: (props) => (
+                                                                        <CustomLaneHeader
+                                                                            {...props}
+                                                                            updateTitle={handleLaneUpdate}
+                                                                        />
+                                                                    )
+                                                                }}
                                                                 canAddLanes
                                                                 editable
                                                                 draggable
@@ -1031,11 +1068,8 @@ export const Boards = () => {
                                                                 onDataChange={onDataChange}
                                                                 onLaneAdd={onLaneAdd}
                                                                 handleDragEnd={handleDrag}
-
-
-
-
                                                             />
+
 
                                                         </div>
                                                     </div>
@@ -1148,7 +1182,7 @@ export const Boards = () => {
                                                         showEditorDescription === true ? (
                                                             <>
                                                                 <div className="commentAreaBox shadow">
-                                                                    <TextEditor value={editorContent} onChange={handleEditorData}  userInfo={userData} />
+                                                                    <TextEditor value={editorContent} onChange={handleEditorData} userInfo={userData} />
 
                                                                 </div>
                                                                 <div className="btnBoxes">
