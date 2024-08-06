@@ -21,6 +21,7 @@ import CustomCard from "../../Components/CustomCard";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { Dropdown, DropdownButton } from "react-bootstrap";
+import { CustomLaneHeader } from "../../Components/CustomLane"
 import { socket } from "../../socket";
 
 
@@ -96,6 +97,7 @@ export const Boards = () => {
     }, []);
 
     const [isAllowed, setIsAllowed] = useState('');
+    const [boardID, setBoardID] = useState();
     const handleBoard = () => {
         document.querySelector('.loaderBox').classList.remove("d-none");
         fetch(`${base_url}/api/view-lists/${id}`,
@@ -113,10 +115,12 @@ export const Boards = () => {
             })
             .then((data) => {
                 console.log('check', data?.workspace?.boards.find((item) => item?.code == id));
+                setBoardID(data?.board);
                 setData(data?.workspace?.boards.find((item) => item?.code == id));
                 setBoardData(data)
                 console.log('sdasa', data)
                 setIsAllowed(data?.is_allowed);
+
                 document.querySelector('.loaderBox').classList.add("d-none");
             })
             .catch((error) => {
@@ -127,7 +131,8 @@ export const Boards = () => {
     }
 
 
-
+    const boardRoom = "board-" + id + '-room';
+    console.log(boardRoom)
 
 
     const handleBoardAdd = (e) => {
@@ -194,15 +199,15 @@ export const Boards = () => {
     const { ApiData: lanePositionData, loading: laneLoader, error: LanerErrorData, post: UpdateLanePos } = usePost('/api/update-position');
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID);
+        socket.emit('saveChanges', id, userID, boardRoom);
     }, [lanePositionData])
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID);
+        socket.emit('saveChanges', id, userID, boardRoom);
     }, [addTaskApiData])
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID);
+        socket.emit('saveChanges', id, userID, boardRoom);
     }, [storeListApiData])
 
 
@@ -475,7 +480,7 @@ export const Boards = () => {
                     document.querySelector('.loaderBox').classList.add("d-none");
                     console.log(data);
 
-                    socket.emit('saveChanges', id, userID);
+                    socket.emit('saveChanges', id, userID, boardRoom);
                 })
                 .catch((error) => {
                     document.querySelector('.loaderBox').classList.add("d-none");
@@ -504,7 +509,7 @@ export const Boards = () => {
 
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID);
+        socket.emit('saveChanges', id, userID, boardRoom);
     }, [deleteAttachmentID])
 
 
@@ -557,7 +562,7 @@ export const Boards = () => {
 
     useEffect(() => {
         setShowEditorDescription(false);
-        socket.emit('saveChanges', id, userID);
+        socket.emit('saveChanges', id, userID, boardRoom);
     }, [updateDescription])
 
 
@@ -593,7 +598,7 @@ export const Boards = () => {
 
     useEffect(() => {
         setShowEditor(false)
-        socket.emit('saveChanges', id, userID);
+        socket.emit('saveChanges', id, userID, boardRoom);
         setNewContent('')
         setAddCommet('')
     }, [addComment])
@@ -638,7 +643,7 @@ export const Boards = () => {
 
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID);
+        socket.emit('saveChanges', id, userID, boardRoom);
         setEditCommentIndex(null)
     }, [editComment])
 
@@ -661,7 +666,7 @@ export const Boards = () => {
 
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID);
+        socket.emit('saveChanges', id, userID, boardRoom);
     }, [deleteData])
 
     const userID = localStorage.getItem('userID');
@@ -692,7 +697,7 @@ export const Boards = () => {
                 .then((data) => {
                     document.querySelector('.loaderBox').classList.add("d-none");
                     console.log(data);
-                    socket.emit('saveChanges', id, userID);
+                    socket.emit('saveChanges', id, userID, boardRoom);
                 })
                 .catch((error) => {
                     document.querySelector('.loaderBox').classList.add("d-none");
@@ -746,7 +751,7 @@ export const Boards = () => {
 
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID);
+        socket.emit('saveChanges', id, userID, boardRoom);
         setAddMember('');
     }, [addmember])
 
@@ -773,7 +778,7 @@ export const Boards = () => {
 
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID);
+        socket.emit('saveChanges', id, userID, boardRoom);
         setAddMember('');
     }, [removeBoard])
 
@@ -800,7 +805,7 @@ export const Boards = () => {
     }, [taskMemberData])
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID);
+        socket.emit('saveChanges', id, userID, boardRoom);
     }, [taskAddmember])
 
 
@@ -824,7 +829,7 @@ export const Boards = () => {
     }, [removeMemberData])
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID);
+        socket.emit('saveChanges', id, userID, boardRoom);
     }, [removeMember])
 
 
@@ -833,10 +838,11 @@ export const Boards = () => {
     const [requestData, setRequestData] = useState();
     const { ApiData: requestMember, loading: requestMemberLoading, error: requestMemberError, post: requestMemberResult } = usePost('/api/mapboardmember');
     const requestDataMember = () => {
+        alert();
         setRequestData((prevData) => ({
             ...prevData,
             user_id: userID,
-            board_id: data?.id
+            board_id: boardID
         }));
 
         console.log('requeest', requestData)
@@ -849,7 +855,7 @@ export const Boards = () => {
     }, [requestData])
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID);
+        socket.emit('saveChanges', id, userID, boardRoom);
         handleBoard()
     }, [requestMember])
 
@@ -865,29 +871,34 @@ export const Boards = () => {
         });
 
 
-        socket.on('chat json', (data) => {
-            const socketData = data;
-            console.log('socketData', socketData);
-            const boardData = socketData?.workspace?.boards?.find((item) => item?.code == id);
-            console.log('bb', boardData);
-            if (openSlug != null && id) {
-                boardData?.lanes?.forEach((item) => {
-                    const cardFound = item?.cards?.filter((cardItem) => cardItem?.slug == openSlug);
-                    console.log('open', cardFound);
-                    if (cardFound?.length > 0) {
-                        console.log('cardFound', { data: { card: cardFound[0] } })
-                        liveData({ data: { card: cardFound[0] } });
-                    }
-                });
+        socket.on('chat json', (data, from) => {
+            console.log(data, from, 'text')
+            if (boardRoom === from) {
+                const socketData = data;
+                console.log('socketData', socketData);
+                const boardData = socketData?.workspace?.boards?.find((item) => item?.code == id);
+                console.log('bb', boardData);
+                if (openSlug != null && id) {
+                    boardData?.lanes?.forEach((item) => {
+                        const cardFound = item?.cards?.filter((cardItem) => cardItem?.slug == openSlug);
+                        console.log('open', cardFound);
+                        if (cardFound?.length > 0) {
+                            console.log('cardFound', { data: { card: cardFound[0] } })
+                            liveData({ data: { card: cardFound[0] } });
+                        }
+                    });
+                }
+
+                setData(boardData);
+                setBoardData(socketData);
             }
 
-            setData(boardData);
-            setBoardData(socketData);
+
 
         });
 
         return () => {
-            socket.off('chat json', data);
+            socket.off('chat json', data, boardRoom);
         };
 
 
@@ -897,6 +908,39 @@ export const Boards = () => {
 
 
     const username = localStorage.getItem('userInfo');
+
+    const userData = detailData?.data?.card?.members
+    // console.log('sss', userData)
+
+    const { ApiData: editLaneApiData, loading: editLaneLoading, error: editLaneError, post: editLanePost } = usePost('/api/storelist');
+    const [laneData, setLaneData] = useState();
+
+    const handleLaneUpdate = (laneId, title) => {
+        setLaneData({
+            ...laneData,
+            id: laneId,
+            board_id: data?.id,
+            title: title
+        });
+
+        setLaneData(prevData => {
+            console.log('listItemssss', prevData);
+            return prevData;
+        });
+    };
+
+    useEffect(() => {
+        if (laneData?.id && laneData?.board_id && laneData?.title) {
+            editLanePost(laneData)
+        }
+    }, [laneData]);
+
+    useEffect(() => {
+        socket.emit('saveChanges', id, userID, boardRoom);
+    }, [editLaneApiData])
+
+
+
     return (
 
         <>
@@ -908,20 +952,23 @@ export const Boards = () => {
                     <>
                         <div className={`sidebar ${sideBarClass}`} id="sidebar">
                             <div className="boardTitle">
-                                <h6><Avatar name={boardData?.workspace?.title} size={40} round="8px" />{boardData?.workspace?.title}</h6>
+                                <h6 className="ps-3"><Avatar name={boardData?.workspace?.title} size={40} round="8px" />{boardData?.workspace?.title}</h6>
+                            </div>
+                            <div className="titleBoard">
+                                <p className="mt-2 text-white ps-3">Your Board</p>
                             </div>
                             <ul className="list-unstyled">
                                 {boardData?.workspace?.boards && boardData?.workspace?.boards.map((item, index) => (
                                     <li key={index} className={`sidebar-li ${location.pathname.includes(`/${item?.code}`) ? 'active' : ''}`}>
                                         <Link className={`border-0 btn shadow-0 sideLink text-lg-start w-100`} to={`/b/${item?.code}`}>
-                                            <span className="sideLinkText">{item.title}</span>
+                                            <span className="sideLinkText"><Avatar name={item.title} size={20} round="4px" /> {item.title}</span>
                                         </Link>
                                     </li>
                                 ))}
 
                                 {
                                     userID == '1' && (
-                                        <li className="sidebar-li px-3">
+                                        <li className="sidebar-li px-3 mt-4">
                                             <button className={`customButton primaryButton w-100`} onClick={() => { setShowForm(true) }}>
                                                 <span className="sideLinkText">Add Board +</span>
                                             </button>
@@ -948,16 +995,11 @@ export const Boards = () => {
                                                         <div className="userShown">
                                                             {
                                                                 data?.users && data?.users.slice(0, 5).map((item, index) => (
-                                                                    index >= 4 ? (
-                                                                        <>
-                                                                            <Avatar key={index} name={item.username} size={30} round="50px" />
-                                                                            <span className="px-1">5+</span>
-
-                                                                        </>
-                                                                    ) : (
-                                                                        <Avatar key={index} name={item.username} size={30} round="50px" />
-                                                                    )
+                                                                    <Avatar key={index} name={item.username} size={30} round="50px" />
                                                                 ))
+                                                            }
+                                                            {
+                                                                <span className="px-2">{data?.users.length}+</span>
                                                             }
 
                                                             {
@@ -1008,7 +1050,15 @@ export const Boards = () => {
                                                         <div>
                                                             <Board
                                                                 data={data}
-                                                                components={{ Card: CustomCard }}
+                                                                components={{
+                                                                    Card: CustomCard,
+                                                                    LaneHeader: (props) => (
+                                                                        <CustomLaneHeader
+                                                                            {...props}
+                                                                            updateTitle={handleLaneUpdate}
+                                                                        />
+                                                                    )
+                                                                }}
                                                                 canAddLanes
                                                                 editable
                                                                 draggable
@@ -1018,11 +1068,8 @@ export const Boards = () => {
                                                                 onDataChange={onDataChange}
                                                                 onLaneAdd={onLaneAdd}
                                                                 handleDragEnd={handleDrag}
-
-
-
-
                                                             />
+
 
                                                         </div>
                                                     </div>
@@ -1135,7 +1182,7 @@ export const Boards = () => {
                                                         showEditorDescription === true ? (
                                                             <>
                                                                 <div className="commentAreaBox shadow">
-                                                                    <TextEditor value={editorContent} onChange={handleEditorData} />
+                                                                    <TextEditor value={editorContent} onChange={handleEditorData} userInfo={userData} />
 
                                                                 </div>
                                                                 <div className="btnBoxes">
@@ -1187,7 +1234,7 @@ export const Boards = () => {
 
                                                                                     item?.ext?.toLowerCase() === 'txt' || item?.ext?.toLowerCase() === 'doc' || item?.ext?.toLowerCase() === 'docx' || item?.ext?.toLowerCase() === 'pdf' || item?.ext?.toLowerCase() === 'csv' || item?.ext?.toLowerCase() === 'xls' || item?.ext?.toLowerCase() === 'xlsx' || item?.ext?.toLowerCase() === 'ppt' || item?.ext?.toLowerCase() === 'pptx') ? (
                                                                                     <div className="attachmentData">
-                                                                                        <a href={base_url + item?.attachment_url} target="_blank" className="documentFile" >
+                                                                                        <a href={item?.attachment_url.includes('trello') ? item?.attachment_url : base_url + item?.attachment_url} target="_blank" className="documentFile" >
                                                                                             <span className="attachment-thumbnail-preview-ext">{item?.ext?.toLowerCase()}</span>
                                                                                         </a>
 
@@ -1195,13 +1242,13 @@ export const Boards = () => {
                                                                                 ) : item?.ext?.toLowerCase() === 'mp4' || item?.ext?.toLowerCase() === 'avi' || item?.ext?.toLowerCase() === 'mov' || item?.ext?.toLowerCase() === 'wmv' || item?.ext?.toLowerCase() === 'flv' ? (
                                                                                     <div className="attachmentData">
                                                                                         <video controls width={150}>
-                                                                                            <source src={base_url + item?.attachment_url} type={`video/${item?.ext?.toLowerCase()}`} />
+                                                                                            <source src={item?.attachment_url.includes('trello') ? item?.attachment_url : base_url + item?.attachment_url} type={`video/${item?.ext?.toLowerCase()}`} />
                                                                                             {/* Your browser does not support the video tag. */}
                                                                                         </video>
                                                                                     </div>
                                                                                 ) : item?.ext?.toLowerCase() == 'png' || item?.ext?.toLowerCase() == 'jpg' || item?.ext?.toLowerCase() == 'jpeg' || item?.ext?.toLowerCase() == 'gif' || item?.ext?.toLowerCase() == 'bmp' || item?.ext?.toLowerCase() == 'tiff' ? (
                                                                                     <div className="attachmentData">
-                                                                                        <a href={base_url + item?.attachment_url} target="_blank" style={{ backgroundImage: `url(${base_url + item?.attachment_url})`, backgroundPosition: 'center', display: 'block' }}></a>
+                                                                                        <a href={item?.attachment_url.includes('trello') ? item?.attachment_url : base_url + item?.attachment_url} target="_blank" style={{ backgroundImage: `url(${item?.attachment_url.includes('trello') ? item?.attachment_url : base_url + item?.attachment_url})`, backgroundPosition: 'center', display: 'block', font: "14px" }}></a>
                                                                                     </div>
                                                                                 ) : null
                                                                             }
@@ -1237,7 +1284,7 @@ export const Boards = () => {
                                                             showEditor === true ? (
                                                                 <div className="data flex-grow-1">
                                                                     <div className="commentAreaBox shadow">
-                                                                        <TextEditor value={newContent} onChange={handleNewComment} />
+                                                                        <TextEditor value={newContent} onChange={handleNewComment} userInfo={userData} />
 
                                                                     </div>
                                                                     <div className="btnBoxes">
@@ -1293,7 +1340,7 @@ export const Boards = () => {
                                                                         <div className="ps-5">
                                                                             {
                                                                                 (item?.ext?.toLowerCase() === 'txt' || item?.ext?.toLowerCase() === 'doc' || item?.ext?.toLowerCase() === 'docx' || item?.ext?.toLowerCase() === 'pdf' || item?.ext?.toLowerCase() === 'csv' || item?.ext?.toLowerCase() === 'xls' || item?.ext?.toLowerCase() === 'xlsx' || item?.ext?.toLowerCase() === 'ppt' || item?.ext?.toLowerCase() === 'pptx') ? (
-                                                                                    <a href={base_url + item?.attachment_url} target="_blank" className="documentFile">
+                                                                                    <a href={item?.attachment_url.includes('trello') ? item?.attachment_url : base_url + item?.attachment_url} target="_blank" className="documentFile">
                                                                                         <FontAwesomeIcon icon={faFileAlt} />
                                                                                         <p>{item?.attachment_name}</p>
                                                                                     </a>
@@ -1301,14 +1348,14 @@ export const Boards = () => {
                                                                                     item?.ext?.toLowerCase() === 'mp4' || item?.ext?.toLowerCase() === 'avi' || item?.ext?.toLowerCase() === 'mov' || item?.ext?.toLowerCase() === 'wmv' || item?.ext?.toLowerCase() === 'flv' ? (
                                                                                         <div className="attachmentData">
                                                                                             <video controls width={300}>
-                                                                                                <source src={base_url + item?.attachment_url} type={`video/${item?.ext?.toLowerCase()}`} />
+                                                                                                <source src={item?.attachment_url.includes('trello') ? item?.attachment_url : base_url + item?.attachment_url} type={`video/${item?.ext?.toLowerCase()}`} />
                                                                                                 Your browser does not support the video tag.
                                                                                             </video>
                                                                                         </div>
                                                                                     ) : (
                                                                                         item?.ext?.toLowerCase() === 'png' || item?.ext?.toLowerCase() === 'jpg' || item?.ext?.toLowerCase() === 'jpeg' || item?.ext?.toLowerCase() === 'gif' || item?.ext?.toLowerCase() === 'bmp' || item?.ext?.toLowerCase() === 'tiff' ? (
-                                                                                            <a href={base_url + item?.attachment_url} target="_blank">
-                                                                                                <img src={base_url + item?.attachment_url} className="mw-100 d-block" />
+                                                                                            <a href={item?.attachment_url.includes('trello') ? item?.attachment_url : base_url + item?.attachment_url} target="_blank">
+                                                                                                <img src={item?.attachment_url.includes('trello') ? item?.attachment_url : base_url + item?.attachment_url} className="mw-100 d-block" />
                                                                                             </a>
                                                                                         ) : null
                                                                                     )
@@ -1338,7 +1385,7 @@ export const Boards = () => {
                                                                             {editCommentIndex === index ? (
                                                                                 <>
                                                                                     <div className="commentAreaBox shadow">
-                                                                                        <TextEditor value={comment} onChange={handleEditCommentData} />
+                                                                                        <TextEditor value={comment} onChange={handleEditCommentData} userInfo={userData} />
                                                                                     </div>
                                                                                     <div className="btnBoxes">
                                                                                         <button className="btnPrimary" type="button" onClick={() => { editCommentBox(item?.id) }}>Save</button>

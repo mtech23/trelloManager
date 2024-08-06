@@ -224,6 +224,46 @@
 }
 
 
+ul.ql-mention-list {
+    list-style: none;
+    background-color: #22272b;
+    padding: 10px;
+    border: 1px solid #4e4949;
+    border-radius: 10px;
+}
+
+span.mention {
+    background-color: #333;
+    padding: 7px 20px;
+    border-radius: 50px;
+}
+
+.editableLane {
+    width: 100%;
+    max-width: 100%;
+}
+
+.editableLane input {
+    width: 100%;
+    background-color: transparent;
+    border: 1px solid #a9b4c0;
+    color: #a9b4c0;
+    border-radius: 5px;
+    padding: 4px 6px;
+    font-size: 14px;
+}
+
+
+.cPJvcZ {
+    border-bottom: 1px solid rgb(238, 238, 238);
+    padding-bottom: 6px;
+    color: rgb(169 180 192) !important;
+    text-transform: capitalize !important;
+}
+
+
+
+
 /* .taskBg {
     background-color: #091e420f;
 } */

@@ -13,9 +13,17 @@
 
 
 .customHeader .siteLogo img {
-    width: 155px;
+    width: 110px;
     max-width: 100%;
     height: auto;
+}
+
+nav.customHeader.navbar.navbar-expand-md.navbar-light {
+    border-bottom: 1px solid #7e7e7e;
+}
+
+.userShown > div {
+    margin-right: -4px;
 }
 
 .workPlaces {

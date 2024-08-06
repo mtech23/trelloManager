@@ -13,10 +13,17 @@
     overflow-y: auto;
 }
 
-.boardTitle h6 {
+.boardTitle {
     color: #fff;
     font-size: 14px;
     padding: 30px 0 0px 16px;
+}
+
+#sidebar .boardTitle {
+    color: #fff;
+    font-size: 14px;
+    padding: 30px 0 0px 0;
+    border-bottom: 1px solid #7e7e7e;
 }
 
 .sidebar::-webkit-scrollbar {

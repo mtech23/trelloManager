@@ -131,7 +131,7 @@ body {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #22272B;
+    background: #000;
     border-radius: 50px;
     cursor: pointer;
 }
