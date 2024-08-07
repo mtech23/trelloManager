@@ -200,14 +200,17 @@ export const Boards = () => {
 
     useEffect(() => {
         socket.emit('saveChanges', id, userID, boardRoom);
+        handleBoard()
     }, [lanePositionData])
 
     useEffect(() => {
         socket.emit('saveChanges', id, userID, boardRoom);
+        handleBoard()
     }, [addTaskApiData])
 
     useEffect(() => {
         socket.emit('saveChanges', id, userID, boardRoom);
+        handleBoard()
     }, [storeListApiData])
 
 
@@ -215,8 +218,9 @@ export const Boards = () => {
     const [cardShow, setCardShow] = useState(false);
     const [trigger, setTrigger] = useState(false);
     const [openSlug, setOpenSlug] = useState(null);
+    const [allData, setAllData] = useState();
 
-    const { ApiData: detailData, loading: detailLoading, error: detailError, get: GetDetail, setData: liveData } = useGet(`/api/b/${id}/${openSlug ? openSlug : ''}`, null);
+    const { ApiData: detailData, loading: detailLoading, error: detailError, get: GetDetail, setData: liveData } = useGet(allData ? allData : `/api/b/${id}/${openSlug ? openSlug : ''}`, null);
 
 
     useEffect(() => {
@@ -235,6 +239,15 @@ export const Boards = () => {
 
 
     }, [openSlug]);
+
+
+    const fetchDetail = () => {
+        setAllData(`/api/b/${id}/${openSlug}/123`);
+    }
+
+    useEffect(()=>{
+        GetDetail()
+    },[allData])
 
 
     // useEffect(()=>{
@@ -446,6 +459,7 @@ export const Boards = () => {
     const closeTask = () => {
         setCardShow(false);
         setOpenSlug('')
+        setAllData('');
         window.history.pushState("object or string", "Title", `/trello/b/${id}`);
         // navigate(`/b/${id}/`)
     }
@@ -481,6 +495,7 @@ export const Boards = () => {
                     console.log(data);
 
                     socket.emit('saveChanges', id, userID, boardRoom);
+                    GetDetail();
                 })
                 .catch((error) => {
                     document.querySelector('.loaderBox').classList.add("d-none");
@@ -510,6 +525,7 @@ export const Boards = () => {
 
     useEffect(() => {
         socket.emit('saveChanges', id, userID, boardRoom);
+        GetDetail();
     }, [deleteAttachmentID])
 
 
@@ -563,6 +579,7 @@ export const Boards = () => {
     useEffect(() => {
         setShowEditorDescription(false);
         socket.emit('saveChanges', id, userID, boardRoom);
+        GetDetail();
     }, [updateDescription])
 
 
@@ -599,6 +616,7 @@ export const Boards = () => {
     useEffect(() => {
         setShowEditor(false)
         socket.emit('saveChanges', id, userID, boardRoom);
+        GetDetail();
         setNewContent('')
         setAddCommet('')
     }, [addComment])
@@ -644,6 +662,7 @@ export const Boards = () => {
 
     useEffect(() => {
         socket.emit('saveChanges', id, userID, boardRoom);
+        GetDetail();
         setEditCommentIndex(null)
     }, [editComment])
 
@@ -667,6 +686,7 @@ export const Boards = () => {
 
     useEffect(() => {
         socket.emit('saveChanges', id, userID, boardRoom);
+        GetDetail();
     }, [deleteData])
 
     const userID = localStorage.getItem('userID');
@@ -697,6 +717,7 @@ export const Boards = () => {
                 .then((data) => {
                     document.querySelector('.loaderBox').classList.add("d-none");
                     console.log(data);
+                    GetDetail();
                     socket.emit('saveChanges', id, userID, boardRoom);
                 })
                 .catch((error) => {
@@ -752,6 +773,7 @@ export const Boards = () => {
 
     useEffect(() => {
         socket.emit('saveChanges', id, userID, boardRoom);
+        handleBoard()
         setAddMember('');
     }, [addmember])
 
@@ -779,6 +801,7 @@ export const Boards = () => {
 
     useEffect(() => {
         socket.emit('saveChanges', id, userID, boardRoom);
+        handleBoard()
         setAddMember('');
     }, [removeBoard])
 
@@ -806,6 +829,7 @@ export const Boards = () => {
 
     useEffect(() => {
         socket.emit('saveChanges', id, userID, boardRoom);
+        GetDetail();
     }, [taskAddmember])
 
 
@@ -830,6 +854,7 @@ export const Boards = () => {
 
     useEffect(() => {
         socket.emit('saveChanges', id, userID, boardRoom);
+        GetDetail();
     }, [removeMember])
 
 
@@ -838,7 +863,6 @@ export const Boards = () => {
     const [requestData, setRequestData] = useState();
     const { ApiData: requestMember, loading: requestMemberLoading, error: requestMemberError, post: requestMemberResult } = usePost('/api/mapboardmember');
     const requestDataMember = () => {
-        alert();
         setRequestData((prevData) => ({
             ...prevData,
             user_id: userID,
@@ -937,6 +961,7 @@ export const Boards = () => {
 
     useEffect(() => {
         socket.emit('saveChanges', id, userID, boardRoom);
+        handleBoard()
     }, [editLaneApiData])
 
 
@@ -995,15 +1020,15 @@ export const Boards = () => {
                                                         <div className="userShown">
                                                             {
                                                                 data?.users && data?.users?.slice(0, 5).map((item, index) => (
-                                                                   
-                                                                        <Avatar key={index} name={item.username} size={30} round="50px" />
-                                                                   
+
+                                                                    <Avatar key={index} name={item.username} size={30} round="50px" />
+
                                                                 ))
                                                             }
                                                             {
                                                                 data?.users?.length > 3 ? (
 
-                                                                    <span className="px-2">{data?.users?.length} +</span>
+                                                                    <span className="px-2">+ {data?.users?.length}</span>
                                                                 ) : ''
                                                             }
 
@@ -1280,7 +1305,10 @@ export const Boards = () => {
                                             </div>
                                             <div className="activitySection">
                                                 <div className="titleSummary">
-                                                    <h3><FontAwesomeIcon icon={faList}></FontAwesomeIcon>Activity</h3>
+                                                    <div className="d-flex align-items-center flex-wrap justify-content-between mb-3">
+                                                        <h3><FontAwesomeIcon icon={faList}></FontAwesomeIcon>Activity</h3>
+                                                        <button type="button" className="btnBox bg-secondary btn" onClick={fetchDetail}>View All</button>
+                                                    </div>
                                                     <div className={`commentBox ${showEditor ? 'align-items-start' : 'align-items-center'}`}>
                                                         <div className="userName">
                                                             <Avatar name={detailData?.user?.name} size={40} round="50px" />

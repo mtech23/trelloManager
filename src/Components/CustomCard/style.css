@@ -157,21 +157,21 @@ span.sc-irTrJD.sc-hAtFlw.hmAjNs.igjTZP {
 }
 
 
-.smooth-dnd-draggable-wrapper .UFLAs {
+.smooth-dnd-draggable-wrapper .UFLAs, .smooth-dnd-container.horizontal button.sc-cCYzbQ.UFLAs {
   background: #6ec8b4 !important;
   color: #22272b !important;
-  transition: background 0.3s ease;
   margin-left: 8px !important;
   border: none !important;
 }
 
-.smooth-dnd-draggable-wrapper .SDhUM {
+.smooth-dnd-draggable-wrapper .SDhUM, .smooth-dnd-container.horizontal button.sc-cjEQSD.SDhUM {
   background: #737677 !important;
   border: none !important;
 }
 
 span.leftSpace {
   padding-right: 7px;
+  margin-left: 7px;
 }
 
 .comPlainTextContentEditable.focus-visible {

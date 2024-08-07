@@ -2,7 +2,7 @@
     margin-bottom: 1rem;
     border-right: 2px solid #fff0;
 }
-
+ 
 .statsCard {
     display: flex;
     justify-content: space-between;
@@ -12,40 +12,43 @@
     padding: 1rem;
     align-items: baseline;
 }
-
+ 
 .cardBox p {
     font-size: 12px;
 }
-
-
+ 
+ 
 li.sidebar-li.active {
     background-color: #898b8cc9;
 }
-
-
+ 
+ 
 .ms-3 p {
     overflow: hidden;
     width: 270px;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-
-
-
+ 
+ 
+ 
 .djiHhb {
     background-color: transparent !important;
-    height: calc(100vh - 110px) !important;
+    height: calc(100vh - 126px) !important;
     gap: 45px;
 }
-
+ 
 .fnvpnN {
     background-color: transparent !important;
 }
-
+ 
 .smooth-dnd-container.horizontal section > div {
     max-height: 78vh !important;
+    padding: 0 15px;
 }
-
+ 
+.borderLeft {border-left: 2px solid #f3f3f3b5;}
+ 
 button.sc-jegwpa.dlKLWs {
     justify-content: flex-start;
     width: 272px;
@@ -55,22 +58,22 @@ button.sc-jegwpa.dlKLWs {
     color: #000;
     font-weight: 700;
 }
-
+ 
 .statsChange p {
     margin-bottom: 0;
     font-size: 13px;
 }
-
+ 
 .statsContent {
     display: flex;
     gap: 1rem;
     flex-grow: 1;
 }
-
+ 
 .statsImg {
     flex-shrink: 0;
 }
-
+ 
 .statsImg img {
     width: 60px;
     aspect-ratio: 1/1;
@@ -78,32 +81,32 @@ button.sc-jegwpa.dlKLWs {
     object-position: center;
     border-radius: 0.5rem;
 }
-
+ 
 .statsData {
     flex-grow: 1;
 }
-
+ 
 .statsNumber {
     font-size: 22px;
     font-weight: 600;
     margin: 0;
 }
-
+ 
 .statsText {
     font-size: 14px;
     color: var(--grayColor);
     margin: 0;
 }
-
+ 
 .statsChange {
     flex-shrink: 0;
 }
-
+ 
 .modal-body .passwordWrapper svg {
     color: var(--grayColor);
     font-size: small;
 }
-
+ 
 .dashboardCards {
     height: 80vh;
     overflow-y: auto;
@@ -111,8 +114,8 @@ button.sc-jegwpa.dlKLWs {
     padding: 10px;
     margin-bottom: 15px;
 }
-
-
+ 
+ 
 .dashData .titleBox {
     display: flex;
     align-items: center;
@@ -121,21 +124,26 @@ button.sc-jegwpa.dlKLWs {
     margin-bottom: 20px;
     flex-wrap: wrap;
 }
-
-
-
+ 
+ 
+ 
 @media screen and (max-width: 1200px) and (min-width: 768px) {
     .stats, .stats:not(:last-child) {
         border-color: #fff0;
     }
-
+ 
     .stats:nth-child(odd) {
         border-color: #000;
     }
 }
-
+ 
 @media screen and (max-width: 767px) {
     .stats, .stats:not(:last-child), .stats:nth-child(odd) {
         border-color: #fff0;
     }
+}
+ 
+.div-max-w {
+    max-width: 220px;
+    flex-wrap: wrap;
 }

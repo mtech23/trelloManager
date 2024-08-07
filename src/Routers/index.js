@@ -15,7 +15,7 @@ import React from 'react';
 
 export default function AdminRouter() {
   return (
-    <BrowserRouter basename="/trello">
+    <BrowserRouter basename="/">
       <AppRoutes />
     </BrowserRouter>
   );

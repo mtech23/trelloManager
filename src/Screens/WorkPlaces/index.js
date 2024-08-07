@@ -344,7 +344,7 @@ export const WorkPlace = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-8">
+                    <div className="col-md-8 borderLeft">
                         <h5 className="text-light font-weight-600 mb-4">Your Boards</h5>
                         <div className="row">
                             {boardData?.boards && boardData?.boards?.map((item, index) => (

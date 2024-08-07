@@ -60,6 +60,7 @@ export const useGet = (url, initialData = null, idData = '') => {
         throw new Error('Network response was not ok');
       }
       const result = await response.json();
+      setLoading(false);
       setData(result);
         
     } catch (err) {
