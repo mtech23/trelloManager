@@ -33,7 +33,7 @@ const CustomCard = ({ title, userIcon, notificationCount, onClick, commentCount,
                 </div>
                 <div className="user-info">
                     {
-                        members && members.slice(0, 3).map((item, index) => (
+                        members && members?.slice(0, 3).map((item, index) => (
                             <>
                                 <Avatar name={item?.username} size={25} round="50px" />
                             </>
@@ -43,8 +43,8 @@ const CustomCard = ({ title, userIcon, notificationCount, onClick, commentCount,
                     }
 
                     {
-                         members.length >= 3 ? (
-                            <span className='leftSpace'>{`+${members.length}`}</span>
+                         members?.length >= 3 ? (
+                            <span className='leftSpace'>{`+${members?.length}`}</span>
                           ) : ''
                     }
 

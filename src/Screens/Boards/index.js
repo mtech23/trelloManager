@@ -994,12 +994,17 @@ export const Boards = () => {
                                                     <div className="col-md-4">
                                                         <div className="userShown">
                                                             {
-                                                                data?.users && data?.users.slice(0, 5).map((item, index) => (
-                                                                    <Avatar key={index} name={item.username} size={30} round="50px" />
+                                                                data?.users && data?.users?.slice(0, 5).map((item, index) => (
+                                                                   
+                                                                        <Avatar key={index} name={item.username} size={30} round="50px" />
+                                                                   
                                                                 ))
                                                             }
                                                             {
-                                                                <span className="px-2">{data?.users.length}+</span>
+                                                                data?.users?.length > 3 ? (
+
+                                                                    <span className="px-2">{data?.users?.length} +</span>
+                                                                ) : ''
                                                             }
 
                                                             {
