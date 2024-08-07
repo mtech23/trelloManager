@@ -44,7 +44,10 @@ li.sidebar-li.active {
 
 .smooth-dnd-container.horizontal section > div {
     max-height: 78vh !important;
+    padding: 0 15px;
 }
+
+.borderLeft {border-left: 2px solid #f3f3f3b5;}
 
 button.sc-jegwpa.dlKLWs {
     justify-content: flex-start;
@@ -138,4 +141,9 @@ button.sc-jegwpa.dlKLWs {
     .stats, .stats:not(:last-child), .stats:nth-child(odd) {
         border-color: #fff0;
     }
+}
+
+.div-max-w {
+    max-width: 100px;
+    flex-wrap: wrap;
 }

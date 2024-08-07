@@ -999,7 +999,7 @@ export const Boards = () => {
                                                                 ))
                                                             }
                                                             {
-                                                                <span className="px-2">{data?.users.length}+</span>
+                                                                <span className="mx-2">+{data?.users.length}</span>
                                                             }
 
                                                             {
