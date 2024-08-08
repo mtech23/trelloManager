@@ -73,6 +73,7 @@ export const Dashboard = () => {
                         document.querySelector(".loaderBox").classList.add("d-none");
                         console.log(data);
                         setShowForm(false);
+                        setFormData('');
                         setMessage(data?.message);
                         setShowModal2(true);
                         WorkPlaceList();
@@ -120,8 +121,10 @@ export const Dashboard = () => {
 
 
       useEffect(() => {
-            setLoading(false);
-            setUserList(usersData?.Users);
+            if (userData) {
+                  setLoading(false);
+                  setUserList(usersData?.Users);
+            }
       }, [usersData]);
 
       const [addUser, setAddUser] = useState();
@@ -148,8 +151,11 @@ export const Dashboard = () => {
       };
 
       useEffect(() => {
-            GetUsers();
-            setAddUser(false);
+            if (addmember) {
+                  GetUsers();
+                  setAddUser(false);
+                  setFormData('');
+            }
       }, [addmember]);
 
       const roleList = [
@@ -194,8 +200,11 @@ export const Dashboard = () => {
       };
 
       useEffect(() => {
-            WorkPlaceList();
-            setShowUpdate(false);
+            if (boardUdpatedData) {
+                  WorkPlaceList();
+                  setFormData('');
+                  setShowUpdate(false);
+            }
       }, [boardUdpatedData]);
 
       const [boardID, setBoardID] = useState(null);
@@ -216,8 +225,10 @@ export const Dashboard = () => {
       }, [boardID]);
 
       useEffect(() => {
-            WorkPlaceList();
-            setBoardID(null);
+            if (DeleteBoard) {
+                  WorkPlaceList();
+                  setBoardID(null);
+            }
       }, [DeleteBoard]);
 
 
@@ -252,8 +263,10 @@ export const Dashboard = () => {
       };
 
       useEffect(() => {
-            GetUsers();
-            setUpdateUser(false);
+            if (userUdpatedData) {
+                  GetUsers();
+                  setUpdateUser(false);
+            }
       }, [userUdpatedData]);
 
 
@@ -273,7 +286,9 @@ export const Dashboard = () => {
       };
 
       useEffect(() => {
-            DeleteuserDataCard();
+            if (userDataID) {
+                  DeleteuserDataCard();
+            }
       }, [userDataID]);
 
       useEffect(() => {
@@ -363,7 +378,7 @@ export const Dashboard = () => {
                                                                                                             icon={faTrashCan}
                                                                                                       ></FontAwesomeIcon>
                                                                                                 </button>
-                                                                                          ): ''}
+                                                                                          ) : ''}
 
                                                                                     </div>
                                                                               </>

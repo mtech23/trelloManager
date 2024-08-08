@@ -173,6 +173,7 @@ export const WorkPlace = () => {
                 console.log(data);
                 setShowForm(false);
                 setMessage(data?.message)
+                setFormData('');
                 setShowModal2(true)
                 setTimeout(() => {
                     setShowModal2(false)
@@ -263,6 +264,7 @@ export const WorkPlace = () => {
     useEffect(() => {
         GetBoardData()
         WorkPlaceList()
+        setFormData('')
         setShowUpdate(false)
     }, [boardUdpatedData])
 

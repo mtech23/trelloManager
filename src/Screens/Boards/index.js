@@ -218,9 +218,9 @@ export const Boards = () => {
     const [cardShow, setCardShow] = useState(false);
     const [trigger, setTrigger] = useState(false);
     const [openSlug, setOpenSlug] = useState(null);
-    const [allData, setAllData] = useState();
+    const [allData, setAllData] = useState('');
 
-    const { ApiData: detailData, loading: detailLoading, error: detailError, get: GetDetail, setData: liveData } = useGet(allData ? allData : `/api/b/${id}/${openSlug ? openSlug : ''}`, null);
+    const { ApiData: detailData, loading: detailLoading, error: detailError, get: GetDetail, setData: liveData } = useGet(allData != "" ? allData : `/api/b/${id}/${openSlug ? openSlug : ''}`, null);
 
 
     useEffect(() => {
@@ -246,7 +246,9 @@ export const Boards = () => {
     }
 
     useEffect(()=>{
-        GetDetail()
+        if(allData) {
+            GetDetail()
+        }
     },[allData])
 
 
