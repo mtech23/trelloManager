@@ -48,29 +48,29 @@ export const Header = (props) => {
     setShowModal(true)
   }
 
-  const WorkPlaceList = () => {
-    fetch(`${base_url}/api/workspaces`,
-      {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${LogoutData}`
-        },
-      },
-    )
-      .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-        console.log(data);
-        setWorkSpace(data?.workspaces);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+  // const WorkPlaceList = () => {
+  //   fetch(`${base_url}/api/workspaces`,
+  //     {
+  //       method: 'GET',
+  //       headers: {
+  //         'Accept': 'application/json',
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${LogoutData}`
+  //       },
+  //     },
+  //   )
+  //     .then((response) => {
+  //       return response.json()
+  //     })
+  //     .then((data) => {
+  //       console.log(data);
+  //       setWorkSpace(data?.workspaces);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     })
 
-  }
+  // }
 
   const handleRedirect = () => {
     const LogoutData = localStorage.getItem('login');
@@ -109,43 +109,8 @@ export const Header = (props) => {
     console.log(formData)
   };
 
-  const handleCreateWorkPlace = (e) => {
-    e.preventDefault();
-    const formDataMethod = new FormData();
-    for (const key in formData) {
-      formDataMethod.append(key, formData[key]);
-    }
 
-    console.log(formData)
-    document.querySelector('.loaderBox').classList.remove("d-none");
-    // Make the fetch request
-    fetch(`${base_url}/api/addworkspace`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${LogoutData}`
-      },
-      body: formDataMethod // Use the FormData object as the request body
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        document.querySelector('.loaderBox').classList.add("d-none");
-        console.log(data);
-        setShowForm(false);
-        setMessage(data?.message)
-        setShowModal2(true)
-      })
-      .catch((error) => {
-        document.querySelector('.loaderBox').classList.add("d-none");
-        console.log(error)
-      })
-  }
 
-  useEffect(() => {
-    WorkPlaceList()
-  }, [])
 
   return (
     <header>
@@ -272,23 +237,6 @@ export const Header = (props) => {
       <CustomModal show={showModal2} close={() => { setShowModal2(false) }} success heading={message} />
 
 
-      <CustomModal show={showForm} close={() => { setShowForm(false) }} heading='Create Workspace' handleSubmit={handleCreateWorkPlace}>
-
-        <CustomInput
-          label="Title"
-          placeholder="Enter Title"
-          type="text"
-          labelClass="mainLabel"
-          inputClass="mainInput"
-          name="title"
-          required
-          onChange={handleChange}
-
-        />
-
-        <CustomButton variant="primaryButton" text="Add Workspace" type="submit"></CustomButton>
-
-      </CustomModal>
     </header>
   );
 };

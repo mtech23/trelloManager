@@ -90,6 +90,7 @@
   position: relative;
   width: 100%;
   /* top: 5px; */
+  background-color: #737677;
 }
 
 .modal-content {
@@ -102,7 +103,7 @@
   flex-grow: 1;
   background-color: #101204;
   padding: 20px 10px 10px;
-  border-radius: 12px;
+  border-radius: 0;
 }
 
 .glBTSG {

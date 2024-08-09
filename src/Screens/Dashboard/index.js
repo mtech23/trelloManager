@@ -98,6 +98,7 @@ export const Dashboard = () => {
       useEffect(() => {
             document.title = "Trello WorkPlace | Dashboard";
             WorkPlaceList();
+            GetUsers();
       }, []);
 
       const [userList, setUserList] = useState();
@@ -108,10 +109,6 @@ export const Dashboard = () => {
             error: usersError,
             get: GetUsers,
       } = useGet(`/api/users`);
-
-      useEffect(() => {
-            GetUsers();
-      }, []);
 
 
 
@@ -221,7 +218,9 @@ export const Dashboard = () => {
       };
 
       useEffect(() => {
-            DeleteBoardCard();
+            if (boardID) {
+                  DeleteBoardCard();
+            }
       }, [boardID]);
 
       useEffect(() => {
@@ -292,8 +291,10 @@ export const Dashboard = () => {
       }, [userDataID]);
 
       useEffect(() => {
-            GetUsers()
-            setuserDataID(null);
+            if (DeleteuserData) {
+                  GetUsers()
+                  setuserDataID(null);
+            }
       }, [DeleteuserData]);
 
       console.log('ll', isLoading)

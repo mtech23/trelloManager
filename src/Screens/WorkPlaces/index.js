@@ -70,13 +70,17 @@ export const WorkPlace = () => {
     }
 
     useEffect(() => {
-        DeleteBoardCard();
+        if (boardID) {
+            DeleteBoardCard();
+        }
     }, [boardID]);
 
     useEffect(() => {
-        GetBoardData()
-        WorkPlaceList()
-        setBoardID(null);
+        if (DeleteBoard) {
+            GetBoardData()
+            WorkPlaceList()
+            setBoardID(null);
+        }
     }, [DeleteBoard])
 
     useEffect(() => {
@@ -85,8 +89,10 @@ export const WorkPlace = () => {
 
 
     useEffect(() => {
-        setLoading(false);
-        setWorkSpace(workspaceData?.workspaces)
+        if (workspaceData) {
+            setLoading(false);
+            setWorkSpace(workspaceData?.workspaces)
+        }
     }, [workspaceData])
 
     const handleCreateWorkPlace = (e) => {
@@ -140,8 +146,10 @@ export const WorkPlace = () => {
 
     useEffect(() => {
         document.title = "Trello WorkPlace | Dashboard";
-        GetBoardData()
-        WorkPlaceList()
+        if (slug) {
+            GetBoardData()
+            WorkPlaceList()
+        }
     }, [slug]);
 
 
@@ -262,10 +270,12 @@ export const WorkPlace = () => {
     }
 
     useEffect(() => {
-        GetBoardData()
-        WorkPlaceList()
-        setFormData('')
-        setShowUpdate(false)
+        if (boardUdpatedData) {
+            GetBoardData()
+            WorkPlaceList()
+            setFormData('')
+            setShowUpdate(false)
+        }
     }, [boardUdpatedData])
 
 

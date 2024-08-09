@@ -261,6 +261,9 @@ span.mention {
     text-transform: capitalize !important;
 }
 
+.ql-snow a {
+    color: #6fc8b4 !important;
+}
 
 .commentBar > .activityContent:nth-of-type(2) {
     background-color: #737677;

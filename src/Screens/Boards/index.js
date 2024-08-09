@@ -22,7 +22,7 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { Dropdown, DropdownButton } from "react-bootstrap";
 import { CustomLaneHeader } from "../../Components/CustomLane"
-import { socket } from "../../socket";
+// import { socket } from "../../socket";
 
 
 
@@ -199,18 +199,27 @@ export const Boards = () => {
     const { ApiData: lanePositionData, loading: laneLoader, error: LanerErrorData, post: UpdateLanePos } = usePost('/api/update-position');
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID, boardRoom);
-        handleBoard()
+        // socket.emit('saveChanges', id, userID, boardRoom);
+        if (lanePositionData) {
+
+            handleBoard()
+        }
     }, [lanePositionData])
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID, boardRoom);
-        handleBoard()
+        // socket.emit('saveChanges', id, userID, boardRoom);
+        if (addTaskApiData) {
+
+            handleBoard()
+        }
     }, [addTaskApiData])
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID, boardRoom);
-        handleBoard()
+        // socket.emit('saveChanges', id, userID, boardRoom);
+        if (storeListApiData) {
+
+            handleBoard()
+        }
     }, [storeListApiData])
 
 
@@ -245,11 +254,11 @@ export const Boards = () => {
         setAllData(`/api/b/${id}/${openSlug}/123`);
     }
 
-    useEffect(()=>{
-        if(allData) {
+    useEffect(() => {
+        if (allData) {
             GetDetail()
         }
-    },[allData])
+    }, [allData])
 
 
     // useEffect(()=>{
@@ -421,7 +430,9 @@ export const Boards = () => {
 
 
     useEffect(() => {
-        handleBoard()
+        if (id) {
+            handleBoard()
+        }
     }, [id])
 
 
@@ -435,7 +446,7 @@ export const Boards = () => {
             ...prevData,
             board_id: taskData?.board_id,
             board_list_id: taskData.laneId,
-            position: taskData?.laneId,
+            // position: taskData?.laneId,
             id: taskData?.id,
             // laneId: taskData?.laneId
 
@@ -451,6 +462,14 @@ export const Boards = () => {
 
     }
 
+    const onCardMoveAcrossLanes = (fromLaneId, toLaneId, cardId, index) => {
+        setPositionData((prevData) => ({
+            ...prevData,
+            position: index,
+        }));
+
+    }
+
     useEffect(() => {
         UpdateLanePos(positionData);
     }, [positionData])
@@ -462,7 +481,8 @@ export const Boards = () => {
         setCardShow(false);
         setOpenSlug('')
         setAllData('');
-        window.history.pushState("object or string", "Title", `/trello/b/${id}`);
+        window.history.pushState("object or string", "Title", `/b/${id}`);
+        handleBoard()
         // navigate(`/b/${id}/`)
     }
 
@@ -496,7 +516,7 @@ export const Boards = () => {
                     document.querySelector('.loaderBox').classList.add("d-none");
                     console.log(data);
 
-                    socket.emit('saveChanges', id, userID, boardRoom);
+                    // socket.emit('saveChanges', id, userID, boardRoom);
                     GetDetail();
                 })
                 .catch((error) => {
@@ -526,8 +546,10 @@ export const Boards = () => {
 
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID, boardRoom);
-        GetDetail();
+        // socket.emit('saveChanges', id, userID, boardRoom);
+        if (deleteAttachmentID) {
+            GetDetail();
+        }
     }, [deleteAttachmentID])
 
 
@@ -580,8 +602,10 @@ export const Boards = () => {
 
     useEffect(() => {
         setShowEditorDescription(false);
-        socket.emit('saveChanges', id, userID, boardRoom);
-        GetDetail();
+        // socket.emit('saveChanges', id, userID, boardRoom);
+        if (updateDescription) {
+            GetDetail();
+        }
     }, [updateDescription])
 
 
@@ -616,11 +640,13 @@ export const Boards = () => {
 
 
     useEffect(() => {
-        setShowEditor(false)
-        socket.emit('saveChanges', id, userID, boardRoom);
-        GetDetail();
-        setNewContent('')
-        setAddCommet('')
+        if (addComment) {
+            setShowEditor(false)
+            // socket.emit('saveChanges', id, userID, boardRoom);
+            GetDetail();
+            setNewContent('')
+            setAddCommet('')
+        }
     }, [addComment])
 
 
@@ -663,9 +689,12 @@ export const Boards = () => {
 
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID, boardRoom);
-        GetDetail();
-        setEditCommentIndex(null)
+        // socket.emit('saveChanges', id, userID, boardRoom);
+        if (editComment) {
+            GetDetail();
+            setEditCommentIndex(null)
+        }
+
     }, [editComment])
 
 
@@ -687,8 +716,10 @@ export const Boards = () => {
 
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID, boardRoom);
-        GetDetail();
+        // socket.emit('saveChanges', id, userID, boardRoom);
+        if (deleteData) {
+            GetDetail();
+        }
     }, [deleteData])
 
     const userID = localStorage.getItem('userID');
@@ -720,7 +751,7 @@ export const Boards = () => {
                     document.querySelector('.loaderBox').classList.add("d-none");
                     console.log(data);
                     GetDetail();
-                    socket.emit('saveChanges', id, userID, boardRoom);
+                    // socket.emit('saveChanges', id, userID, boardRoom);
                 })
                 .catch((error) => {
                     document.querySelector('.loaderBox').classList.add("d-none");
@@ -738,14 +769,16 @@ export const Boards = () => {
     const { ApiData: usersData, loading: usersLoading, error: usersError, get: GetUsers } = useGet(`/api/users`);
 
     useEffect(() => {
-        GetUsers()
-        console.log('user', usersData)
-        setUserList(usersData?.Users)
+        if (id) {
+            GetUsers()
+            console.log('user', usersData)
+            setUserList(usersData?.Users)
+        }
     }, [id])
 
-    useEffect(() => {
-        GetUsers()
-    }, [])
+    // useEffect(() => {
+    //     GetUsers()
+    // }, [])
 
 
     useEffect(() => {
@@ -774,9 +807,11 @@ export const Boards = () => {
 
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID, boardRoom);
-        handleBoard()
-        setAddMember('');
+        // socket.emit('saveChanges', id, userID, boardRoom);
+        if (addmember) {
+            handleBoard()
+            setAddMember('');
+        }
     }, [addmember])
 
 
@@ -802,9 +837,11 @@ export const Boards = () => {
 
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID, boardRoom);
-        handleBoard()
-        setAddMember('');
+        // socket.emit('saveChanges', id, userID, boardRoom);
+        if (removeBoard) {
+            handleBoard()
+            setAddMember('');
+        }
     }, [removeBoard])
 
     // add task member 
@@ -830,8 +867,10 @@ export const Boards = () => {
     }, [taskMemberData])
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID, boardRoom);
-        GetDetail();
+        // socket.emit('saveChanges', id, userID, boardRoom);
+        if (taskAddmember) {
+            GetDetail();
+        }
     }, [taskAddmember])
 
 
@@ -855,8 +894,10 @@ export const Boards = () => {
     }, [removeMemberData])
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID, boardRoom);
-        GetDetail();
+        // socket.emit('saveChanges', id, userID, boardRoom);
+        if (removeMember) {
+            GetDetail();
+        }
     }, [removeMember])
 
 
@@ -881,54 +922,58 @@ export const Boards = () => {
     }, [requestData])
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID, boardRoom);
-        handleBoard()
+        // socket.emit('saveChanges', id, userID, boardRoom);
+        if (requestMember) {
+
+            handleBoard()
+        }
     }, [requestMember])
 
 
+    // socket comment
 
-    useEffect(() => {
-        socket.on("connect", () => {
-            console.log('connected', socket.id); // x8WIv7-mJelg7on_ALbx
-        });
+    // useEffect(() => {
+    //     socket.on("connect", () => {
+    //         console.log('connected', socket.id); 
+    //     });
 
-        socket.on("disconnect", () => {
-            console.log('disconnected', socket.id);
-        });
-
-
-        socket.on('chat json', (data, from) => {
-            console.log(data, from, 'text')
-            if (boardRoom === from) {
-                const socketData = data;
-                console.log('socketData', socketData);
-                const boardData = socketData?.workspace?.boards?.find((item) => item?.code == id);
-                console.log('bb', boardData);
-                if (openSlug != null && id) {
-                    boardData?.lanes?.forEach((item) => {
-                        const cardFound = item?.cards?.filter((cardItem) => cardItem?.slug == openSlug);
-                        console.log('open', cardFound);
-                        if (cardFound?.length > 0) {
-                            console.log('cardFound', { data: { card: cardFound[0] } })
-                            liveData({ data: { card: cardFound[0] } });
-                        }
-                    });
-                }
-
-                setData(boardData);
-                setBoardData(socketData);
-            }
+    //     socket.on("disconnect", () => {
+    //         console.log('disconnected', socket.id);
+    //     });
 
 
+    //     socket.on('chat json', (data, from) => {
+    //         console.log(data, from, 'text')
+    //         if (boardRoom === from) {
+    //             const socketData = data;
+    //             console.log('socketData', socketData);
+    //             const boardData = socketData?.workspace?.boards?.find((item) => item?.code == id);
+    //             console.log('bb', boardData);
+    //             if (openSlug != null && id) {
+    //                 boardData?.lanes?.forEach((item) => {
+    //                     const cardFound = item?.cards?.filter((cardItem) => cardItem?.slug == openSlug);
+    //                     console.log('open', cardFound);
+    //                     if (cardFound?.length > 0) {
+    //                         console.log('cardFound', { data: { card: cardFound[0] } })
+    //                         liveData({ data: { card: cardFound[0] } });
+    //                     }
+    //                 });
+    //             }
 
-        });
-
-        return () => {
-            socket.off('chat json', data, boardRoom);
-        };
+    //             setData(boardData);
+    //             setBoardData(socketData);
+    //         }
 
 
-    }, [])
+
+    //     });
+
+    //     return () => {
+    //         socket.off('chat json', data, boardRoom);
+    //     };
+
+
+    // }, [])
 
 
 
@@ -962,11 +1007,33 @@ export const Boards = () => {
     }, [laneData]);
 
     useEffect(() => {
-        socket.emit('saveChanges', id, userID, boardRoom);
-        handleBoard()
+        // socket.emit('saveChanges', id, userID, boardRoom);
+        if (editLaneApiData) {
+
+            handleBoard()
+        }
     }, [editLaneApiData])
 
 
+
+    const downloadFile = (url) => {
+        const link = document.createElement('a');
+        const fileUrl = url.includes('trello') ? url : base_url + url;
+
+        link.href = fileUrl;
+        link.download = url.split('/').pop(); // Extracts the filename from the URL
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+
+    const openComment = (url, name) => {
+        const fileUrl = url.includes('trello') ? url : base_url + url;
+        setShowEditor(true)
+        setNewContent(`<a href=${fileUrl} className="text-info">${name}</a>`);
+    }
 
     return (
 
@@ -1100,6 +1167,7 @@ export const Boards = () => {
                                                                 onDataChange={onDataChange}
                                                                 onLaneAdd={onLaneAdd}
                                                                 handleDragEnd={handleDrag}
+                                                                onCardMoveAcrossLanes={onCardMoveAcrossLanes}
                                                             />
 
 
@@ -1261,41 +1329,59 @@ export const Boards = () => {
                                                                 return (
                                                                     <div className="attachmentBox mb-4">
                                                                         <div className="dataExist">
-                                                                            {
-                                                                                (
-
-                                                                                    item?.ext?.toLowerCase() === 'txt' || item?.ext?.toLowerCase() === 'doc' || item?.ext?.toLowerCase() === 'docx' || item?.ext?.toLowerCase() === 'pdf' || item?.ext?.toLowerCase() === 'csv' || item?.ext?.toLowerCase() === 'xls' || item?.ext?.toLowerCase() === 'xlsx' || item?.ext?.toLowerCase() === 'ppt' || item?.ext?.toLowerCase() === 'pptx') ? (
-                                                                                    <div className="attachmentData">
-                                                                                        <a href={item?.attachment_url.includes('trello') ? item?.attachment_url : base_url + item?.attachment_url} target="_blank" className="documentFile" >
-                                                                                            <span className="attachment-thumbnail-preview-ext">{item?.ext?.toLowerCase()}</span>
-                                                                                        </a>
-
-                                                                                    </div>
-                                                                                ) : item?.ext?.toLowerCase() === 'mp4' || item?.ext?.toLowerCase() === 'avi' || item?.ext?.toLowerCase() === 'mov' || item?.ext?.toLowerCase() === 'wmv' || item?.ext?.toLowerCase() === 'flv' ? (
-                                                                                    <div className="attachmentData">
-                                                                                        <video controls width={150}>
-                                                                                            <source src={item?.attachment_url.includes('trello') ? item?.attachment_url : base_url + item?.attachment_url} type={`video/${item?.ext?.toLowerCase()}`} />
-                                                                                            {/* Your browser does not support the video tag. */}
-                                                                                        </video>
-                                                                                    </div>
-                                                                                ) : item?.ext?.toLowerCase() == 'png' || item?.ext?.toLowerCase() == 'jpg' || item?.ext?.toLowerCase() == 'jpeg' || item?.ext?.toLowerCase() == 'gif' || item?.ext?.toLowerCase() == 'bmp' || item?.ext?.toLowerCase() == 'tiff' ? (
-                                                                                    <div className="attachmentData">
-                                                                                        <a href={item?.attachment_url.includes('trello') ? item?.attachment_url : base_url + item?.attachment_url} target="_blank" style={{ backgroundImage: `url(${item?.attachment_url.includes('trello') ? item?.attachment_url : base_url + item?.attachment_url})`, backgroundPosition: 'center', display: 'block', font: "14px" }}></a>
-                                                                                    </div>
-                                                                                ) : null
-                                                                            }
-
+                                                                            {(
+                                                                                item?.ext?.toLowerCase() === 'txt' ||
+                                                                                item?.ext?.toLowerCase() === 'doc' ||
+                                                                                item?.ext?.toLowerCase() === 'docx' ||
+                                                                                item?.ext?.toLowerCase() === 'pdf' ||
+                                                                                item?.ext?.toLowerCase() === 'csv' ||
+                                                                                item?.ext?.toLowerCase() === 'xls' ||
+                                                                                item?.ext?.toLowerCase() === 'xlsx' ||
+                                                                                item?.ext?.toLowerCase() === 'ppt' ||
+                                                                                item?.ext?.toLowerCase() === 'pptx'
+                                                                            ) ? (
+                                                                                <div className="attachmentData">
+                                                                                    <a href={item?.attachment_url.includes('trello') ? item?.attachment_url : base_url + item?.attachment_url} target="_blank" className="documentFile">
+                                                                                        <span className="attachment-thumbnail-preview-ext">{item?.ext?.toLowerCase()}</span>
+                                                                                    </a>
+                                                                                </div>
+                                                                            ) : item?.ext?.toLowerCase() === 'mp4' ||
+                                                                                item?.ext?.toLowerCase() === 'avi' ||
+                                                                                item?.ext?.toLowerCase() === 'mov' ||
+                                                                                item?.ext?.toLowerCase() === 'wmv' ||
+                                                                                item?.ext?.toLowerCase() === 'flv' ? (
+                                                                                <div className="attachmentData">
+                                                                                    <video controls width={150}>
+                                                                                        <source src={item?.attachment_url.includes('trello') ? item?.attachment_url : base_url + item?.attachment_url} type={`video/${item?.ext?.toLowerCase()}`} />
+                                                                                    </video>
+                                                                                </div>
+                                                                            ) : item?.ext?.toLowerCase() == 'png' ||
+                                                                                item?.ext?.toLowerCase() == 'jpg' ||
+                                                                                item?.ext?.toLowerCase() == 'jpeg' ||
+                                                                                item?.ext?.toLowerCase() == 'gif' ||
+                                                                                item?.ext?.toLowerCase() == 'bmp' ||
+                                                                                item?.ext?.toLowerCase() == 'tiff' ? (
+                                                                                <div className="attachmentData">
+                                                                                    <a href={item?.attachment_url.includes('trello') ? item?.attachment_url : base_url + item?.attachment_url} target="_blank" style={{ backgroundImage: `url(${item?.attachment_url.includes('trello') ? item?.attachment_url : base_url + item?.attachment_url})`, backgroundPosition: 'center', display: 'block', font: "14px" }}></a>
+                                                                                </div>
+                                                                            ) : null}
 
                                                                             <div className="dateTime">
-                                                                                <FormatDateTime isoDateString={item?.created_at} />
-                                                                            </div>
-                                                                            <div class="actionBtn">
-                                                                                <button type="button">Comment</button>
-                                                                                <button type="button">Download</button>
-                                                                                <button type="button" onClick={() => { deleteAttachment(item?.id) }}>Delete</button>
+                                                                                <>
+                                                                                    <small>{item?.attachment_name}</small>
+                                                                                    <FormatDateTime isoDateString={item?.created_at} />
+                                                                                </>
+                                                                                <div class="actionBtn">
+                                                                                    <button type="button" onClick={() => { openComment(item?.attachment_url, item?.attachment_name) }}>
+                                                                                        Comment</button>
+
+                                                                                    <button type="button" onClick={() => downloadFile(item?.attachment_url)}>Download</button>
+                                                                                    <button type="button" onClick={() => { deleteAttachment(item?.id) }}>Delete</button>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
+
                                                                 );
 
                                                             default:
@@ -1328,9 +1414,13 @@ export const Boards = () => {
                                                                     </div>
                                                                 </div>
                                                             ) : (
-                                                                <div className="commentAreaBox shadow" onClick={() => { setShowEditor(true) }}>
+                                                                <div className="commentAreaBox shadow" onClick={() => {
+                                                                    setShowEditor(true);
+                                                                    setNewContent('');
+                                                                }}>
                                                                     <span>Write a comment...</span>
                                                                 </div>
+
                                                             )
                                                         }
                                                     </div>
